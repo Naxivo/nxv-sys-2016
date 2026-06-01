@@ -1,0 +1,2302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Basis BCS Academy</title>
+<link rel="manifest" href="#" id="manifestLink">
+<meta name="theme-color" content="#1d4ed8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Basis BCS Academy">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════
+   CSS VARIABLES
+═══════════════════════════════════════ */
+:root {
+  --p:      #1d4ed8;
+  --p2:     #1e3a8a;
+  --pl:     #eff6ff;
+  --pm:     #bfdbfe;
+  --ac:     #0891b2;
+  --ok:     #059669;
+  --okl:    #ecfdf5;
+  --okm:    #6ee7b7;
+  --err:    #dc2626;
+  --errl:   #fef2f2;
+  --errm:   #fca5a5;
+  --warn:   #d97706;
+  --warnl:  #fffbeb;
+  --warnm:  #fcd34d;
+  --bg:     #f0f4f8;
+  --sur:    #ffffff;
+  --sur2:   #f8fafc;
+  --sur3:   #f1f5f9;
+  --bdr:    #e2e8f0;
+  --bdr2:   #cbd5e1;
+  --tx:     #0f172a;
+  --tx2:    #334155;
+  --tx3:    #64748b;
+  --tx4:    #94a3b8;
+  --r:      14px;
+  --r2:     10px;
+  --sh:     0 1px 3px rgba(15,23,42,.05), 0 4px 12px rgba(15,23,42,.04);
+  --sh2:    0 4px 8px rgba(15,23,42,.06), 0 16px 40px rgba(15,23,42,.08);
+  --sh3:    0 24px 64px rgba(15,23,42,.14);
+  --nh:     68px;
+  --font:   'Poppins', sans-serif;
+}
+
+body.dark {
+  --p:      #60a5fa;
+  --p2:     #3b82f6;
+  --pl:     #1e3a5f;
+  --pm:     #1e40af;
+  --ac:     #22d3ee;
+  --ok:     #34d399;
+  --okl:    #022c22;
+  --okm:    #065f46;
+  --err:    #f87171;
+  --errl:   #1c0808;
+  --errm:   #7f1d1d;
+  --warn:   #fbbf24;
+  --warnl:  #1c1100;
+  --warnm:  #78350f;
+  --bg:     #090d18;
+  --sur:    #111827;
+  --sur2:   #1a2235;
+  --sur3:   #1f2b3e;
+  --bdr:    #1e2d45;
+  --bdr2:   #263550;
+  --tx:     #f0f6ff;
+  --tx2:    #94a3b8;
+  --tx3:    #64748b;
+  --tx4:    #475569;
+  --sh:     0 1px 3px rgba(0,0,0,.3), 0 4px 12px rgba(0,0,0,.2);
+  --sh2:    0 4px 8px rgba(0,0,0,.3), 0 16px 40px rgba(0,0,0,.25);
+  --sh3:    0 24px 64px rgba(0,0,0,.5);
+}
+
+/* ═══════════════════════════════════════
+   BASE
+═══════════════════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { height:100%; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--tx);
+  min-height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+  overflow-x: hidden;
+  transition: background .35s, color .35s;
+}
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-thumb { background: var(--bdr2); border-radius: 3px; }
+
+/* ═══════════════════════════════════════
+   LOGIN PAGE
+═══════════════════════════════════════ */
+#loginPage {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 40px 24px;
+  background: var(--sur);
+  position: relative; overflow: hidden;
+}
+#loginPage::before {
+  content: ''; position: absolute;
+  width: 350px; height: 350px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(29,78,216,.07) 0%, transparent 70%);
+  top: -100px; right: -80px; pointer-events: none;
+}
+#loginPage::after {
+  content: ''; position: absolute;
+  width: 250px; height: 250px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(8,145,178,.05) 0%, transparent 70%);
+  bottom: -60px; left: -60px; pointer-events: none;
+}
+.login-logo-wrap { position: relative; margin-bottom: 20px; }
+.login-logo {
+  width: 88px; height: 88px; border-radius: 24px;
+  background: linear-gradient(145deg, var(--p), var(--ac));
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 16px 40px rgba(29,78,216,.3);
+  position: relative; overflow: hidden;
+}
+.login-logo::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(145deg, rgba(255,255,255,.18), transparent 60%);
+}
+.login-logo img { width: 56px; height: 56px; object-fit: contain; position: relative; z-index: 1; }
+.login-ring { position: absolute; inset: -7px; border-radius: 30px; border: 2px solid rgba(29,78,216,.12); }
+.login-name { font-size: 21px; font-weight: 800; color: var(--tx); text-align: center; margin-bottom: 4px; line-height: 1.3; }
+.login-tag { font-size: 12px; color: var(--tx3); text-align: center; margin-bottom: 36px; font-weight: 500; }
+.login-card { width: 100%; background: var(--sur2); border: 1px solid var(--bdr); border-radius: 22px; padding: 28px 22px; box-shadow: var(--sh2); }
+.lbl { display: block; font-size: 11px; font-weight: 700; color: var(--tx3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 7px; }
+.inp { width: 100%; background: var(--sur); border: 1.5px solid var(--bdr); border-radius: var(--r2); padding: 13px 16px; font-size: 15px; font-family: var(--font); color: var(--tx); outline: none; transition: border-color .2s, box-shadow .2s; margin-bottom: 14px; }
+.inp:focus { border-color: var(--p); box-shadow: 0 0 0 3px rgba(29,78,216,.1); }
+.login-hint { text-align: center; font-size: 12px; color: var(--tx4); margin-top: 14px; font-weight: 500; }
+.login-ver { text-align: center; font-size: 11px; color: var(--tx4); margin-top: 28px; font-style: italic; }
+
+/* ═══════════════════════════════════════
+   PAGES
+═══════════════════════════════════════ */
+.page { display: none; flex-direction: column; min-height: 100vh; padding-bottom: calc(var(--nh) + 30px); }
+.page.active { display: flex; animation: pgIn .22s ease; }
+@keyframes pgIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+/* ═══════════════════════════════════════
+   TOPBAR
+═══════════════════════════════════════ */
+.topbar {
+  position: sticky; top: 0; z-index: 60;
+  background: var(--sur); border-bottom: 1px solid var(--bdr);
+  height: 58px; display: flex; align-items: center;
+  padding: 0 16px; gap: 11px;
+  box-shadow: 0 1px 8px rgba(15,23,42,.06);
+  transition: background .35s, border-color .35s;
+}
+.tb-logo { width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--p), var(--ac)); }
+.tb-logo img { width: 22px; height: 22px; object-fit: contain; }
+.tb-info { flex: 1; min-width: 0; }
+.tb-name { font-size: 14px; font-weight: 700; color: var(--tx); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tb-sub { font-size: 11px; color: var(--tx3); font-weight: 500; margin-top: 1px; }
+.tb-right { display: flex; gap: 6px; }
+.ib { width: 34px; height: 34px; border-radius: 9px; background: var(--sur2); border: 1px solid var(--bdr); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--tx2); transition: all .2s; }
+.ib:active { transform: scale(.92); background: var(--pl); border-color: var(--pm); }
+
+/* ═══════════════════════════════════════
+   BOTTOM NAV
+═══════════════════════════════════════ */
+.bnav {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 480px; height: var(--nh);
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255,255,255,.9);
+  display: flex; align-items: stretch; z-index: 100;
+  box-shadow: 0 -4px 24px rgba(15,23,42,.08);
+  transition: background .35s, border-color .35s;
+}
+body.dark .bnav { background: rgba(17,24,39,.92); border-top-color: rgba(255,255,255,.08); }
+.ni { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; border: none; background: none; padding: 6px 2px; transition: all .2s; position: relative; }
+.ni::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 0; height: 3px; background: linear-gradient(90deg, var(--p), var(--ac)); border-radius: 0 0 4px 4px; transition: width .3s cubic-bezier(.34,1.56,.64,1); }
+.ni.active::before { width: 30px; }
+.ni-ic { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; transition: transform .3s cubic-bezier(.34,1.56,.64,1); opacity: .45; }
+.ni-ic svg { width: 100%; height: 100%; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; stroke: var(--tx); transition: stroke .2s; }
+.ni-lb { font-size: 9px; font-weight: 700; color: var(--tx4); letter-spacing: .3px; text-transform: uppercase; transition: color .2s; }
+.ni.active .ni-ic { transform: translateY(-2px) scale(1.1); opacity: 1; }
+.ni.active .ni-ic svg { stroke: var(--p); }
+.ni.active .ni-lb { color: var(--p); font-weight: 800; }
+.ni-dot { position: absolute; top: 8px; right: 50%; transform: translateX(10px); width: 7px; height: 7px; border-radius: 50%; background: var(--err); border: 2px solid var(--sur); animation: blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+/* ═══════════════════════════════════════
+   CONTENT
+═══════════════════════════════════════ */
+.con { padding: 16px; flex: 1; }
+
+/* ═══════════════════════════════════════
+   CARDS
+═══════════════════════════════════════ */
+.card { background: var(--sur); border: 1px solid var(--bdr); border-radius: var(--r); box-shadow: var(--sh); overflow: hidden; transition: background .35s, border-color .35s; }
+.card + .card { margin-top: 12px; }
+.ch { padding: 14px 16px 0; display: flex; align-items: center; justify-content: space-between; }
+.ct { font-size: 11px; font-weight: 700; color: var(--tx3); text-transform: uppercase; letter-spacing: 1px; }
+.cb { padding: 12px 16px 16px; }
+
+/* ═══════════════════════════════════════
+   WELCOME BANNER
+═══════════════════════════════════════ */
+.wb { border-radius: var(--r); padding: 20px 18px; margin-bottom: 16px; position: relative; overflow: hidden; color: #fff; background: linear-gradient(145deg, #1d4ed8 0%, #1e3a8a 45%, #0891b2 100%); }
+.wb::before { content: ''; position: absolute; width: 180px; height: 180px; border-radius: 50%; background: rgba(255,255,255,.06); top: -50px; right: -30px; }
+.wb::after { content: ''; position: absolute; width: 100px; height: 100px; border-radius: 50%; background: rgba(255,255,255,.04); bottom: -20px; right: 70px; }
+.wb-greeting { font-size: 11px; font-weight: 600; opacity: .75; margin-bottom: 4px; letter-spacing: .5px; text-transform: uppercase; }
+.wb-name { font-size: 20px; font-weight: 800; margin-bottom: 3px; line-height: 1.3; position: relative; z-index: 1; }
+.wb-date { font-size: 12px; opacity: .7; margin-bottom: 10px; font-weight: 500; }
+.wb-att { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.15); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.25); border-radius: 20px; padding: 5px 12px; font-size: 12px; font-weight: 700; margin-bottom: 10px; color: #fff; }
+.wb-pills { display: flex; gap: 8px; flex-wrap: wrap; position: relative; z-index: 1; }
+.wb-pill { display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.2); border-radius: 20px; padding: 4px 11px; font-size: 11px; font-weight: 700; }
+
+/* ═══════════════════════════════════════
+   STATS
+═══════════════════════════════════════ */
+.sg { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.st { background: var(--sur); border: 1px solid var(--bdr); border-radius: var(--r); padding: 14px; display: flex; flex-direction: column; gap: 5px; box-shadow: var(--sh); transition: transform .2s, background .35s; }
+.st:active { transform: scale(.97); }
+.st-ic { font-size: 20px; }
+.st-v { font-size: 28px; font-weight: 800; line-height: 1; }
+.st-l { font-size: 11px; color: var(--tx3); font-weight: 600; }
+.st.b { border-top: 3px solid var(--p); } .st.b .st-v { color: var(--p); }
+.st.g { border-top: 3px solid var(--ok); } .st.g .st-v { color: var(--ok); }
+.st.o { border-top: 3px solid var(--warn); } .st.o .st-v { color: var(--warn); }
+.st.r { border-top: 3px solid var(--err); } .st.r .st-v { color: var(--err); }
+
+/* ═══════════════════════════════════════
+   QUICK ACTIONS
+═══════════════════════════════════════ */
+.qg { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 16px; }
+.qb { display: flex; flex-direction: column; align-items: center; gap: 6px; background: var(--sur); border: 1px solid var(--bdr); border-radius: var(--r); padding: 13px 6px; cursor: pointer; transition: all .2s; box-shadow: var(--sh); }
+.qb:active { transform: scale(.93); background: var(--pl); border-color: var(--pm); }
+.qb-ic { width: 22px; height: 22px; }
+.qb-ic svg { width: 100%; height: 100%; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; stroke: var(--p); }
+.qb-lb { font-size: 10px; font-weight: 700; color: var(--tx2); text-align: center; line-height: 1.3; }
+
+/* SECTION HEADER */
+.sh { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.sh-t { font-size: 14px; font-weight: 700; color: var(--tx); }
+.sh-l { font-size: 12px; color: var(--p); font-weight: 700; cursor: pointer; }
+
+/* ACTIVITY */
+.ai { display: flex; align-items: center; gap: 11px; padding: 11px 0; border-bottom: 1px solid var(--bdr); }
+.ai:last-child { border-bottom: none; }
+.ai-dot { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.ai-dot svg { width: 18px; height: 18px; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+.ai-dot.b { background: var(--pl); } .ai-dot.b svg { stroke: var(--p); }
+.ai-dot.g { background: var(--okl); } .ai-dot.g svg { stroke: var(--ok); }
+.ai-dot.o { background: var(--warnl); } .ai-dot.o svg { stroke: var(--warn); }
+.ai-dot.r { background: var(--errl); } .ai-dot.r svg { stroke: var(--err); }
+.ai-tx { flex: 1; } .ai-m { font-size: 13px; font-weight: 700; } .ai-s { font-size: 11px; color: var(--tx3); margin-top: 2px; font-weight: 500; }
+.ai-t { font-size: 11px; color: var(--tx4); white-space: nowrap; font-weight: 600; }
+
+/* BATCH TABS */
+.btabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 3px; margin-bottom: 13px; scrollbar-width: none; }
+.btabs::-webkit-scrollbar { display: none; }
+.btab { flex-shrink: 0; padding: 7px 15px; border-radius: 30px; font-size: 12px; font-weight: 700; cursor: pointer; border: 2px solid var(--bdr); background: var(--sur); color: var(--tx3); transition: all .2s; font-family: var(--font); }
+.btab.active { background: var(--p); border-color: var(--p); color: #fff; box-shadow: 0 4px 14px rgba(29,78,216,.25); }
+
+/* SEARCH */
+.srch { display: flex; align-items: center; gap: 9px; background: var(--sur); border: 1.5px solid var(--bdr); border-radius: var(--r2); padding: 10px 14px; margin-bottom: 13px; transition: border-color .2s; }
+.srch:focus-within { border-color: var(--p); }
+.srch input { flex: 1; border: none; background: none; outline: none; font-size: 14px; font-family: var(--font); color: var(--tx); }
+.srch input::placeholder { color: var(--tx4); }
+.srch svg { width: 16px; height: 16px; stroke: var(--tx4); stroke-width: 2; fill: none; flex-shrink: 0; }
+
+/* STUDENT LIST */
+.sli { display: flex; align-items: center; gap: 11px; padding: 12px 16px; border-bottom: 1px solid var(--bdr); cursor: pointer; transition: background .15s; }
+.sli:last-child { border-bottom: none; }
+.sli:active { background: var(--sur2); }
+.sli.inactive .sl-name { text-decoration: line-through; color: var(--tx4); }
+.av { width: 38px; height: 38px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; flex-shrink: 0; }
+.sl-info { flex: 1; } .sl-name { font-size: 14px; font-weight: 700; } .sl-det { font-size: 11px; color: var(--tx3); margin-top: 2px; font-weight: 500; }
+
+/* BADGES */
+.bdg { display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+.bdg-b { background: var(--pl); color: var(--p); }
+.bdg-g { background: var(--okl); color: var(--ok); }
+.bdg-r { background: var(--errl); color: var(--err); }
+.bdg-o { background: var(--warnl); color: var(--warn); }
+.bdg-gr { background: var(--sur3); color: var(--tx3); }
+
+/* BUTTONS */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 13px 18px; border-radius: var(--r2); font-size: 14px; font-weight: 700; font-family: var(--font); cursor: pointer; border: none; transition: all .2s; width: 100%; }
+.btn-p { background: var(--p); color: #fff; box-shadow: 0 4px 16px rgba(29,78,216,.25); }
+.btn-p:active { background: var(--p2); transform: scale(.98); }
+.btn-ok { background: var(--ok); color: #fff; box-shadow: 0 4px 14px rgba(5,150,105,.2); }
+.btn-ok:active { transform: scale(.98); }
+.btn-out { background: transparent; color: var(--p); border: 2px solid var(--p); box-shadow: none; }
+.btn-err { background: var(--err); color: #fff; }
+.btn-ghost { background: var(--sur2); color: var(--tx2); border: 1px solid var(--bdr); box-shadow: none; }
+.btn-sm { padding: 8px 13px; font-size: 12px; border-radius: 9px; width: auto; }
+
+/* PROGRESS */
+.pb { height: 5px; background: var(--bdr); border-radius: 5px; overflow: hidden; margin-top: 5px; }
+.pf { height: 100%; border-radius: 5px; transition: width .5s ease; }
+
+/* SUBTABS */
+.stabs { display: flex; background: var(--sur2); border-radius: 11px; padding: 3px; margin-bottom: 13px; border: 1px solid var(--bdr); gap: 2px; }
+.stab { flex: 1; padding: 8px 6px; text-align: center; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; color: var(--tx3); border: none; background: none; transition: all .2s; font-family: var(--font); }
+.stab.active { background: var(--sur); color: var(--p); box-shadow: var(--sh); }
+
+/* ATTENDANCE */
+.adb { display: flex; align-items: center; justify-content: space-between; background: var(--pl); border-radius: var(--r2); padding: 12px 15px; margin-bottom: 13px; border: 1px solid var(--pm); }
+.ad-lbl { font-size: 10px; color: var(--p); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; opacity: .8; }
+.ad-date { font-size: 15px; font-weight: 800; color: var(--p); }
+.ad-nav { display: flex; gap: 6px; }
+.ad-btn { width: 28px; height: 28px; border-radius: 7px; background: var(--p); color: #fff; border: none; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; font-family: var(--font); }
+.asm { display: flex; gap: 8px; margin-bottom: 13px; }
+.asp { flex: 1; text-align: center; padding: 10px; border-radius: 10px; font-size: 12px; font-weight: 700; line-height: 1.7; }
+.asp.p { background: var(--okl); color: var(--ok); border: 1px solid var(--okm); }
+.asp.a { background: var(--errl); color: var(--err); border: 1px solid var(--errm); }
+.asp.t { background: var(--pl); color: var(--p); border: 1px solid var(--pm); }
+.ati { display: flex; align-items: center; gap: 11px; padding: 11px 16px; border-bottom: 1px solid var(--bdr); }
+.ati:last-child { border-bottom: none; }
+.ati-info { flex: 1; } .ati-name { font-size: 14px; font-weight: 700; } .ati-id { font-size: 11px; color: var(--tx3); margin-top: 2px; font-weight: 500; }
+.att-tog { display: flex; border-radius: 9px; overflow: hidden; border: 1.5px solid var(--bdr); }
+.atb { padding: 7px 13px; font-size: 12px; font-weight: 700; cursor: pointer; border: none; background: var(--sur2); color: var(--tx3); transition: all .15s; font-family: var(--font); }
+.atb.P.active { background: var(--ok); color: #fff; }
+.atb.A.active { background: var(--err); color: #fff; }
+
+/* SMS */
+.stg { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 16px; }
+.stc { background: var(--sur); border: 2px solid var(--bdr); border-radius: var(--r); padding: 15px 11px; cursor: pointer; transition: all .2s; text-align: center; }
+.stc:active, .stc.active { border-color: var(--p); background: var(--pl); }
+.stc-ic { width: 28px; height: 28px; margin: 0 auto 8px; }
+.stc-ic svg { width: 100%; height: 100%; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; fill: none; stroke: var(--p); }
+.stc.active .stc-ic svg { stroke: var(--p); }
+.stc-lb { font-size: 13px; font-weight: 700; color: var(--tx); }
+.stc-ds { font-size: 11px; color: var(--tx3); margin-top: 3px; font-weight: 500; }
+.fg { margin-bottom: 12px; }
+.fg label { display: block; font-size: 11px; font-weight: 700; color: var(--tx3); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 6px; }
+.fi, .fs, .fta { width: 100%; background: var(--sur2); border: 1.5px solid var(--bdr); border-radius: var(--r2); padding: 11px 14px; font-size: 14px; font-family: var(--font); color: var(--tx); outline: none; transition: border-color .2s; }
+.fi:focus, .fs:focus, .fta:focus { border-color: var(--p); }
+.fta { resize: vertical; min-height: 90px; }
+.cc { font-size: 11px; color: var(--tx4); text-align: right; margin-top: 3px; font-weight: 600; }
+
+/* SMS BALANCE */
+.bal { border-radius: var(--r); padding: 15px 17px; margin-bottom: 14px; background: linear-gradient(135deg, var(--p), var(--ac)); color: #fff; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 6px 20px rgba(29,78,216,.22); }
+.bal.low { background: linear-gradient(135deg, var(--err), #7f1d1d); }
+.bal-lbl { font-size: 10px; opacity: .75; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; font-weight: 700; }
+.bal-amt { font-size: 24px; font-weight: 800; }
+.bal-time { font-size: 10px; opacity: .6; margin-top: 3px; font-weight: 600; }
+.bal-btn { background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.3); border-radius: 9px; padding: 8px 12px; color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; font-family: var(--font); transition: background .2s; }
+.bal-btn:active { background: rgba(255,255,255,.3); }
+
+/* FAIL BANNER */
+.fail-banner { background: var(--errl); border: 1px solid var(--errm); border-radius: 10px; padding: 11px 13px; display: flex; gap: 9px; align-items: flex-start; margin-bottom: 13px; }
+.fail-banner svg { width: 16px; height: 16px; stroke: var(--err); stroke-width: 2; fill: none; flex-shrink: 0; margin-top: 2px; }
+.fail-tx { font-size: 13px; color: var(--err); font-weight: 700; line-height: 1.5; }
+
+/* SMS LOG */
+.slog { display: flex; gap: 11px; padding: 12px 16px; border-bottom: 1px solid var(--bdr); }
+.slog:last-child { border-bottom: none; }
+.slog-ic { width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px; }
+.slog-ic svg { width: 100%; height: 100%; stroke-width: 2; fill: none; stroke: var(--tx3); }
+.slog-tx { flex: 1; } .slog-m { font-size: 13px; font-weight: 700; } .slog-d { font-size: 11px; color: var(--tx3); margin-top: 2px; line-height: 1.5; font-weight: 500; }
+.slog-t { font-size: 11px; color: var(--tx4); white-space: nowrap; font-weight: 600; }
+.slog-st { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px; margin-top: 3px; }
+.slog-st.ok { background: var(--okl); color: var(--ok); }
+.slog-st.fail { background: var(--errl); color: var(--err); }
+
+/* EXAMS */
+.exc { background: var(--sur); border: 1px solid var(--bdr); border-radius: var(--r); margin-bottom: 12px; overflow: hidden; box-shadow: var(--sh); }
+.exh { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--sur2); border-bottom: 1px solid var(--bdr); }
+.exh-n { font-size: 14px; font-weight: 700; } .exh-avg { font-size: 12px; color: var(--p); font-weight: 700; }
+.exr { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid var(--bdr); }
+.exr:last-child { border-bottom: none; }
+.exr-n { flex: 1; font-size: 13px; font-weight: 700; }
+.mi { width: 56px; text-align: center; background: var(--sur2); border: 1.5px solid var(--bdr); border-radius: 8px; padding: 6px; font-size: 14px; font-weight: 700; font-family: var(--font); color: var(--tx); outline: none; transition: border-color .2s; }
+.mi:focus { border-color: var(--p); }
+
+/* RESULTS */
+.rc { background: var(--sur); border: 1px solid var(--bdr); border-radius: var(--r); overflow: hidden; margin-bottom: 10px; box-shadow: var(--sh); }
+.rch { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--bdr); }
+.rk { width: 30px; height: 30px; border-radius: 50%; background: var(--p); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; flex-shrink: 0; }
+.rn { font-size: 14px; font-weight: 700; } .rb { font-size: 11px; color: var(--tx3); font-weight: 500; }
+.rs { margin-left: auto; text-align: right; }
+.rs-v { font-size: 22px; font-weight: 800; color: var(--p); } .rs-l { font-size: 10px; color: var(--tx4); font-weight: 600; }
+.rsubs { padding: 10px 16px; display: flex; flex-wrap: wrap; gap: 6px; }
+.rsp { display: flex; align-items: center; gap: 5px; background: var(--sur2); border-radius: 7px; padding: 4px 10px; font-size: 12px; font-weight: 700; border: 1px solid var(--bdr); }
+
+/* SETTINGS */
+.ss { margin-bottom: 18px; }
+.ss-t { font-size: 11px; font-weight: 700; color: var(--tx4); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 7px; padding: 0 2px; }
+.si { display: flex; align-items: center; gap: 12px; padding: 13px 16px; background: var(--sur); border: 1px solid var(--bdr); cursor: pointer; transition: background .15s; }
+.si:first-of-type { border-radius: var(--r) var(--r) 0 0; }
+.si:last-of-type { border-radius: 0 0 var(--r) var(--r); }
+.si:only-of-type { border-radius: var(--r); }
+.si + .si { border-top: none; }
+.si:active { background: var(--sur2); }
+.si-ic { width: 20px; height: 20px; flex-shrink: 0; }
+.si-ic svg { width: 100%; height: 100%; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; stroke: var(--p); }
+.si-info { flex: 1; } .si-lb { font-size: 14px; font-weight: 700; } .si-ds { font-size: 11px; color: var(--tx3); margin-top: 2px; font-weight: 500; }
+.si-ar { color: var(--tx4); font-size: 16px; font-weight: 300; }
+
+/* TOGGLE */
+.tog { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
+.tog input { opacity: 0; width: 0; height: 0; }
+.tog-sl { position: absolute; inset: 0; background: var(--bdr2); border-radius: 24px; cursor: pointer; transition: background .2s; }
+.tog-sl::before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: transform .2s; box-shadow: 0 1px 4px rgba(0,0,0,.2); }
+.tog input:checked + .tog-sl { background: var(--p); }
+.tog input:checked + .tog-sl::before { transform: translateX(20px); }
+
+/* BATCH MANAGEMENT */
+.bmi { display: flex; align-items: center; gap: 12px; padding: 13px 16px; background: var(--sur); border-bottom: 1px solid var(--bdr); }
+.bmi:last-child { border-bottom: none; }
+.bmi-dot { width: 36px; height: 36px; border-radius: 10px; background: var(--pl); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--p); flex-shrink: 0; border: 1px solid var(--pm); }
+.bmi-dot.off { background: var(--sur3); color: var(--tx4); border-color: var(--bdr); }
+.bmi-info { flex: 1; } .bmi-name { font-size: 14px; font-weight: 700; } .bmi-det { font-size: 11px; color: var(--tx3); margin-top: 2px; font-weight: 500; }
+
+/* DRAWERS */
+.ov { position: fixed; inset: 0; background: rgba(9,13,24,.6); backdrop-filter: blur(6px); z-index: 200; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .25s; }
+.ov.open { opacity: 1; pointer-events: all; }
+.sht { background: var(--sur); border-radius: 22px 22px 0 0; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; transform: translateY(100%); transition: transform .32s cubic-bezier(.34,1.4,.64,1); padding-bottom: 32px; }
+.ov.open .sht { transform: translateY(0); }
+.sht-handle { width: 38px; height: 4px; background: var(--bdr2); border-radius: 4px; margin: 13px auto 18px; }
+.sht-title { font-size: 18px; font-weight: 800; padding: 0 20px 14px; border-bottom: 1px solid var(--bdr); color: var(--tx); }
+.sht-body { padding: 18px 20px; }
+
+/* ALERT BANNER */
+.abanner { background: var(--errl); border: 1px solid var(--errm); border-radius: 11px; padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start; margin-bottom: 13px; }
+.abanner svg { width: 16px; height: 16px; stroke: var(--err); stroke-width: 2; fill: none; flex-shrink: 0; margin-top: 2px; }
+.abanner-tx { font-size: 13px; color: var(--err); font-weight: 700; line-height: 1.5; }
+
+/* INFO BOX */
+.ibox { background: var(--pl); border: 1px solid var(--pm); border-radius: 10px; padding: 11px 13px; margin-bottom: 13px; font-size: 13px; color: var(--p); font-weight: 700; line-height: 1.5; }
+
+/* PROFILE */
+.profile-card { display: flex; align-items: center; gap: 13px; background: var(--sur); border: 1px solid var(--bdr); border-radius: var(--r); padding: 16px; margin-bottom: 18px; box-shadow: var(--sh); }
+.profile-av { width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(135deg,var(--p),var(--ac)); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; color: #fff; box-shadow: 0 4px 12px rgba(29,78,216,.2); }
+.profile-name { font-size: 16px; font-weight: 700; }
+.profile-role { font-size: 12px; color: var(--tx3); margin-top: 2px; font-weight: 500; }
+
+/* LICENCE CARD */
+.lic-card { background: var(--okl); border: 1px solid var(--okm); border-radius: var(--r); padding: 13px 16px; display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.lic-ic { width: 20px; height: 20px; }
+.lic-ic svg { width: 100%; height: 100%; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; stroke: var(--ok); }
+.lic-info { flex: 1; }
+.lic-title { font-size: 13px; font-weight: 700; color: var(--ok); }
+.lic-sub { font-size: 11px; color: var(--ok); opacity: .7; margin-top: 2px; font-weight: 500; }
+
+/* ABOUT */
+.about-banner { background: linear-gradient(135deg, var(--p), var(--ac)); border-radius: var(--r); padding: 20px 18px; color: #fff; margin-bottom: 13px; box-shadow: 0 8px 28px rgba(29,78,216,.22); }
+.about-dev-name { font-size: 18px; font-weight: 800; margin-bottom: 3px; }
+.about-dev-role { font-size: 12px; opacity: .75; margin-bottom: 13px; font-weight: 600; }
+.about-contact { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; margin-top: 8px; }
+.about-contact a { color: #fff; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,.4); }
+
+/* LOADING */
+.loading { display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+.spinner { width: 32px; height: 32px; border: 3px solid var(--bdr); border-top-color: var(--p); border-radius: 50%; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* EMPTY STATE */
+.empty { text-align: center; padding: 40px 20px; color: var(--tx3); }
+.empty svg { width: 48px; height: 48px; stroke: var(--bdr2); stroke-width: 1.5; fill: none; margin-bottom: 12px; }
+.empty p { font-size: 14px; font-weight: 600; }
+
+/* DL ROW */
+.dl-row { display: flex; gap: 8px; margin-bottom: 13px; }
+
+/* TOAST */
+.toast { position: fixed; bottom: calc(var(--nh) + 12px); left: 50%; transform: translateX(-50%) translateY(16px); background: var(--tx); color: var(--bg); border-radius: 12px; padding: 11px 20px; font-size: 13px; font-weight: 700; white-space: nowrap; opacity: 0; transition: all .3s cubic-bezier(.34,1.56,.64,1); z-index: 400; box-shadow: var(--sh3); }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ LOGIN ═══════════ -->
+<div id="loginPage">
+  <div class="login-logo-wrap">
+    <div class="login-logo">
+      <img src="logo.png" alt="Basis BCS Academy" onerror="this.style.display='none';this.parentNode.innerHTML='<span style=\'font-size:36px;font-weight:900;color:#fff;font-family:Poppins\'>B</span>'">
+    </div>
+    <div class="login-ring"></div>
+  </div>
+  <div class="login-name">Basis BCS Academy</div>
+  <div class="login-tag">Coaching Centre Management System</div>
+  <div class="login-card">
+    <label class="lbl">Username</label>
+    <input class="inp" type="text" id="lu" placeholder="Enter username" autocomplete="username">
+    <label class="lbl">Password</label>
+    <input class="inp" type="password" id="lp" placeholder="••••••••" style="margin-bottom:6px" autocomplete="current-password">
+    <button class="btn btn-p" onclick="doLogin()" id="loginBtn">Sign In →</button>
+    <div id="loginError" style="color:var(--err);font-size:12px;text-align:center;margin-top:10px;display:none;font-weight:600"></div>
+  </div>
+  <div class="login-ver">Basis BCS Academy · v1.0 · Made in Bangladesh 🇧🇩</div>
+</div>
+
+<!-- ═══════════ APP ═══════════ -->
+<div id="app" style="display:none">
+
+<!-- HOME -->
+<div class="page active" id="pg-home">
+  <div class="topbar">
+    <div class="tb-logo">
+      <img src="logo.png" alt="B" style="width:22px;height:22px;object-fit:contain" onerror="this.style.display='none';this.parentNode.innerHTML='<span style=\'color:#fff;font-weight:800;font-size:14px\'>B</span>'">
+    </div>
+    <div class="tb-info">
+      <div class="tb-name">Basis BCS Academy</div>
+      <div class="tb-sub" id="todayDate">Loading...</div>
+    </div>
+    <div class="tb-right">
+      <button class="ib" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+      <button class="ib" onclick="toast('🔔 No new notifications')">
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--tx2);stroke-width:2;fill:none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="con">
+    <div class="wb">
+      <div class="wb-greeting">Welcome back</div>
+      <div class="wb-name" id="wbGreeting">Good morning, Admin ☀️</div>
+      <div class="wb-date" id="wbDate">Loading...</div>
+      <div class="wb-att" id="attStatusBanner">⚠️ Today's attendance not marked yet</div>
+      <div class="wb-pills">
+        <div class="wb-pill">🏫 <span id="activeBatchCount">2</span> Active Batches</div>
+        <div class="wb-pill">👥 <span id="totalStudentCount">—</span> Students</div>
+      </div>
+    </div>
+    <div class="sg">
+      <div class="st b">
+        <div class="st-ic">👥</div>
+        <div class="st-v" id="statTotal">—</div>
+        <div class="st-l">Total Students</div>
+      </div>
+      <div class="st g">
+        <div class="st-ic">✅</div>
+        <div class="st-v" id="statAtt">—%</div>
+        <div class="st-l">Avg Attendance</div>
+      </div>
+      <div class="st o">
+        <div class="st-ic">⚠️</div>
+        <div class="st-v" id="statAbsent">—</div>
+        <div class="st-l">Absent Alerts</div>
+      </div>
+      <div class="st r">
+        <div class="st-ic">📱</div>
+        <div class="st-v" id="statSMS">—</div>
+        <div class="st-l">SMS Sent Today</div>
+      </div>
+    </div>
+    <div class="sh"><div class="sh-t">Quick Actions</div></div>
+    <div class="qg">
+      <div class="qb" onclick="go('attendance')">
+        <div class="qb-ic"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <div class="qb-lb">Mark Attendance</div>
+      </div>
+      <div class="qb" onclick="openSht('addStu')">
+        <div class="qb-ic"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg></div>
+        <div class="qb-lb">Add Student</div>
+      </div>
+      <div class="qb" onclick="go('sms')">
+        <div class="qb-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <div class="qb-lb">Send SMS</div>
+      </div>
+      <div class="qb" onclick="go('exams')">
+        <div class="qb-ic"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+        <div class="qb-lb">Add Marks</div>
+      </div>
+    </div>
+    <div class="sh"><div class="sh-t">Batch Overview</div><div class="sh-l" onclick="go('attendance')">See all →</div></div>
+    <div class="card" id="batchOverview">
+      <div class="loading"><div class="spinner"></div></div>
+    </div>
+    <div class="sh" style="margin-top:16px"><div class="sh-t">Recent Activity</div></div>
+    <div class="card">
+      <div class="cb" style="padding:0 16px" id="recentActivity">
+        <div class="ai">
+          <div class="ai-dot g"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+          <div class="ai-tx"><div class="ai-m">System Ready</div><div class="ai-s">Basis BCS Academy v1.0</div></div>
+          <div class="ai-t">Now</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STUDENTS -->
+<div class="page" id="pg-students">
+  <div class="topbar">
+    <div class="tb-info"><div class="tb-name">Students</div></div>
+    <div class="tb-right">
+      <button class="ib" onclick="exportStudentsPDF()" title="PDF">
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--tx2);stroke-width:2;fill:none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </button>
+      <button class="ib" onclick="openSht('addStu')" title="Add Student">
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--tx2);stroke-width:2;fill:none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="con">
+    <div class="srch">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Search name or RegNo…" id="stuSearch" oninput="filterStudents(this.value)">
+    </div>
+    <div class="btabs" id="stuBatchTabs">
+      <div class="btab active" onclick="swBatch(this,'all')" data-batch="all">All</div>
+    </div>
+    <div class="dl-row">
+      <button class="btn btn-ghost btn-sm" style="flex:1" onclick="exportStudentsPDF()">📄 PDF</button>
+      <button class="btn btn-ghost btn-sm" style="flex:1" onclick="exportStudentsExcel()">📊 Excel</button>
+    </div>
+    <div class="card" style="padding:0" id="studentList">
+      <div class="loading"><div class="spinner"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ATTENDANCE -->
+<div class="page" id="pg-attendance">
+  <div class="topbar">
+    <div class="tb-info"><div class="tb-name">Attendance</div></div>
+    <div class="tb-right">
+      <button class="ib" onclick="exportAttendance()">
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--tx2);stroke-width:2;fill:none"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="con">
+    <div class="stabs">
+      <button class="stab active" onclick="swSub(this,'at-mark')">Mark Today</button>
+      <button class="stab" onclick="swSub(this,'at-rep')">Report</button>
+      <button class="stab" onclick="swSub(this,'at-abs')">Absent List</button>
+    </div>
+    <!-- Mark Today -->
+    <div id="at-mark">
+      <div class="adb">
+        <div><div class="ad-lbl">Date</div><div class="ad-date" id="attDate">—</div></div>
+        <div class="ad-nav">
+          <button class="ad-btn" onclick="changeDate(-1)">‹</button>
+          <button class="ad-btn" onclick="changeDate(1)">›</button>
+        </div>
+      </div>
+      <div class="btabs" id="attBatchTabs">
+        <div class="btab active" onclick="swAttBatch(this,'Shitalakkhya')">Shitalakkhya</div>
+        <div class="btab" onclick="swAttBatch(this,'Bhairab')">Bhairab</div>
+      </div>
+      <div class="asm">
+        <div class="asp p">Present<br><strong id="pC">0</strong></div>
+        <div class="asp a">Absent<br><strong id="aC">0</strong></div>
+        <div class="asp t">Total<br><strong id="tC">—</strong></div>
+      </div>
+      <div class="srch" style="margin-bottom:13px">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search student…" id="attSearch" oninput="filterAttList(this.value)">
+      </div>
+      <div class="card" style="padding:0;margin-bottom:12px" id="attList">
+        <div class="loading"><div class="spinner"></div></div>
+      </div>
+      <button class="btn btn-ok" onclick="saveAttendance()">Save Attendance</button>
+    </div>
+    <!-- Report -->
+    <div id="at-rep" style="display:none">
+      <div class="btabs">
+        <div class="btab active" onclick="swBatch(this,'Shitalakkhya')">Shitalakkhya</div>
+        <div class="btab" onclick="swBatch(this,'Bhairab')">Bhairab</div>
+      </div>
+      <div class="card" id="attReport">
+        <div class="loading"><div class="spinner"></div></div>
+      </div>
+    </div>
+    <!-- Absent List -->
+    <div id="at-abs" style="display:none">
+      <div class="abanner">
+        <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div class="abanner-tx" id="absentBannerTxt">Checking absent students…</div>
+      </div>
+      <div class="card" style="padding:0" id="absentList">
+        <div class="loading"><div class="spinner"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXAMS -->
+<div class="page" id="pg-exams">
+  <div class="topbar">
+    <div class="tb-info"><div class="tb-name">Exams</div></div>
+    <div class="tb-right">
+      <button class="ib" onclick="toast('📄 Export coming soon!')">
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--tx2);stroke-width:2;fill:none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="con">
+    <div class="stabs">
+      <button class="stab active" onclick="swSub(this,'ex-marks')">Add Marks</button>
+      <button class="stab" onclick="swSub(this,'ex-result')">Results</button>
+      <button class="stab" onclick="swSub(this,'ex-batch')">Batch Result</button>
+    </div>
+    <!-- Add Marks -->
+    <div id="ex-marks">
+      <div class="btabs">
+        <div class="btab active" onclick="swExamBatch(this,'Shitalakkhya')">Shitalakkhya</div>
+        <div class="btab" onclick="swExamBatch(this,'Bhairab')">Bhairab</div>
+      </div>
+      <div class="fg" style="margin-bottom:12px">
+        <label>Select Exam Date</label>
+        <select class="fs" id="examDateSelect" onchange="loadMarks()">
+          <option value="">— Select date —</option>
+        </select>
+      </div>
+      <button class="btn btn-ghost btn-sm" style="margin-bottom:12px" onclick="openSht('addExamDate')">+ Add New Exam Date</button>
+      <div id="marksList"><div class="empty"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16"/><polyline points="14 2 14 8 20 8"/></svg><p>Select exam date to add marks</p></div></div>
+      <button class="btn btn-p" onclick="saveMarks()" id="saveMarksBtn" style="display:none">Save Marks</button>
+    </div>
+    <!-- Results -->
+    <div id="ex-result" style="display:none">
+      <div class="btabs">
+        <div class="btab active" onclick="swBatch(this,'Shitalakkhya')">Shitalakkhya</div>
+        <div class="btab" onclick="swBatch(this,'Bhairab')">Bhairab</div>
+      </div>
+      <div id="resultsList"><div class="loading"><div class="spinner"></div></div></div>
+    </div>
+    <!-- Batch Result -->
+    <div id="ex-batch" style="display:none">
+      <div class="sg" style="margin-bottom:14px">
+        <div class="st b"><div class="st-ic">📘</div><div class="st-v" id="batchAvgS">—</div><div class="st-l">Shitalakkhya Avg</div></div>
+        <div class="st g"><div class="st-ic">📗</div><div class="st-v" id="batchAvgB">—</div><div class="st-l">Bhairab Avg</div></div>
+      </div>
+      <div class="card" id="batchResultCard"><div class="loading"><div class="spinner"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SMS -->
+<div class="page" id="pg-sms">
+  <div class="topbar">
+    <div class="tb-info"><div class="tb-name">SMS</div></div>
+    <div class="tb-right">
+      <button class="ib" onclick="swSub(document.querySelector('#smsStabs .stab:last-child'),'sms-hist')">
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--tx2);stroke-width:2;fill:none"><path d="M14 2H6a2 2 0 0 0-2 2v16"/><polyline points="14 2 14 8 20 8"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="con">
+    <div class="stabs" id="smsStabs">
+      <button class="stab active" onclick="swSub(this,'sms-send')">Send SMS</button>
+      <button class="stab" onclick="swSub(this,'sms-hist');loadSMSLog()">History</button>
+    </div>
+    <!-- Send SMS -->
+    <div id="sms-send">
+      <div class="bal" id="balCard">
+        <div>
+          <div class="bal-lbl">SMS Balance</div>
+          <div class="bal-amt" id="balAmt">Loading...</div>
+          <div class="bal-time" id="balTime">Checking...</div>
+        </div>
+        <button class="bal-btn" onclick="refreshBalance()">🔄 Refresh</button>
+      </div>
+      <div class="fail-banner" id="failBanner" style="display:none">
+        <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div class="fail-tx" id="failTxt">Some SMS failed. <span style="text-decoration:underline;cursor:pointer">Retry →</span></div>
+      </div>
+      <div class="stg">
+        <div class="stc active" onclick="selSms(this,'absence')">
+          <div class="stc-ic"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div class="stc-lb">Absence Alert</div>
+          <div class="stc-ds">Auto at 3 absences</div>
+        </div>
+        <div class="stc" onclick="selSms(this,'festival')">
+          <div class="stc-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
+          <div class="stc-lb">Festival</div>
+          <div class="stc-ds">Eid, New Year etc.</div>
+        </div>
+        <div class="stc" onclick="selSms(this,'announce')">
+          <div class="stc-ic"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+          <div class="stc-lb">Announcement</div>
+          <div class="stc-ds">Class, exam notice</div>
+        </div>
+        <div class="stc" onclick="selSms(this,'custom')">
+          <div class="stc-ic"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+          <div class="stc-lb">Custom</div>
+          <div class="stc-ds">Write your own</div>
+        </div>
+      </div>
+      <div class="fg">
+        <label>Send To</label>
+        <select class="fs" id="smsTo">
+          <option value="all">All Students</option>
+          <option value="Shitalakkhya">Shitalakkhya</option>
+          <option value="Bhairab">Bhairab</option>
+          <option value="absent">Absent Students Only</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Message</label>
+        <textarea class="fta" id="smsMsg" oninput="updCC()">Dear [Student Name], You have 3 absents this month. Your admission is on hold. Please contact the office.
+
+Basis BCS Academy.</textarea>
+        <div class="cc"><span id="cc">0</span> characters · ~<span id="sc">1</span> SMS per recipient</div>
+      </div>
+      <div class="fg">
+        <label>Schedule (optional)</label>
+        <input class="fi" type="datetime-local" id="smsSchedule">
+      </div>
+      <button class="btn btn-p" onclick="sendSMS()">Send SMS →</button>
+    </div>
+    <!-- History -->
+    <div id="sms-hist" style="display:none">
+      <div class="card" style="padding:0" id="smsLogList">
+        <div class="loading"><div class="spinner"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div class="page" id="pg-settings">
+  <div class="topbar"><div class="tb-info"><div class="tb-name">Settings</div></div></div>
+  <div class="con">
+    <div class="profile-card">
+      <div class="profile-av" id="profileAv">A</div>
+      <div>
+        <div class="profile-name" id="profileName">Admin</div>
+        <div class="profile-role" id="profileRole">Administrator</div>
+      </div>
+      <button class="btn btn-out btn-sm" style="margin-left:auto" onclick="doLogout()">Logout</button>
+    </div>
+
+    <div class="lic-card">
+      <div class="lic-ic"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      <div class="lic-info">
+        <div class="lic-title">Licence Active</div>
+        <div class="lic-sub">Valid · Basis BCS Academy · v1.0</div>
+      </div>
+    </div>
+
+    <div class="ss">
+      <div class="ss-t">Appearance</div>
+      <div class="si">
+        <div class="si-ic"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
+        <div class="si-info"><div class="si-lb">Dark Mode</div><div class="si-ds">Switch between light and dark theme</div></div>
+        <label class="tog"><input type="checkbox" id="darkTog" onchange="toggleTheme()"><span class="tog-sl"></span></label>
+      </div>
+    </div>
+
+    <div class="ss">
+      <div class="ss-t">Batch Management</div>
+      <div class="card" style="padding:0" id="batchMgmt">
+        <div class="loading"><div class="spinner"></div></div>
+      </div>
+    </div>
+
+    <div class="ss" id="adminOnlySettings">
+      <div class="ss-t">Teachers & Access</div>
+      <div class="si" onclick="openSht('manageTeachers')">
+        <div class="si-ic"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div class="si-info"><div class="si-lb">Manage Teachers</div><div class="si-ds">Add or remove teacher accounts</div></div>
+        <div class="si-ar">›</div>
+      </div>
+      <div class="si" onclick="openSht('changePass')">
+        <div class="si-ic"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <div class="si-info"><div class="si-lb">Change Password</div><div class="si-ds">Update your login password</div></div>
+        <div class="si-ar">›</div>
+      </div>
+    </div>
+
+    <div class="ss" id="adminSMSSettings">
+      <div class="ss-t">SMS Configuration</div>
+      <div class="si" onclick="toast('📱 Update SMS_API_KEY in Google Sheets Settings tab')">
+        <div class="si-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <div class="si-info"><div class="si-lb">SMS API Key</div><div class="si-ds">Update in Google Sheets Settings tab</div></div>
+        <div class="si-ar">›</div>
+      </div>
+      <div class="si">
+        <div class="si-ic"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+        <div class="si-info"><div class="si-lb">Auto Absence SMS</div><div class="si-ds">Trigger at 3 absences per month</div></div>
+        <label class="tog"><input type="checkbox" id="autoSmsTog" onchange="toggleAutoSMS()"><span class="tog-sl"></span></label>
+      </div>
+    </div>
+
+    <div class="ss">
+      <div class="ss-t">Data</div>
+      <div class="si" onclick="syncData()">
+        <div class="si-ic"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
+        <div class="si-info"><div class="si-lb">Sync Google Sheets</div><div class="si-ds" id="lastSync">Tap to sync</div></div>
+        <div class="si-ar">›</div>
+      </div>
+      <div class="si" onclick="exportStudentsPDF()">
+        <div class="si-ic"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+        <div class="si-info"><div class="si-lb">Export Student Data</div><div class="si-ds">Download as PDF or Excel</div></div>
+        <div class="si-ar">›</div>
+      </div>
+    </div>
+
+    <div class="ss">
+      <div class="ss-t">About</div>
+      <div class="si" onclick="openSht('about')">
+        <div class="si-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <div class="si-info"><div class="si-lb">About This App</div><div class="si-ds">Developer · Guide · Do's & Don'ts</div></div>
+        <div class="si-ar">›</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bnav">
+  <button class="ni active" onclick="go('home')" id="nav-home">
+    <div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
+    <div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    <div class="ni-lb">Home</div>
+  </button>
+  <button class="ni" onclick="go('students')" id="nav-students">
+    <div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+    <div class="ni-lb">Students</div>
+  </button>
+  <button class="ni" onclick="go('attendance')" id="nav-attendance">
+    <div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+    <div class="ni-lb">Attend.</div>
+  </button>
+  <button class="ni" onclick="go('exams')" id="nav-exams">
+    <div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+    <div class="ni-lb">Exams</div>
+  </button>
+  <button class="ni" onclick="go('sms')" id="nav-sms">
+    <div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+    <div class="ni-lb">SMS</div>
+    <div class="ni-dot"></div>
+  </button>
+  <button class="ni" onclick="go('settings')" id="nav-settings">
+    <div class="ni-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+    <div class="ni-lb">Settings</div>
+  </button>
+</nav>
+
+</div><!-- /app -->
+
+<!-- ═══════════ DRAWERS ═══════════ -->
+
+<!-- Add Student -->
+<div class="ov" id="ov-addStu">
+  <div class="sht">
+    <div class="sht-handle"></div>
+    <div class="sht-title">Add New Student</div>
+    <div class="sht-body">
+      <div class="fg"><label>Full Name *</label><input class="fi" id="stuName" placeholder="e.g. রাফিক আহমেদ"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="fg"><label>Reg No *</label><input class="fi" id="stuRegNo" placeholder="e.g. 01"></div>
+        <div class="fg"><label>Batch *</label>
+          <select class="fs" id="stuBatch">
+            <option value="Shitalakkhya">Shitalakkhya</option>
+            <option value="Bhairab">Bhairab</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg">
+        <label>Department</label>
+        <input class="fi" id="stuDept" placeholder="e.g. বিজ্ঞান" list="deptList" oninput="loadDeptSuggestions()">
+        <datalist id="deptList"></datalist>
+      </div>
+      <div class="fg"><label>Phone (optional)</label><input class="fi" id="stuPhone" type="tel" placeholder="01XXXXXXXXX"></div>
+      <div class="fg">
+        <label>Batch Type *</label>
+        <div style="display:flex;gap:8px">
+          <label style="flex:1;display:flex;align-items:center;gap:8px;background:var(--pl);border:2px solid var(--pm);border-radius:10px;padding:11px 13px;cursor:pointer;font-size:14px;font-weight:700;color:var(--p)">
+            <input type="radio" name="btype" value="Regular" checked style="accent-color:var(--p)"> 📚 Regular
+          </label>
+          <label style="flex:1;display:flex;align-items:center;gap:8px;background:var(--sur2);border:2px solid var(--bdr);border-radius:10px;padding:11px 13px;cursor:pointer;font-size:14px;font-weight:700;color:var(--tx2)">
+            <input type="radio" name="btype" value="Exam" style="accent-color:var(--p)"> 📝 Exam
+          </label>
+        </div>
+      </div>
+      <button class="btn btn-p" onclick="addStudent()">Add Student</button>
+    </div>
+  </div>
+</div>
+
+<!-- Student Detail -->
+<div class="ov" id="ov-stuDtl">
+  <div class="sht">
+    <div class="sht-handle"></div>
+    <div class="sht-title">Student Details</div>
+    <div class="sht-body">
+      <div style="display:flex;align-items:center;gap:13px;margin-bottom:18px">
+        <div class="av" id="dtlAv" style="width:52px;height:52px;border-radius:14px;font-size:18px;background:var(--pl);color:var(--p)">—</div>
+        <div>
+          <div style="font-size:19px;font-weight:800" id="dtlName">—</div>
+          <div style="font-size:12px;color:var(--tx3);font-weight:500;margin-top:3px" id="dtlInfo">—</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:16px">
+        <div style="background:var(--sur2);border:1px solid var(--bdr);border-radius:10px;padding:12px"><div style="font-size:10px;color:var(--tx4);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;font-weight:700">Phone</div><div style="font-weight:700" id="dtlPhone">—</div></div>
+        <div style="background:var(--sur2);border:1px solid var(--bdr);border-radius:10px;padding:12px"><div style="font-size:10px;color:var(--tx4);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;font-weight:700">Department</div><div style="font-weight:700" id="dtlDept">—</div></div>
+        <div style="background:var(--sur2);border:1px solid var(--bdr);border-radius:10px;padding:12px"><div style="font-size:10px;color:var(--tx4);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;font-weight:700">Reg No</div><div style="font-weight:700" id="dtlReg">—</div></div>
+        <div style="background:var(--sur2);border:1px solid var(--bdr);border-radius:10px;padding:12px"><div style="font-size:10px;color:var(--tx4);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;font-weight:700">Status</div><div style="font-weight:700" id="dtlStatus">—</div></div>
+      </div>
+      <div style="display:flex;gap:8px" id="dtlBtns">
+        <button class="btn btn-out btn-sm" style="flex:1" onclick="openEditStudent()">✏️ Edit</button>
+        <button class="btn btn-err btn-sm" style="flex:1" id="dtlDeactivateBtn" onclick="deactivateStudent()">Mark Inactive</button>
+      </div>
+      <div style="margin-top:8px" id="dtlReactivateBtn" style="display:none">
+        <button class="btn btn-ok" onclick="reactivateStudent()">✅ Reactivate Student</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Student -->
+<div class="ov" id="ov-editStu">
+  <div class="sht">
+    <div class="sht-handle"></div>
+    <div class="sht-title">Edit Student</div>
+    <div class="sht-body">
+      <input type="hidden" id="editRegNo">
+      <input type="hidden" id="editBatch">
+      <div class="fg"><label>Full Name *</label><input class="fi" id="editName" placeholder="Student name"></div>
+      <div class="fg"><label>Department</label><input class="fi" id="editDept" placeholder="Department" list="deptList2"><datalist id="deptList2"></datalist></div>
+      <div class="fg"><label>Phone</label><input class="fi" id="editPhone" type="tel" placeholder="01XXXXXXXXX"></div>
+      <button class="btn btn-p" onclick="saveEditStudent()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Batch -->
+<div class="ov" id="ov-addBatch">
+  <div class="sht">
+    <div class="sht-handle"></div>
+    <div class="sht-title">Add New Batch</div>
+    <div class="sht-body">
+      <div class="fg"><label>Batch Name *</label><input class="fi" id="newBatchName" placeholder="e.g. Padma, Meghna" oninput="updBatchPreview()"></div>
+      <div class="fg"><label>Timing</label><input class="fi" id="newBatchTiming" placeholder="e.g. 8:00 AM – 10:00 AM"></div>
+      <div class="fg"><label>Max Capacity</label><input class="fi" id="newBatchCap" type="number" placeholder="e.g. 70"></div>
+      <div class="ibox" id="batchPreview">ℹ️ A new sheet will be automatically created in Google Sheets.</div>
+      <button class="btn btn-p" onclick="addBatch()">Create Batch</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Exam Date -->
+<div class="ov" id="ov-addExamDate">
+  <div class="sht">
+    <div class="sht-handle"></div>
+    <div class="sht-title">Add Exam Date</div>
+    <div class="sht-body">
+      <div class="fg"><label>Exam Date *</label><input class="fi" id="newExamDate" type="date"></div>
+      <button class="btn btn-p" onclick="addExamDate()">Add Date</button>
+    </div>
+  </div>
+</div>
+
+<!-- Change Password -->
+<div class="ov" id="ov-changePass">
+  <div class="sht">
+    <div class="sht-handle"></div>
+    <div class="sht-title">Change Password</div>
+    <div class="sht-body">
+      <div class="fg"><label>Current Password *</label><input class="fi" id="oldPass" type="password" placeholder="••••••••"></div>
+      <div class="fg"><label>New Password *</label><input class="fi" id="newPass" type="password" placeholder="••••••••"></div>
+      <div class="fg"><label>Confirm New Password *</label><input class="fi" id="confPass" type="password" placeholder="••••••••"></div>
+      <button class="btn btn-p" onclick="changePassword()">Change Password</button>
+    </div>
+  </div>
+</div>
+
+<!-- Manage Teachers -->
+<div class="ov" id="ov-manageTeachers">
+  <div class="sht">
+    <div class="sht-handle"></div>
+    <div class="sht-title">Manage Teachers</div>
+    <div class="sht-body">
+      <div class="card" style="padding:0;margin-bottom:14px" id="teacherList">
+        <div class="loading"><div class="spinner"></div></div>
+      </div>
+      <button class="btn btn-p" onclick="openSht('addTeacher')">+ Add New Teacher</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Teacher -->
+<div class="ov" id="ov-addTeacher">
+  <div class="sht">
+    <div class="sht-handle"></div>
+    <div class="sht-title">Add New Teacher</div>
+    <div class="sht-body">
+      <div class="fg"><label>Full Name *</label><input class="fi" id="tName" placeholder="e.g. Mr. Karim"></div>
+      <div class="fg"><label>Username *</label><input class="fi" id="tUser" placeholder="e.g. karim (lowercase)"></div>
+      <div class="fg"><label>Password *</label><input class="fi" id="tPass" type="password" placeholder="••••••••"></div>
+      <div class="fg"><label>Role *</label>
+        <select class="fs" id="tRole">
+          <option value="Teacher">Teacher</option>
+          <option value="Admin">Admin</option>
+        </select>
+      </div>
+      <button class="btn btn-p" onclick="addTeacher()">Add Teacher</button>
+    </div>
+  </div>
+</div>
+
+<!-- About -->
+<div class="ov" id="ov-about">
+  <div class="sht">
+    <div class="sht-handle"></div>
+    <div class="sht-title">About</div>
+    <div class="sht-body">
+      <div class="about-banner">
+        <div class="about-dev-name">Crafted by ASM Nasim</div>
+        <div class="about-dev-role">Custom Software Solutions · Bangladesh</div>
+        <div class="about-contact">
+          📱 <a href="https://wa.me/8801706106866?text=Hello%20ASM%20Nasim%2C%20I%20am%20interested%20in%20your%20software%20services." target="_blank">WhatsApp: 01706106866</a>
+        </div>
+        <div class="about-contact">💼 Available for custom software solutions</div>
+        <div class="about-contact">✨ New features can be added anytime</div>
+        <div class="about-contact">💡 Have a feature in mind? Let's talk!</div>
+      </div>
+      <div class="card" style="margin-bottom:11px">
+        <div class="ch"><div class="ct">How to Use</div></div>
+        <div class="cb" style="font-size:13px;color:var(--tx2);line-height:2;font-weight:500">
+          1. Add students from Students section<br>
+          2. Mark attendance every day per batch<br>
+          3. SMS alerts send automatically at 3 absences<br>
+          4. Add exam marks by selecting exam date<br>
+          5. View results and batch reports anytime<br>
+          6. Admin can reactivate inactive students
+        </div>
+      </div>
+      <div class="card">
+        <div class="ch"><div class="ct">Do's & Don'ts</div></div>
+        <div class="cb" style="font-size:13px;line-height:2;font-weight:600">
+          <div style="color:var(--ok)">✅ Mark attendance every class day</div>
+          <div style="color:var(--ok)">✅ Keep SMS balance topped up</div>
+          <div style="color:var(--ok)">✅ Only admin reactivates inactive students</div>
+          <div style="color:var(--ok)">✅ Contact developer for any issues</div>
+          <div style="margin-top:6px;color:var(--err)">❌ Don't delete students — mark inactive instead</div>
+          <div style="color:var(--err)">❌ Don't share admin password with anyone</div>
+          <div style="color:var(--err)">❌ Don't edit Google Sheets directly</div>
+          <div style="color:var(--err)">❌ Don't clear browser data</div>
+          <div style="color:var(--err)">❌ Don't share login credentials</div>
+        </div>
+      </div>
+      <div style="text-align:center;font-size:12px;color:var(--tx4);font-weight:500;margin-top:14px;font-style:italic">
+        Basis BCS Academy · v1.0 · Made in Bangladesh 🇧🇩
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+// ═══════════════════════════════════════
+//  CONFIGURATION — Fill these values
+// ═══════════════════════════════════════
+const API_URL = "https://script.google.com/macros/s/AKfycbxD6TPu03zV04eCtuyJgDjb7NXmEQATtlLFcqNejkU_kaI65euOrvvjH-XAS3xGrxxe/exec";
+const SECRET_TOKEN = "d6bf785b7cfcca40a85e3376cfb930da27a2842eb1d5a5b51105bf190edd07a2"; // ← paste your token here
+
+// ═══════════════════════════════════════
+//  API HELPER
+// ═══════════════════════════════════════
+async function api(action, data = {}) {
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        token: SECRET_TOKEN,
+        timestamp: Date.now(),
+        action,
+        ...data
+      })
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("API Error:", err);
+    return { success: false, error: err.message };
+  }
+}
+
+// ═══════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════
+let currentUser = null;
+let currentBatch = "Shitalakkhya";
+let currentExamBatch = "Shitalakkhya";
+let allStudents = {};
+let attRecords = {};
+let pCount = 0, aCount = 0;
+let currentAttBatch = "Shitalakkhya";
+let selectedStudent = null;
+let batches = [];
+let examDates = [];
+let currentDate = new Date();
+let markedBatchesToday = new Set();
+
+// ═══════════════════════════════════════
+//  THEME
+// ═══════════════════════════════════════
+function toggleTheme() {
+  const d = document.body.classList.toggle('dark');
+  localStorage.setItem('bcs_theme', d ? 'dark' : 'light');
+  document.getElementById('themeBtn').textContent = d ? '☀️' : '🌙';
+  const t = document.getElementById('darkTog');
+  if (t) t.checked = d;
+}
+(function() {
+  if (localStorage.getItem('bcs_theme') === 'dark') {
+    document.body.classList.add('dark');
+    window.addEventListener('DOMContentLoaded', () => {
+      const b = document.getElementById('themeBtn');
+      if (b) b.textContent = '☀️';
+      const t = document.getElementById('darkTog');
+      if (t) t.checked = true;
+    });
+  }
+})();
+
+// ═══════════════════════════════════════
+//  DATE & TIME
+// ═══════════════════════════════════════
+const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function getBDDate(date = new Date()) {
+  const bd = new Date(date.toLocaleString('en-US', { timeZone: 'Asia/Dhaka' }));
+  return bd;
+}
+
+function formatDate(date) {
+  const bd = getBDDate(date);
+  return `${DAYS[bd.getDay()]}, ${bd.getDate()} ${MONTHS[bd.getMonth()]} ${bd.getFullYear()}`;
+}
+
+function formatDateShort(date) {
+  const bd = getBDDate(date);
+  return `${bd.getDate()} ${MONTHS[bd.getMonth()]} ${bd.getFullYear()}`;
+}
+
+function formatDateISO(date) {
+  const bd = getBDDate(date);
+  return `${bd.getFullYear()}-${String(bd.getMonth()+1).padStart(2,'0')}-${String(bd.getDate()).padStart(2,'0')}`;
+}
+
+function getGreeting() {
+  const h = getBDDate().getHours();
+  if (h >= 5 && h < 12) return 'Good morning, Admin ☀️';
+  if (h >= 12 && h < 17) return 'Good afternoon, Admin 🌤️';
+  if (h >= 17 && h < 21) return 'Good evening, Admin 🌆';
+  return 'Good night, Admin 🌙';
+}
+
+function initDates() {
+  const full = formatDate(new Date());
+  const short = formatDateShort(new Date());
+  const td = document.getElementById('todayDate');
+  if (td) td.textContent = full;
+  const wd = document.getElementById('wbDate');
+  if (wd) wd.textContent = full;
+  const wg = document.getElementById('wbGreeting');
+  if (wg) wg.textContent = getGreeting();
+  const ad = document.getElementById('attDate');
+  if (ad) ad.textContent = formatDateShort(currentDate);
+}
+
+// ═══════════════════════════════════════
+//  LOGIN
+// ═══════════════════════════════════════
+async function doLogin() {
+  const u = document.getElementById('lu').value.trim();
+  const p = document.getElementById('lp').value;
+  const btn = document.getElementById('loginBtn');
+  const err = document.getElementById('loginError');
+
+  if (!u || !p) { showLoginError('Please enter username and password'); return; }
+
+  btn.textContent = 'Signing in...';
+  btn.disabled = true;
+
+  const res = await api('login', { username: u, password: p });
+
+  if (res.success) {
+    currentUser = res.user;
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    err.style.display = 'none';
+
+    // Update profile
+    document.getElementById('profileName').textContent = res.user.name;
+    document.getElementById('profileRole').textContent = res.user.role + ' · Basis BCS Academy';
+    document.getElementById('profileAv').textContent = res.user.name.charAt(0).toUpperCase();
+
+    // Hide admin-only settings for teachers
+    if (res.user.role !== 'Admin') {
+      const adminSettings = document.getElementById('adminOnlySettings');
+      const adminSMS = document.getElementById('adminSMSSettings');
+      if (adminSettings) adminSettings.style.display = 'none';
+      if (adminSMS) adminSMS.style.display = 'none';
+    }
+
+    initDates();
+    loadHomeData();
+    loadBatches();
+
+  } else {
+    showLoginError('Invalid username or password');
+  }
+
+  btn.textContent = 'Sign In →';
+  btn.disabled = false;
+}
+
+function showLoginError(msg) {
+  const err = document.getElementById('loginError');
+  err.textContent = msg;
+  err.style.display = 'block';
+}
+
+function doLogout() {
+  currentUser = null;
+  allStudents = {};
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('loginPage').style.display = 'flex';
+  document.getElementById('lu').value = '';
+  document.getElementById('lp').value = '';
+  document.getElementById('loginError').style.display = 'none';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('loginPage').style.display !== 'none') doLogin();
+  if (e.key === 'Escape') document.querySelectorAll('.ov.open').forEach(o => o.classList.remove('open'));
+});
+
+// ═══════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════
+function go(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n => n.classList.remove('active'));
+  document.getElementById('pg-' + name).classList.add('active');
+  const nav = document.getElementById('nav-' + name);
+  if (nav) {
+    nav.classList.add('active');
+    const bar = nav.querySelector('.ni-bar');
+    if (bar) bar.style.width = '30px';
+  }
+  // Remove bar from others
+  document.querySelectorAll('.ni:not(.active) .ni-bar').forEach(b => b.style.width = '0');
+  window.scrollTo(0, 0);
+
+  // Load page data
+  if (name === 'students') loadStudents();
+  if (name === 'attendance') loadAttendanceList();
+  if (name === 'settings') { loadBatchManagement(); loadTeachers(); }
+  if (name === 'sms') refreshBalance();
+  if (name === 'exams') loadExamDates();
+}
+
+// ═══════════════════════════════════════
+//  SUBTABS
+// ═══════════════════════════════════════
+const SUBS = ['at-mark','at-rep','at-abs','ex-marks','ex-result','ex-batch','sms-send','sms-hist'];
+function swSub(btn, id) {
+  btn.closest('.stabs').querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  SUBS.forEach(k => { const el = document.getElementById(k); if (el) el.style.display = 'none'; });
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'block';
+  if (id === 'at-abs') loadAbsentStudents();
+  if (id === 'at-rep') loadAttendanceReport();
+  if (id === 'ex-result') loadResults();
+  if (id === 'ex-batch') loadBatchResults();
+}
+
+// ═══════════════════════════════════════
+//  BATCH TABS
+// ═══════════════════════════════════════
+function swBatch(el, batch) {
+  el.closest('.btabs').querySelectorAll('.btab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentBatch = batch;
+  if (batch !== 'all') loadStudents(batch);
+  else loadStudents();
+}
+
+function swAttBatch(el, batch) {
+  el.closest('.btabs').querySelectorAll('.btab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentAttBatch = batch;
+  loadAttendanceList();
+}
+
+function swExamBatch(el, batch) {
+  el.closest('.btabs').querySelectorAll('.btab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentExamBatch = batch;
+  loadMarks();
+}
+
+// ═══════════════════════════════════════
+//  DRAWERS
+// ═══════════════════════════════════════
+function openSht(id) { document.getElementById('ov-' + id).classList.add('open'); }
+function closeSht(id) { document.getElementById('ov-' + id).classList.remove('open'); }
+document.querySelectorAll('.ov').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+});
+
+// ═══════════════════════════════════════
+//  HOME DATA
+// ═══════════════════════════════════════
+async function loadHomeData() {
+  // Student count
+  const res = await api('getStudentCount');
+  if (res.success) {
+    document.getElementById('statTotal').textContent = res.count;
+    document.getElementById('totalStudentCount').textContent = res.count;
+  }
+
+  // Absent alerts
+  const absRes = await api('getAbsentStudents', {});
+  if (absRes.success) {
+    document.getElementById('statAbsent').textContent = absRes.students.length;
+  }
+
+  document.getElementById('statAtt').textContent = '—%';
+  document.getElementById('statSMS').textContent = '—';
+
+  // Batch overview
+  await loadBatchOverview();
+}
+
+async function loadBatchOverview() {
+  const el = document.getElementById('batchOverview');
+  const batchRes = await api('getBatches');
+  if (!batchRes.success) { el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3);font-size:13px">Could not load batches</div>'; return; }
+
+  const activeBatches = batchRes.batches.filter(b => b.status === 'Active');
+  document.getElementById('activeBatchCount').textContent = activeBatches.length;
+
+  const colors = ['ok','p','warn','err'];
+  let html = '<div class="cb" style="padding:0">';
+  for (let i = 0; i < activeBatches.length; i++) {
+    const b = activeBatches[i];
+    const cl = colors[i % colors.length];
+    html += `<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--bdr)">
+      <div style="width:34px;height:34px;border-radius:9px;background:var(--pl);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--p);font-size:11px;border:1px solid var(--pm);text-align:center">${b.name.slice(0,4)}</div>
+      <div style="flex:1"><div style="font-size:13px;font-weight:700">${b.name}</div><div class="pb"><div class="pf" style="width:75%;background:var(--${cl})"></div></div></div>
+      <div style="text-align:right"><div style="font-size:14px;font-weight:800;color:var(--${cl})">—%</div><div style="font-size:11px;color:var(--tx4);font-weight:600">— students</div></div>
+    </div>`;
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+// ═══════════════════════════════════════
+//  BATCHES
+// ═══════════════════════════════════════
+async function loadBatches() {
+  const res = await api('getBatches');
+  if (!res.success) return;
+  batches = res.batches;
+
+  // Update student batch tabs
+  const stuTabs = document.getElementById('stuBatchTabs');
+  if (stuTabs) {
+    stuTabs.innerHTML = '<div class="btab active" onclick="swBatch(this,\'all\')" data-batch="all">All</div>';
+    batches.filter(b => b.status === 'Active').forEach(b => {
+      stuTabs.innerHTML += `<div class="btab" onclick="swBatch(this,'${b.name}')" data-batch="${b.name}">${b.name}</div>`;
+    });
+  }
+
+  // Update attendance batch tabs
+  const attTabs = document.getElementById('attBatchTabs');
+  if (attTabs) {
+    attTabs.innerHTML = '';
+    const active = batches.filter(b => b.status === 'Active');
+    active.forEach((b, i) => {
+      attTabs.innerHTML += `<div class="btab${i===0?' active':''}" onclick="swAttBatch(this,'${b.name}')">${b.name}</div>`;
+    });
+    if (active.length > 0) currentAttBatch = active[0].name;
+  }
+
+  // Update add student batch select
+  const stuBatchSel = document.getElementById('stuBatch');
+  if (stuBatchSel) {
+    stuBatchSel.innerHTML = batches.filter(b => b.status === 'Active').map(b => `<option value="${b.name}">${b.name}</option>`).join('');
+  }
+
+  // Update SMS send to
+  const smsTo = document.getElementById('smsTo');
+  if (smsTo) {
+    smsTo.innerHTML = '<option value="all">All Students</option>';
+    batches.filter(b => b.status === 'Active').forEach(b => {
+      smsTo.innerHTML += `<option value="${b.name}">${b.name}</option>`;
+    });
+    smsTo.innerHTML += '<option value="absent">Absent Students Only</option>';
+  }
+}
+
+async function loadBatchManagement() {
+  const el = document.getElementById('batchMgmt');
+  const res = await api('getBatches');
+  if (!res.success) { el.innerHTML = '<div class="cb">Could not load batches</div>'; return; }
+
+  let html = '';
+  res.batches.forEach(b => {
+    const on = b.status === 'Active';
+    html += `<div class="bmi">
+      <div class="bmi-dot${on?'':' off'}">${b.name.slice(0,4)}</div>
+      <div class="bmi-info">
+        <div class="bmi-name">${b.name}</div>
+        <div class="bmi-det"><span style="color:var(--${on?'ok':'err'});font-weight:700">${on?'Active':'Inactive'}</span></div>
+      </div>
+      <label class="tog"><input type="checkbox" ${on?'checked':''} onchange="toggleBatch('${b.name}', this)"><span class="tog-sl"></span></label>
+    </div>`;
+  });
+  html += `<div style="padding:12px 16px"><button class="btn btn-p" style="font-size:13px" onclick="openSht('addBatch')">＋ Add New Batch</button></div>`;
+  el.innerHTML = html;
+}
+
+async function toggleBatch(name, checkbox) {
+  const res = await api('toggleBatch', { batchName: name });
+  if (res.success) {
+    toast(`${name} ${res.status === 'Active' ? 'activated ✅' : 'deactivated ❌'}`);
+    loadBatchManagement();
+    loadBatches();
+  } else {
+    checkbox.checked = !checkbox.checked;
+    toast('❌ Failed to update batch');
+  }
+}
+
+async function addBatch() {
+  const name = document.getElementById('newBatchName').value.trim();
+  const timing = document.getElementById('newBatchTiming').value.trim();
+  const cap = document.getElementById('newBatchCap').value;
+  if (!name) { toast('❌ Batch name required'); return; }
+
+  const res = await api('addBatch', { batchName: name, timing, capacity: cap });
+  if (res.success) {
+    toast(`✅ ${name} created!`);
+    closeSht('addBatch');
+    document.getElementById('newBatchName').value = '';
+    document.getElementById('newBatchTiming').value = '';
+    document.getElementById('newBatchCap').value = '';
+    loadBatches();
+    loadBatchManagement();
+  } else {
+    toast('❌ ' + res.error);
+  }
+}
+
+function updBatchPreview() {
+  const v = document.getElementById('newBatchName').value.trim() || 'BatchName';
+  document.getElementById('batchPreview').innerHTML = `ℹ️ A new sheet <strong>"${v}"</strong> will be created in Google Sheets automatically.`;
+}
+
+// ═══════════════════════════════════════
+//  STUDENTS
+// ═══════════════════════════════════════
+const AVCOLORS = [
+  ['#dbeafe','#1e40af'],['#dcfce7','#166534'],['#fef3c7','#854d0e'],
+  ['#fce7f3','#9d174d'],['#ede9fe','#5b21b6'],['#fee2e2','#991b1b']
+];
+function getAvColor(name) {
+  let h = 0;
+  for (let c of name) h = (h * 31 + c.charCodeAt(0)) & 0xffffffff;
+  return AVCOLORS[Math.abs(h) % AVCOLORS.length];
+}
+function getInitials(name) {
+  return name.split(' ').slice(0,2).map(w => w[0] || '').join('').toUpperCase() || '?';
+}
+
+async function loadStudents(batch = null) {
+  const el = document.getElementById('studentList');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+
+  const batchList = batch && batch !== 'all' ? [batch] : batches.filter(b => b.status === 'Active').map(b => b.name);
+  let allStu = [];
+
+  for (const b of batchList) {
+    const res = await api('getStudents', { batch: b });
+    if (res.success) {
+      res.students.forEach(s => { s._batch = b; });
+      allStu = allStu.concat(res.students);
+      allStudents[b] = res.students;
+    }
+  }
+
+  renderStudentList(allStu);
+}
+
+function renderStudentList(students) {
+  const el = document.getElementById('studentList');
+  if (!students.length) {
+    el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><p>No students found</p></div>';
+    return;
+  }
+
+  let html = students.map(s => {
+    const [bg, fg] = getAvColor(s.name);
+    const inactive = s.status === 'Inactive';
+    return `<div class="sli${inactive?' inactive':''}" onclick="showStudentDetail(${JSON.stringify(s).replace(/"/g,'&quot;')})">
+      <div class="av" style="background:${bg};color:${fg}">${getInitials(s.name)}</div>
+      <div class="sl-info">
+        <div class="sl-name">${s.name} ${inactive?'<span class="bdg bdg-gr" style="font-size:10px">Inactive</span>':''}</div>
+        <div class="sl-det">Reg: ${s.regNo} · ${s._batch} · ${s.department||'—'}</div>
+      </div>
+      <span class="bdg bdg-b">${s._batch.slice(0,4)}</span>
+    </div>`;
+  }).join('');
+  html += `<div style="padding:11px 16px;text-align:center;font-size:12px;color:var(--tx4);font-weight:600">${students.length} students</div>`;
+  el.innerHTML = html;
+}
+
+function filterStudents(q) {
+  const all = Object.values(allStudents).flat();
+  if (!q) { renderStudentList(all); return; }
+  const filtered = all.filter(s =>
+    s.name.toLowerCase().includes(q.toLowerCase()) ||
+    s.regNo.toString().includes(q) ||
+    (s.department || '').toLowerCase().includes(q.toLowerCase())
+  );
+  renderStudentList(filtered);
+}
+
+function showStudentDetail(s) {
+  selectedStudent = s;
+  const [bg, fg] = getAvColor(s.name);
+  document.getElementById('dtlAv').textContent = getInitials(s.name);
+  document.getElementById('dtlAv').style.background = bg;
+  document.getElementById('dtlAv').style.color = fg;
+  document.getElementById('dtlName').textContent = s.name;
+  document.getElementById('dtlInfo').textContent = `Reg: ${s.regNo} · ${s._batch} · ${s.batchType||'Regular'}`;
+  document.getElementById('dtlPhone').textContent = s.phone || '—';
+  document.getElementById('dtlDept').textContent = s.department || '—';
+  document.getElementById('dtlReg').textContent = s.regNo;
+  document.getElementById('dtlStatus').textContent = s.status;
+  document.getElementById('dtlStatus').style.color = s.status === 'Active' ? 'var(--ok)' : 'var(--err)';
+
+  // Show/hide buttons based on role and status
+  const deactivateBtn = document.getElementById('dtlDeactivateBtn');
+  const reactivateBtn = document.getElementById('dtlReactivateBtn');
+  if (currentUser?.role === 'Admin') {
+    if (s.status === 'Active') {
+      deactivateBtn.style.display = 'block';
+      reactivateBtn.style.display = 'none';
+    } else {
+      deactivateBtn.style.display = 'none';
+      reactivateBtn.style.display = 'block';
+    }
+  } else {
+    deactivateBtn.style.display = 'none';
+    reactivateBtn.style.display = 'none';
+  }
+
+  openSht('stuDtl');
+}
+
+function openEditStudent() {
+  if (!selectedStudent) return;
+  document.getElementById('editRegNo').value = selectedStudent.regNo;
+  document.getElementById('editBatch').value = selectedStudent._batch;
+  document.getElementById('editName').value = selectedStudent.name;
+  document.getElementById('editDept').value = selectedStudent.department || '';
+  document.getElementById('editPhone').value = selectedStudent.phone || '';
+  closeSht('stuDtl');
+  openSht('editStu');
+}
+
+async function saveEditStudent() {
+  const name = document.getElementById('editName').value.trim();
+  if (!name) { toast('❌ Name required'); return; }
+  const res = await api('editStudent', {
+    batch: document.getElementById('editBatch').value,
+    student: {
+      regNo: document.getElementById('editRegNo').value,
+      name,
+      department: document.getElementById('editDept').value.trim(),
+      phone: document.getElementById('editPhone').value.trim()
+    }
+  });
+  if (res.success) {
+    toast('✅ Student updated!');
+    closeSht('editStu');
+    loadStudents();
+  } else {
+    toast('❌ ' + res.error);
+  }
+}
+
+async function addStudent() {
+  const name = document.getElementById('stuName').value.trim();
+  const regNo = document.getElementById('stuRegNo').value.trim();
+  const batch = document.getElementById('stuBatch').value;
+  const dept = document.getElementById('stuDept').value.trim();
+  const phone = document.getElementById('stuPhone').value.trim();
+  const btype = document.querySelector('input[name="btype"]:checked')?.value || 'Regular';
+
+  if (!name) { toast('❌ Name required'); return; }
+  if (!regNo) { toast('❌ Reg No required'); return; }
+  if (!batch) { toast('❌ Batch required'); return; }
+
+  const res = await api('addStudent', {
+    student: { name, regNo, batch, department: dept, phone, batchType: btype }
+  });
+
+  if (res.success) {
+    toast('✅ Student added to Google Sheets!');
+    closeSht('addStu');
+    document.getElementById('stuName').value = '';
+    document.getElementById('stuRegNo').value = '';
+    document.getElementById('stuDept').value = '';
+    document.getElementById('stuPhone').value = '';
+    loadStudents();
+    loadHomeData();
+  } else {
+    toast('❌ ' + res.error);
+  }
+}
+
+async function deactivateStudent() {
+  if (!selectedStudent) return;
+  if (!confirm('Mark this student as inactive?')) return;
+  const res = await api('deactivateStudent', { batch: selectedStudent._batch, regNo: selectedStudent.regNo });
+  if (res.success) {
+    toast('✅ Student marked inactive');
+    closeSht('stuDtl');
+    loadStudents();
+  } else {
+    toast('❌ ' + res.error);
+  }
+}
+
+async function reactivateStudent() {
+  if (!selectedStudent) return;
+  const res = await api('reactivateStudent', { batch: selectedStudent._batch, regNo: selectedStudent.regNo });
+  if (res.success) {
+    toast('✅ Student reactivated!');
+    closeSht('stuDtl');
+    loadStudents();
+  } else {
+    toast('❌ ' + res.error);
+  }
+}
+
+async function loadDeptSuggestions() {
+  const batch = document.getElementById('stuBatch')?.value || 'Shitalakkhya';
+  const res = await api('getDepartments', { batch });
+  if (res.success) {
+    const dl = document.getElementById('deptList');
+    dl.innerHTML = res.departments.map(d => `<option value="${d}">`).join('');
+    const dl2 = document.getElementById('deptList2');
+    if (dl2) dl2.innerHTML = dl.innerHTML;
+  }
+}
+
+// ═══════════════════════════════════════
+//  ATTENDANCE
+// ═══════════════════════════════════════
+async function loadAttendanceList() {
+  const el = document.getElementById('attList');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  pCount = 0; aCount = 0;
+
+  const dateStr = formatDateShort(currentDate);
+  document.getElementById('attDate').textContent = dateStr;
+
+  // Load students for current batch
+  const res = await api('getStudents', { batch: currentAttBatch });
+  if (!res.success) { el.innerHTML = '<div class="cb">Failed to load students</div>'; return; }
+
+  // Check existing attendance
+  const isoDate = formatDateISO(currentDate);
+  const attRes = await api('getAttendance', { date: dateStr, batch: currentAttBatch });
+  const existing = attRes.success ? attRes.records : [];
+
+  const total = res.students.filter(s => s.status === 'Active').length;
+  document.getElementById('tC').textContent = total;
+
+  attRecords = {};
+  existing.forEach(r => { attRecords[r.regNo] = r.status; });
+
+  // Count
+  pCount = existing.filter(r => r.status === 'P').length;
+  aCount = existing.filter(r => r.status === 'A').length;
+  document.getElementById('pC').textContent = pCount;
+  document.getElementById('aC').textContent = aCount;
+
+  const activeStudents = res.students.filter(s => s.status === 'Active');
+  allStudents[currentAttBatch] = activeStudents;
+
+  renderAttList(activeStudents, attRecords);
+}
+
+function renderAttList(students, existing = {}) {
+  const el = document.getElementById('attList');
+  if (!students.length) {
+    el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><p>No students in this batch</p></div>';
+    return;
+  }
+
+  let html = students.map(s => {
+    const status = existing[s.regNo] || '';
+    return `<div class="ati" id="att-${s.regNo}">
+      <div class="ati-info">
+        <div class="ati-name">${s.name}</div>
+        <div class="ati-id">Reg: ${s.regNo}</div>
+      </div>
+      <div class="att-tog">
+        <button class="atb P${status==='P'?' active':''}" onclick="markAtt(this,'P','${s.regNo}')">P</button>
+        <button class="atb A${status==='A'?' active':''}" onclick="markAtt(this,'A','${s.regNo}')">A</button>
+      </div>
+    </div>`;
+  }).join('');
+  html += `<div style="padding:11px 16px;text-align:center;font-size:12px;color:var(--tx4);font-weight:600">${students.length} students in ${currentAttBatch}</div>`;
+  el.innerHTML = html;
+}
+
+function filterAttList(q) {
+  const students = allStudents[currentAttBatch] || [];
+  const filtered = !q ? students : students.filter(s =>
+    s.name.toLowerCase().includes(q.toLowerCase()) || s.regNo.toString().includes(q)
+  );
+  renderAttList(filtered, attRecords);
+}
+
+function markAtt(btn, type, regNo) {
+  const row = btn.closest('.ati');
+  const prev = row.querySelector('.atb.active');
+  const wasP = prev?.classList.contains('P');
+  const wasA = prev?.classList.contains('A');
+  row.querySelectorAll('.atb').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  if (!wasP && type === 'P') pCount++;
+  if (!wasA && type === 'A') aCount++;
+  if (wasP && type === 'A') { pCount--; aCount++; }
+  if (wasA && type === 'P') { aCount--; pCount++; }
+
+  document.getElementById('pC').textContent = pCount;
+  document.getElementById('aC').textContent = aCount;
+
+  attRecords[regNo] = type;
+}
+
+async function saveAttendance() {
+  const students = allStudents[currentAttBatch] || [];
+  if (!students.length) { toast('❌ No students loaded'); return; }
+
+  const dateStr = formatDateShort(currentDate);
+  const records = students.map(s => ({
+    regNo: s.regNo, name: s.name,
+    status: attRecords[s.regNo] || 'P'
+  }));
+
+  const res = await api('saveAttendance', {
+    date: dateStr,
+    batch: currentAttBatch,
+    records,
+    markedBy: currentUser?.name || 'Teacher'
+  });
+
+  if (res.success) {
+    toast('✅ Attendance saved to Google Sheets!');
+    markedBatchesToday.add(currentAttBatch);
+    updateAttStatusBanner();
+  } else {
+    toast('❌ ' + (res.error || 'Failed to save'));
+  }
+}
+
+function updateAttStatusBanner() {
+  const banner = document.getElementById('attStatusBanner');
+  if (!banner) return;
+  const active = batches.filter(b => b.status === 'Active');
+  const marked = markedBatchesToday.size;
+  if (marked === 0) {
+    banner.textContent = "⚠️ Today's attendance not marked yet";
+  } else if (marked < active.length) {
+    banner.textContent = `🕐 ${marked} of ${active.length} batches marked today`;
+  } else {
+    banner.textContent = "✅ All batches attendance done for today!";
+  }
+}
+
+function changeDate(dir) {
+  currentDate.setDate(currentDate.getDate() + dir);
+  document.getElementById('attDate').textContent = formatDateShort(currentDate);
+  attRecords = {};
+  pCount = 0; aCount = 0;
+  loadAttendanceList();
+}
+
+async function loadAttendanceReport() {
+  const el = document.getElementById('attReport');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  const bd = getBDDate();
+  const month = `${MONTHS[bd.getMonth()]} ${bd.getFullYear()}`;
+  const res = await api('getAttendanceReport', { batch: currentBatch === 'all' ? 'Shitalakkhya' : currentBatch, month });
+  if (!res.success || !res.report.length) {
+    el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3);font-size:13px">No attendance data for this month</div>';
+    return;
+  }
+  let html = `<div class="ch"><div class="ct">${month} — ${currentBatch === 'all' ? 'Shitalakkhya' : currentBatch}</div></div><div class="cb" style="padding:0 16px">`;
+  res.report.forEach(s => {
+    const cl = s.percentage >= 75 ? 'ok' : s.percentage >= 50 ? 'warn' : 'err';
+    html += `<div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--bdr)">
+      <div style="flex:1"><div style="font-size:13px;font-weight:700">${s.name} <span style="color:var(--tx4);font-size:11px">· ${s.regNo}</span></div>
+      <div class="pb"><div class="pf" style="width:${s.percentage}%;background:var(--${cl})"></div></div></div>
+      <div style="text-align:right;font-size:12px"><span style="color:var(--ok);font-weight:700">${s.present}P</span> / <span style="color:var(--err);font-weight:700">${s.absent}A</span>
+      <div style="color:var(--${cl});font-weight:800">${s.percentage}%</div></div>
+    </div>`;
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+async function loadAbsentStudents() {
+  const el = document.getElementById('absentList');
+  const banner = document.getElementById('absentBannerTxt');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+
+  const res = await api('getAbsentStudents', {});
+  if (!res.success) { el.innerHTML = '<div class="cb">Failed to load</div>'; return; }
+
+  banner.textContent = `${res.students.length} students have 3+ absences this month`;
+
+  if (!res.students.length) {
+    el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><p>No absent alerts this month!</p></div>';
+    return;
+  }
+
+  el.innerHTML = res.students.map(s => `
+    <div class="sli">
+      <div class="av" style="background:var(--errl);color:var(--err)">${getInitials(s.name)}</div>
+      <div class="sl-info"><div class="sl-name">${s.name}</div><div class="sl-det">Reg: ${s.regNo} · ${s.batch} · ${s.count} absences</div></div>
+      ${currentUser?.role === 'Admin' ? `<button class="btn btn-sm" style="background:var(--errl);color:var(--err);border:1px solid var(--errm);cursor:pointer;font-weight:700" onclick="sendAbsenceSMS('${s.name}','${s.regNo}')">SMS</button>` : ''}
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════
+//  EXAMS
+// ═══════════════════════════════════════
+async function loadExamDates() {
+  const res = await api('getExamDates', { batch: currentExamBatch });
+  const sel = document.getElementById('examDateSelect');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">— Select date —</option>';
+  if (res.success) {
+    examDates = res.dates;
+    res.dates.forEach(d => { sel.innerHTML += `<option value="${d}">${d}</option>`; });
+  }
+}
+
+async function loadMarks() {
+  const date = document.getElementById('examDateSelect')?.value;
+  const saveBtn = document.getElementById('saveMarksBtn');
+  if (!date) {
+    document.getElementById('marksList').innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16"/><polyline points="14 2 14 8 20 8"/></svg><p>Select exam date to add marks</p></div>';
+    if (saveBtn) saveBtn.style.display = 'none';
+    return;
+  }
+
+  const el = document.getElementById('marksList');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+
+  const stuRes = await api('getStudents', { batch: currentExamBatch });
+  const marksRes = await api('getMarks', { examDate: date, batch: currentExamBatch });
+  const existingMarks = {};
+  if (marksRes.success) marksRes.marks.forEach(m => { existingMarks[m.regNo] = m.score; });
+
+  if (!stuRes.success) { el.innerHTML = '<div class="cb">Failed to load students</div>'; return; }
+
+  const students = stuRes.students.filter(s => s.status === 'Active');
+  if (!students.length) { el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3)">No active students in this batch</div>'; return; }
+
+  const avg = marksRes.success && marksRes.marks.length > 0
+    ? Math.round(marksRes.marks.reduce((a, b) => a + Number(b.score), 0) / marksRes.marks.length)
+    : '—';
+
+  let html = `<div class="exc"><div class="exh"><div class="exh-n">${currentExamBatch} · ${date}</div><div class="exh-avg">Avg: ${avg}</div></div>`;
+  students.forEach(s => {
+    const score = existingMarks[s.regNo] || '';
+    html += `<div class="exr">
+      <div class="exr-n">${s.name} <span style="color:var(--tx4);font-size:11px">· ${s.regNo}</span></div>
+      <input class="mi" type="number" id="mark-${s.regNo}" value="${score}" min="0" max="100" placeholder="—">
+    </div>`;
+  });
+  html += '</div>';
+  el.innerHTML = html;
+  if (saveBtn) saveBtn.style.display = 'flex';
+}
+
+async function saveMarks() {
+  const date = document.getElementById('examDateSelect')?.value;
+  if (!date) { toast('❌ Select exam date first'); return; }
+
+  const stuRes = await api('getStudents', { batch: currentExamBatch });
+  if (!stuRes.success) { toast('❌ Could not load students'); return; }
+
+  const marks = stuRes.students.filter(s => s.status === 'Active').map(s => {
+    const input = document.getElementById(`mark-${s.regNo}`);
+    return { regNo: s.regNo, name: s.name, score: input ? Number(input.value) || 0 : 0 };
+  });
+
+  const res = await api('saveMarks', { examDate: date, batch: currentExamBatch, marks });
+  if (res.success) { toast('✅ Marks saved to Google Sheets!'); }
+  else { toast('❌ ' + res.error); }
+}
+
+function addExamDate() {
+  const date = document.getElementById('newExamDate').value;
+  if (!date) { toast('❌ Select a date'); return; }
+  const formatted = new Date(date).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+  const sel = document.getElementById('examDateSelect');
+  sel.innerHTML += `<option value="${formatted}">${formatted}</option>`;
+  sel.value = formatted;
+  toast('✅ Exam date added!');
+  closeSht('addExamDate');
+  loadMarks();
+}
+
+async function loadResults() {
+  const el = document.getElementById('resultsList');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  if (!examDates.length) { el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M14 2H6"/></svg><p>No exam dates found</p></div>'; return; }
+
+  const res = await api('getMarks', { examDate: examDates[0], batch: currentExamBatch });
+  if (!res.success || !res.marks.length) {
+    el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M14 2H6"/></svg><p>No results found</p></div>';
+    return;
+  }
+
+  const medals = ['🥇','🥈','🥉'];
+  el.innerHTML = res.marks.map((m, i) => `
+    <div class="rc">
+      <div class="rch">
+        <div class="rk" style="${i<3?`background:${['#92400e','#64748b','#78350f'][i]}`:''}">${medals[i] || i+1}</div>
+        <div><div class="rn">${m.name}</div><div class="rb">Reg: ${m.regNo} · ${currentExamBatch}</div></div>
+        <div class="rs"><div class="rs-v">${m.score}</div><div class="rs-l">/ 100</div></div>
+      </div>
+      <div class="rsubs">
+        <div class="rsp">${examDates[0]} <span style="color:var(--p);font-weight:800">${m.score}</span></div>
+      </div>
+    </div>`).join('');
+}
+
+async function loadBatchResults() {
+  const el = document.getElementById('batchResultCard');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  if (!examDates.length) { el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3)">No exam dates found</div>'; return; }
+
+  const results = {};
+  for (const b of ['Shitalakkhya', 'Bhairab']) {
+    const res = await api('getMarks', { examDate: examDates[0], batch: b });
+    if (res.success && res.marks.length) {
+      const avg = Math.round(res.marks.reduce((a, m) => a + Number(m.score), 0) / res.marks.length);
+      results[b] = avg;
+    }
+  }
+
+  document.getElementById('batchAvgS').textContent = results['Shitalakkhya'] || '—';
+  document.getElementById('batchAvgB').textContent = results['Bhairab'] || '—';
+
+  let html = `<div class="ch"><div class="ct">All Batches · ${examDates[0]}</div></div><div class="cb" style="padding:0 16px">`;
+  Object.entries(results).forEach(([b, avg]) => {
+    html += `<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--bdr)">
+      <div style="width:34px;height:34px;border-radius:9px;background:var(--pl);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--p);font-size:11px;border:1px solid var(--pm)">${b.slice(0,4)}</div>
+      <div style="flex:1"><div style="font-size:13px;font-weight:700">${b}</div><div class="pb"><div class="pf" style="width:${avg}%;background:var(--p)"></div></div></div>
+      <div style="font-size:18px;font-weight:800;color:var(--p)">${avg}</div>
+    </div>`;
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+// ═══════════════════════════════════════
+//  SMS
+// ═══════════════════════════════════════
+const SMS_TEMPLATES = {
+  absence: { to: 'absent', msg: `Dear [Student Name], You have 3 absents this month. Your admission is on hold. Please contact the office.\n\nBasis BCS Academy.` },
+  festival: { to: 'all', msg: `Eid Mubarak! Wishing you and your family a joyful celebration.\n\nBasis BCS Academy.` },
+  announce: { to: 'all', msg: `Dear [Student Name], Important announcement from Basis BCS Academy. Please check the notice board.\n\nBasis BCS Academy.` },
+  custom: { to: 'all', msg: `Basis BCS Academy.` }
+};
+
+function selSms(card, type) {
+  card.closest('.stg').querySelectorAll('.stc').forEach(c => c.classList.remove('active'));
+  card.classList.add('active');
+  const t = SMS_TEMPLATES[type];
+  if (t) {
+    const msg = document.getElementById('smsMsg');
+    const sel = document.getElementById('smsTo');
+    if (msg) { msg.value = t.msg; updCC(); }
+    if (sel) sel.value = t.to;
+  }
+}
+
+function updCC() {
+  const l = document.getElementById('smsMsg')?.value.length || 0;
+  const cc = document.getElementById('cc');
+  const sc = document.getElementById('sc');
+  if (cc) cc.textContent = l;
+  if (sc) sc.textContent = Math.ceil(l / 160) || 1;
+}
+
+async function refreshBalance() {
+  const amt = document.getElementById('balAmt');
+  const time = document.getElementById('balTime');
+  if (amt) amt.textContent = 'Checking...';
+
+  const res = await api('checkBalance');
+  if (res.success) {
+    if (amt) amt.textContent = `৳ ${res.balance}`;
+    if (time) time.textContent = 'Last checked: just now';
+    const card = document.getElementById('balCard');
+    if (card && Number(res.balance) < 200) card.classList.add('low');
+    else if (card) card.classList.remove('low');
+  } else {
+    if (amt) amt.textContent = 'SMS not configured';
+    if (time) time.textContent = 'Configure API key first';
+  }
+}
+
+async function sendSMS() {
+  const msg = document.getElementById('smsMsg')?.value;
+  const to = document.getElementById('smsTo')?.value;
+  if (!msg) { toast('❌ Message required'); return; }
+
+  // Get numbers based on selection
+  let numbers = [];
+  if (to === 'absent') {
+    const res = await api('getAbsentStudents', {});
+    if (res.success) {
+      numbers = res.students.map(s => s.phone).filter(p => p && p !== '');
+    }
+  } else if (to === 'all') {
+    for (const b of batches.filter(b => b.status === 'Active')) {
+      const res = await api('getStudents', { batch: b.name });
+      if (res.success) numbers = numbers.concat(res.students.filter(s => s.phone).map(s => s.phone));
+    }
+  } else {
+    const res = await api('getStudents', { batch: to });
+    if (res.success) numbers = res.students.filter(s => s.phone).map(s => s.phone);
+  }
+
+  if (!numbers.length) { toast('❌ No phone numbers available'); return; }
+
+  const res = await api('sendSMS', { numbers, message: msg });
+  if (res.success) {
+    toast(`📱 SMS sending started for ${numbers.length} recipients!`);
+  } else {
+    toast('❌ ' + (res.error || 'SMS failed'));
+  }
+}
+
+async function sendAbsenceSMS(name, regNo) {
+  toast(`📱 Sending SMS to ${name}...`);
+}
+
+async function loadSMSLog() {
+  const el = document.getElementById('smsLogList');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  const res = await api('getSMSLog');
+  if (!res.success || !res.logs.length) {
+    el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><p>No SMS history yet</p></div>';
+    return;
+  }
+
+  el.innerHTML = res.logs.map(log => `
+    <div class="slog">
+      <div class="slog-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <div class="slog-tx">
+        <div class="slog-m">${log.phone}</div>
+        <div class="slog-d">${log.message}</div>
+        <span class="slog-st ${log.status === 'Delivered' ? 'ok' : 'fail'}">${log.status === 'Delivered' ? '✅' : '❌'} ${log.status}</span>
+      </div>
+      <div class="slog-t">${log.time}</div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════
+//  TEACHERS
+// ═══════════════════════════════════════
+async function loadTeachers() {
+  if (currentUser?.role !== 'Admin') return;
+  const el = document.getElementById('teacherList');
+  if (!el) return;
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  const res = await api('getTeachers');
+  if (!res.success) { el.innerHTML = '<div class="cb">Failed to load</div>'; return; }
+
+  el.innerHTML = res.teachers.map(t => `
+    <div class="sli">
+      <div class="av" style="background:var(--pl);color:var(--p)">${t.name.charAt(0).toUpperCase()}</div>
+      <div class="sl-info">
+        <div class="sl-name">${t.name}</div>
+        <div class="sl-det">${t.username} · ${t.role} · <span style="color:var(--${t.status==='Active'?'ok':'err'})">${t.status}</span></div>
+      </div>
+      ${t.status === 'Active' && t.role !== 'Admin' ? `<button class="btn btn-sm btn-err" onclick="deactivateTeacher('${t.username}')">Remove</button>` : ''}
+    </div>`).join('');
+}
+
+async function addTeacher() {
+  const name = document.getElementById('tName').value.trim();
+  const user = document.getElementById('tUser').value.trim().toLowerCase();
+  const pass = document.getElementById('tPass').value;
+  const role = document.getElementById('tRole').value;
+  if (!name || !user || !pass) { toast('❌ All fields required'); return; }
+
+  const res = await api('addTeacher', { teacher: { name, username: user, password: pass, role } });
+  if (res.success) {
+    toast('✅ Teacher added!');
+    closeSht('addTeacher');
+    document.getElementById('tName').value = '';
+    document.getElementById('tUser').value = '';
+    document.getElementById('tPass').value = '';
+    loadTeachers();
+  } else {
+    toast('❌ ' + res.error);
+  }
+}
+
+async function deactivateTeacher(username) {
+  if (!confirm('Remove this teacher?')) return;
+  const res = await api('deactivateTeacher', { username });
+  if (res.success) { toast('✅ Teacher removed'); loadTeachers(); }
+  else { toast('❌ ' + res.error); }
+}
+
+async function changePassword() {
+  const old = document.getElementById('oldPass').value;
+  const nw = document.getElementById('newPass').value;
+  const conf = document.getElementById('confPass').value;
+  if (!old || !nw || !conf) { toast('❌ All fields required'); return; }
+  if (nw !== conf) { toast('❌ Passwords do not match'); return; }
+
+  const res = await api('changePassword', { username: currentUser.username, oldPassword: old, newPassword: nw });
+  if (res.success) {
+    toast('✅ Password changed!');
+    closeSht('changePass');
+    document.getElementById('oldPass').value = '';
+    document.getElementById('newPass').value = '';
+    document.getElementById('confPass').value = '';
+  } else {
+    toast('❌ ' + res.error);
+  }
+}
+
+async function toggleAutoSMS() {
+  toast('📱 Update AUTO_SMS in Google Sheets Settings tab');
+}
+
+async function syncData() {
+  toast('☁️ Syncing with Google Sheets...');
+  await loadHomeData();
+  await loadBatches();
+  const ls = document.getElementById('lastSync');
+  if (ls) ls.textContent = 'Last synced: just now';
+  toast('✅ Sync complete!');
+}
+
+// ═══════════════════════════════════════
+//  EXPORT
+// ═══════════════════════════════════════
+function exportStudentsPDF() {
+  toast('📄 PDF export coming in next update!');
+}
+
+function exportStudentsExcel() {
+  toast('📊 Excel export coming in next update!');
+}
+
+function exportAttendance() {
+  toast('📊 Attendance export coming in next update!');
+}
+
+// ═══════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════
+let tt;
+function toast(msg) {
+  const t = document.getElementById('toastEl');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(tt);
+  tt = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ═══════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════
+initDates();
+updCC();
+</script>
+</body>
+</html>
