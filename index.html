@@ -1203,6 +1203,7 @@ let batches = [];
 let examDates = [];
 let currentDate = new Date();
 let markedBatchesToday = new Set();
+let studentCache = {};
 
 // ═══════════════════════════════════════
 //  THEME
@@ -2278,13 +2279,6 @@ async function syncData() {
 // ═══════════════════════════════════════
 //  EXPORT
 // ═══════════════════════════════════════
-function exportStudentsPDF() {
-  toast('📄 PDF export coming in next update!');
-}
-
-function exportStudentsExcel() {
-  toast('📊 Excel export coming in next update!');
-}
 
 async function exportAttendance() {
   try {
