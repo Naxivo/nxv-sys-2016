@@ -1,0 +1,24 @@
+{
+  "name": "Basis BCS Academy",
+  "short_name": "BCS Academy",
+  "description": "Coaching Centre Management System",
+  "start_url": "/nxv-sys-2016/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4f46e5",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/nxv-sys-2016/icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/nxv-sys-2016/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
