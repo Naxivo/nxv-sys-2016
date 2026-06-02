@@ -1723,6 +1723,9 @@ async function addStudent() {
     document.getElementById('stuRegNo').value = '';
     document.getElementById('stuDept').value = '';
     document.getElementById('stuPhone').value = '';
+  const activeBatch = document.querySelector('.btab.active').innerText;
+  delete studentCache[activeBatch];
+     
     loadStudents();
     loadHomeData();
   } else {
