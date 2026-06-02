@@ -2298,17 +2298,12 @@ async function exportAttendance() {
       date: currentDate 
     });
     
-    if (!response.success) { 
+    if (!response.success || response.records.length === 0) { 
       alert('No attendance data found for this date.'); 
       return; 
     }
     
     const records = response.records;
-    if (records.length === 0) {
-      alert('No attendance records found.');
-      return; 
-    }
-    
     const centreName = "Basis BCS Academy";
     const exportDate = new Date().toLocaleDateString('en-BD', { 
       day: '2-digit', month: 'short', year: 'numeric' 
@@ -2318,6 +2313,7 @@ async function exportAttendance() {
     const absent = records.filter(r => r.status === 'A').length;
     const total = records.length;
     
+    // Create HTML container
     const container = document.createElement('div');
     container.style.position = 'absolute';
     container.style.left = '-9999px';
@@ -2327,62 +2323,56 @@ async function exportAttendance() {
     container.style.fontFamily = "'Poppins', sans-serif";
     
     container.innerHTML = `
-      <div style="text-align: center; margin-bottom: 20px;">
-        <h1 style="color: #1d4ed8; font-size: 24px; margin: 0 0 8px 0; font-weight: 800;">${centreName}</h1>
-        <h2 style="color: #000; font-size: 18px; margin: 0 0 4px 0; font-weight: 700;">Attendance Report</h2>
-        <p style="color: #64748b; font-size: 12px; margin: 0 0 15px 0;">Batch: ${batchName} | Date: ${currentDate}</p>
+      <div style="text-align:center;margin-bottom:20px;">
+        <h1 style="color:#1d4ed8;font-size:24px;margin:0 0 8px 0;font-weight:800;">${centreName}</h1>
+        <h2 style="color:#000;font-size:18px;margin:0 0 4px 0;font-weight:700;">Attendance Report</h2>
+        <p style="color:#64748b;font-size:12px;margin:0 0 15px 0;">Batch: ${batchName} | Date: ${currentDate}</p>
       </div>
-      
-      <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-        <div style="flex: 1; background: #ecfdf5; border: 2px solid #10b981; border-radius: 8px; padding: 12px; text-align: center;">
-          <div style="font-size: 24px; font-weight: 800; color: #059669;">${present}</div>
-          <div style="font-size: 11px; color: #059669; font-weight: 600;">Present</div>
+      <div style="display:flex;gap:15px;margin-bottom:20px;">
+        <div style="flex:1;background:#ecfdf5;border:2px solid #10b981;border-radius:8px;padding:12px;text-align:center;">
+          <div style="font-size:24px;font-weight:800;color:#059669;">${present}</div>
+          <div style="font-size:11px;color:#059669;font-weight:600;">Present</div>
         </div>
-        <div style="flex: 1; background: #fef2f2; border: 2px solid #ef4444; border-radius: 8px; padding: 12px; text-align: center;">
-          <div style="font-size: 24px; font-weight: 800; color: #dc2626;">${absent}</div>
-          <div style="font-size: 11px; color: #dc2626; font-weight: 600;">Absent</div>
+        <div style="flex:1;background:#fef2f2;border:2px solid #ef4444;border-radius:8px;padding:12px;text-align:center;">
+          <div style="font-size:24px;font-weight:800;color:#dc2626;">${absent}</div>
+          <div style="font-size:11px;color:#dc2626;font-weight:600;">Absent</div>
         </div>
-        <div style="flex: 1; background: #eff6ff; border: 2px solid #3b82f6; border-radius: 8px; padding: 12px; text-align: center;">
-          <div style="font-size: 24px; font-weight: 800; color: #1d4ed8;">${total}</div>
-          <div style="font-size: 11px; color: #1d4ed8; font-weight: 600;">Total</div>
+        <div style="flex:1;background:#eff6ff;border:2px solid #3b82f6;border-radius:8px;padding:12px;text-align:center;">
+          <div style="font-size:24px;font-weight:800;color:#1d4ed8;">${total}</div>
+          <div style="font-size:11px;color:#1d4ed8;font-weight:600;">Total</div>
         </div>
       </div>
-      
-      <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
-        <thead>
-          <tr style="background: #1d4ed8; color: white;">
-            <th style="padding: 8px; border: 1px solid #e2e8f0; text-align: left; width: 10%;">SL</th>
-            <th style="padding: 8px; border: 1px solid #e2e8f0; text-align: left; width: 20%;">Reg No</th>
-            <th style="padding: 8px; border: 1px solid #e2e8f0; text-align: left; width: 40%;">Name</th>
-            <th style="padding: 8px; border: 1px solid #e2e8f0; text-align: left; width: 15%;">Status</th>
-            <th style="padding: 8px; border: 1px solid #e2e8f0; text-align: left; width: 15%;">Time</th>
-          </tr>
-        </thead>
+      <table style="width:100%;border-collapse:collapse;font-size:11px;">
+        <thead><tr style="background:#1d4ed8;color:white;">
+          <th style="padding:8px;border:1px solid #e2e8f0;text-align:left;">SL</th>
+          <th style="padding:8px;border:1px solid #e2e8f0;text-align:left;">Reg No</th>
+          <th style="padding:8px;border:1px solid #e2e8f0;text-align:left;">Name</th>
+          <th style="padding:8px;border:1px solid #e2e8f0;text-align:left;">Status</th>
+          <th style="padding:8px;border:1px solid #e2e8f0;text-align:left;">Time</th>
+        </tr></thead>
         <tbody>
           ${records.map((r, i) => `
-            <tr style="background: ${i % 2 === 0 ? '#f8fafc' : 'white'};">
-              <td style="padding: 6px 8px; border: 1px solid #e2e8f0;">${i + 1}</td>
-              <td style="padding: 6px 8px; border: 1px solid #e2e8f0;">${r.regNo}</td>
-              <td style="padding: 6px 8px; border: 1px solid #e2e8f0;">${r.name}</td>
-              <td style="padding: 6px 8px; border: 1px solid #e2e8f0; text-align: center;">
-                <span style="display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; ${r.status === 'P' ? 'background: #ecfdf5; color: #059669;' : 'background: #fef2f2; color: #dc2626;'}">
+            <tr style="background:${i % 2 === 0 ? '#f8fafc' : 'white'};">
+              <td style="padding:6px 8px;border:1px solid #e2e8f0;">${i + 1}</td>
+              <td style="padding:6px 8px;border:1px solid #e2e8f0;">${r.regNo}</td>
+              <td style="padding:6px 8px;border:1px solid #e2e8f0;">${r.name}</td>
+              <td style="padding:6px 8px;border:1px solid #e2e8f0;text-align:center;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;font-size:10px;font-weight:700;background:${r.status === 'P' ? '#ecfdf5;color:#059669;' : '#fef2f2;color:#dc2626;'}">
                   ${r.status === 'P' ? 'Present' : 'Absent'}
                 </span>
               </td>
-              <td style="padding: 6px 8px; border: 1px solid #e2e8f0; font-size: 10px;">${r.time || 'N/A'}</td>
+              <td style="padding:6px 8px;border:1px solid #e2e8f0;font-size:10px;">${r.time || 'N/A'}</td>
             </tr>
           `).join('')}
         </tbody>
       </table>
-      
-      <div style="text-align: center; margin-top: 15px; color: #94a3b8; font-size: 10px;">
-        Exported on: ${exportDate}
-      </div>
+      <div style="text-align:center;margin-top:15px;color:#94a3b8;font-size:10px;">Exported: ${exportDate}</div>
     `;
     
     document.body.appendChild(container);
     await document.fonts.ready;
     
+    // Capture and create PDF
     const canvas = await html2canvas(container, {
       scale: 2,
       useCORS: true,
