@@ -2305,5 +2305,123 @@ function toast(msg) {
 initDates();
 updCC();
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<script>
+// ═══════════════════════════════════════
+//  EXPORT FUNCTIONS
+// ═══════════════════════════════════════
+async function exportStudentsPDF() {
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    const activeTab = document.querySelector('.btab.active');
+    const batchName = activeTab ? activeTab.innerText : 'Shitalakkhya';
+    
+    const response = await api('getStudents', { batch: batchName });
+    if (!response.success) { alert('Failed to load student data.'); return; }
+    
+    const students = response.students;
+    const centreName = "Basis BCS Academy";
+    const exportDate = new Date().toLocaleDateString('en-BD', { 
+      day: '2-digit', month: 'short', year: 'numeric' 
+    });
+    
+    // Header
+    doc.setFontSize(20);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(29, 78, 216);
+    doc.text(centreName, 105, 20, { align: 'center' });
+    
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Batch: ${batchName}`, 105, 30, { align: 'center' });
+    
+    doc.setFontSize(11);
+    doc.setTextColor(100, 100, 100);
+    doc.text(`Exported on: ${exportDate}`, 105, 38, { align: 'center' });
+    
+    // Table
+    const tableColumn = ["SL", "Reg No", "Name", "Department", "Phone", "Status"];
+    const tableRows = students.map(s => [
+      s.serial, s.regNo, s.name, s.department || "N/A", s.phone || "N/A", s.status
+    ]);
+    
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 45,
+      theme: 'grid',
+      headStyles: { fillColor: [29, 78, 216], textColor: 255, fontStyle: 'bold', fontSize: 11 },
+      bodyStyles: { fontSize: 10, textColor: 50 },
+      alternateRowStyles: { fillColor: [245, 247, 250] },
+      margin: { top: 45, left: 15, right: 15 }
+    });
+    
+    // Footer
+    const pageCount = doc.internal.getNumberOfPages();
+    doc.setFontSize(9);
+    doc.setTextColor(150, 150, 150);
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.text(`Page ${i} of ${pageCount}`, 105, 290, { align: 'center' });
+    }
+    
+    doc.save(`${batchName}_Students_${Date.now()}.pdf`);
+    
+  } catch (err) {
+    console.error('PDF Error:', err);
+    alert('Error generating PDF.');
+  }
+}
+
+async function exportStudentsExcel() {
+  try {
+    const activeTab = document.querySelector('.btab.active');
+    const batchName = activeTab ? activeTab.innerText : 'Shitalakkhya';
+    
+    const response = await api('getStudents', { batch: batchName });
+    if (!response.success) { alert('Failed to load student data.'); return; }
+    
+    const students = response.students;
+    const centreName = "Basis BCS Academy";
+    const exportDate = new Date().toLocaleDateString('en-BD');
+    
+    const excelData = students.map(s => ({
+      "Serial": s.serial,
+      "Registration No": s.regNo,
+      "Name": s.name,
+      "Department": s.department || "",
+      "Phone": s.phone || "",
+      "Status": s.status
+    }));
+    
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(excelData);
+    
+    const headerData = [
+      [centreName],
+      [`Batch: ${batchName}`],
+      [`Exported on: ${exportDate}`],
+      []
+    ];
+    XLSX.utils.sheet_add_aoa(ws, headerData, { origin: "A1" });
+    
+    ws['!cols'] = [
+      { wch: 6 }, { wch: 12 }, { wch: 30 }, { wch: 20 }, { wch: 15 }, { wch: 10 }
+    ];
+    
+    XLSX.utils.book_append_sheet(wb, ws, "Students");
+    XLSX.writeFile(wb, `${batchName}_Students_${Date.now()}.xlsx`);
+    
+  } catch (err) {
+    console.error('Excel Error:', err);
+    alert('Error generating Excel.');
+  }
+}
+</script>
 </body>
 </html>
