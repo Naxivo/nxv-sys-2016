@@ -1292,6 +1292,7 @@ async function doLogin() {
 
   if (res.success) {
     currentUser = res.user;
+    localStorage.setItem('bcsUser', JSON.stringify(res.user));
     document.getElementById('loginPage').style.display = 'none';
     document.getElementById('app').style.display = 'block';
     err.style.display = 'none';
@@ -1328,6 +1329,7 @@ function showLoginError(msg) {
 }
 
 function doLogout() {
+  localStorage.removeItem('bcsUser');
   currentUser = null;
   allStudents = {};
   document.getElementById('app').style.display = 'none';
@@ -2452,12 +2454,47 @@ function toast(msg) {
   clearTimeout(tt);
   tt = setTimeout(() => t.classList.remove('show'), 2800);
 }
+   
+// ✅ AUTO-LOGIN CHECK
+(function() {
+  const saved = localStorage.getItem('bcsUser');
+  if (saved) {
+    try {
+      currentUser = JSON.parse(saved);
+      
+      // Skip login page and go to app
+      document.getElementById('loginPage').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      
+      // Update UI
+      document.getElementById('profileName').textContent = currentUser.name;
+      document.getElementById('profileRole').textContent = currentUser.role + ' · Basis BCS Academy';
+      document.getElementById('profileAv').textContent = currentUser.name.charAt(0).toUpperCase();
+      
+      // Hide admin settings if it's a teacher
+      if (currentUser.role !== 'Admin') {
+        const adminSettings = document.getElementById('adminOnlySettings');
+        const adminSMS = document.getElementById('adminSMSSettings');
+        if (adminSettings) adminSettings.style.display = 'none';
+        if (adminSMS) adminSMS.style.display = 'none';
+      }
+      
+      // Load app data
+      initDates();
+      loadHomeData();
+      loadBatches();
+      updCC();
+      return;  
+       
+    } catch(e) {
+      localStorage.removeItem('bcsUser');
+  initDates();
+  updCC();
+    }
+  }
+})();
 
-// ═══════════════════════════════════════
-//  INIT
-// ═══════════════════════════════════════
-initDates();
-updCC();
+
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
