@@ -1763,10 +1763,8 @@ async function addStudent() {
     document.getElementById('stuRegNo').value = '';
     document.getElementById('stuDept').value = '';
     document.getElementById('stuPhone').value = '';
-  const activeBatch = document.querySelector('.btab.active').innerText;
-  delete studentCache[activeBatch];
-   const activeBatch = document.getElementById('stuBatch').value;
-  delete studentCache[activeBatch];  
+   const addedBatch = document.getElementById('stuBatch').value;
+  delete studentCache[addedBatch];
   delete studentCache['all'];         
      
     loadStudents();
