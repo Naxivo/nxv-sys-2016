@@ -1362,7 +1362,7 @@ function go(name) {
   window.scrollTo(0, 0);
 
   // Load page data
-  if (name === 'students') loadStudents();
+  if (name === 'students') ;
   if (name === 'attendance') loadAttendanceList();
   if (name === 'settings') { loadBatchManagement(); loadTeachers(); }
   if (name === 'sms') refreshBalance();
@@ -1401,7 +1401,7 @@ function swBatch(el, batch) {
   
   // Load from API if not cached
   if (batch !== 'all') loadStudents(batch);
-  else loadStudents();
+  else ;
 }
 
 function swAttBatch(el, batch) {
@@ -1611,18 +1611,36 @@ function getInitials(name) {
 async function loadStudents(batch = null) {
   const el = document.getElementById('studentList');
   
-  // 1. CHECK CACHE FIRST (Instant!)
-  const cacheKey = batch || 'all';
-  if (studentCache[cacheKey]) {
-    renderStudentList(studentCache[cacheKey]);
-    return; // Don't ask Google again!
+  // FIX 1: If loading 'all', wait for batches to load first
+  if (!batch || batch === 'all') {
+    if (batches.length === 0) {
+      await loadBatches();
+    }
   }
   
-  // 2. SHOW LOADING
+  const cacheKey = batch || 'all';
+  
+  // FIX 2: Check cache AND make sure it has data
+  if (studentCache[cacheKey] && studentCache[cacheKey].length > 0) {
+    renderStudentList(studentCache[cacheKey]);
+    return;
+  }
+  
   el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
 
-  // 3. FETCH FROM GOOGLE
-  const batchList = batch && batch !== 'all' ? [batch] : batches.filter(b => b.status === 'Active').map(b => b.name);
+  let batchList = [];
+  if (batch && batch !== 'all') {
+    batchList = [batch];
+  } else {
+    batchList = batches.filter(b => b.status === 'Active').map(b => b.name);
+  }
+
+  // FIX 3: If still no batches, show error
+  if (batchList.length === 0) {
+    el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><p>No active batches found</p></div>';
+    return;
+  }
+
   let allStu = [];
 
   for (const b of batchList) {
@@ -1634,10 +1652,15 @@ async function loadStudents(batch = null) {
     }
   }
   
-  // 4. SAVE TO CACHE
   studentCache[cacheKey] = allStu;
   
-  // 5. RENDER
+  // FIX 4: Save to localStorage (persists across refresh)
+  try {
+    localStorage.setItem('bcsStudentCache', JSON.stringify(studentCache));
+  } catch(e) {
+    localStorage.removeItem('bcsStudentCache');
+  }
+  
   renderStudentList(allStu);
 }
 function renderStudentList(students) {
