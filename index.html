@@ -1393,15 +1393,14 @@ function swBatch(el, batch) {
   el.classList.add('active');
   currentBatch = batch;
   
-  // Check cache first (Instant!)
-  if (studentCache[batch]) {
+  // Check cache first (Instant!) - ONLY for individual batches
+  if (batch && batch !== 'all' && studentCache[batch]) {
     renderStudentList(studentCache[batch]);
     return;
   }
   
-  // Load from API if not cached
-  if (batch !== 'all') loadStudents(batch);
-  else ;
+  // Load from API
+  loadStudents(batch);
 }
 
 function swAttBatch(el, batch) {
