@@ -1609,6 +1609,9 @@ function getInitials(name) {
 
 async function loadStudents(batch = null) {
   const el = document.getElementById('studentList');
+
+  console.log('🔍 loadStudents called with batch:', batch);
+  console.log('🔍 Current batches:', batches);
   
   // 1. Wait for batches to load if we are loading 'all'
   if (!batch || batch === 'all') {
