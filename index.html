@@ -1389,17 +1389,20 @@ function swSub(btn, id) {
 //  BATCH TABS
 // ═══════════════════════════════════════
 function swBatch(el, batch) {
+  console.log('🔴 swBatch called with batch:', batch);
+  
   el.closest('.btabs').querySelectorAll('.btab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   currentBatch = batch;
   
   // Check cache first (Instant!) - ONLY for individual batches
   if (batch && batch !== 'all' && studentCache[batch]) {
+    console.log('✅ Loading from cache:', batch);
     renderStudentList(studentCache[batch]);
     return;
   }
   
-  // Load from API
+  console.log('⏳ Calling loadStudents with:', batch);
   loadStudents(batch);
 }
 
