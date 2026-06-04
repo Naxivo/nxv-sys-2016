@@ -2479,7 +2479,7 @@ function toast(msg) {
 }
    
 // ✅ AUTO-LOGIN CHECK
-(function() {
+(async function() {
   const saved = localStorage.getItem('bcsUser');
   if (saved) {
     try {
@@ -2505,7 +2505,7 @@ function toast(msg) {
       // Load app data
       initDates();
       loadHomeData();
-      loadBatches();
+      await loadBatches();
       updCC();
       return;  
        
