@@ -1650,8 +1650,23 @@ async function loadStudents(batch = null) {
 
   // 6. Fetch from Google Sheets
   let allStu = [];
-  for (const b of batchList) {
-    const res = await api('getStudents', { batch: b });
+  
+  // 🚀 START ALL REQUESTS AT ONCE (Parallel)
+  const promises = batchList.map(async (b) => {
+    try {
+      const res = await api('getStudents', { batch: b });
+      return { batch: b, res: res };
+    } catch (e) {
+      console.error('Error loading batch:', b, e);
+      return { batch: b, res: { success: false } };
+    }
+  });
+
+  // ⏳ WAIT FOR ALL TO FINISH
+  const results = await Promise.all(promises);
+  
+  // 📦 COMBINE THE RESULTS
+  for (const { batch: b, res } of results) {
     if (res.success) {
       res.students.forEach(s => { s._batch = b; });
       allStu = allStu.concat(res.students);
