@@ -1958,9 +1958,8 @@ pCount = activeStudents.length - aCount;
 document.getElementById('pC').textContent = pCount;
 document.getElementById('aC').textContent = aCount;
 
-  const activeStudents = res.students.filter(s => s.status === 'Active');
+  
   allStudents[currentAttBatch] = activeStudents;
-
   renderAttList(activeStudents, attRecords);
 }
 
