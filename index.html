@@ -17,7 +17,7 @@
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
 
-<title>Basis BCS Academy</title>
+<title>Basic BCS Academy</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
@@ -526,11 +526,11 @@ body.dark .bnav { background: rgba(17,24,39,.92); border-top-color: rgba(255,255
 <div id="loginPage">
   <div class="login-logo-wrap">
     <div class="login-logo">
-      <img src="logo.png" alt="Basis BCS Academy" onerror="this.style.display='none';this.parentNode.innerHTML='<span style=\'font-size:36px;font-weight:900;color:#fff;font-family:Poppins\'>B</span>'">
+      <img src="logo.png" alt="Basic BCS Academy" onerror="this.style.display='none';this.parentNode.innerHTML='<span style=\'font-size:36px;font-weight:900;color:#fff;font-family:Poppins\'>B</span>'">
     </div>
     <div class="login-ring"></div>
   </div>
-  <div class="login-name">Basis BCS Academy</div>
+  <div class="login-name">Basic BCS Academy</div>
   <div class="login-tag">Coaching Centre Management System</div>
   <div class="login-card">
     <label class="lbl">Username</label>
@@ -540,7 +540,7 @@ body.dark .bnav { background: rgba(17,24,39,.92); border-top-color: rgba(255,255
     <button class="btn btn-p" onclick="doLogin()" id="loginBtn">Sign In →</button>
     <div id="loginError" style="color:var(--err);font-size:12px;text-align:center;margin-top:10px;display:none;font-weight:600"></div>
   </div>
-  <div class="login-ver">Basis BCS Academy · v1.0 · Made in Bangladesh 🇧🇩</div>
+  <div class="login-ver">Basic BCS Academy · v1.0 · Made in Bangladesh 🇧🇩</div>
 </div>
 
 <!-- ═══════════ APP ═══════════ -->
@@ -553,7 +553,7 @@ body.dark .bnav { background: rgba(17,24,39,.92); border-top-color: rgba(255,255
       <img src="logo.png" alt="B" style="width:22px;height:22px;object-fit:contain" onerror="this.style.display='none';this.parentNode.innerHTML='<span style=\'color:#fff;font-weight:800;font-size:14px\'>B</span>'">
     </div>
     <div class="tb-info">
-      <div class="tb-name">Basis BCS Academy</div>
+      <div class="tb-name">Basic BCS Academy</div>
       <div class="tb-sub" id="todayDate">Loading...</div>
     </div>
     <div class="tb-right">
@@ -624,7 +624,7 @@ body.dark .bnav { background: rgba(17,24,39,.92); border-top-color: rgba(255,255
       <div class="cb" style="padding:0 16px" id="recentActivity">
         <div class="ai">
           <div class="ai-dot g"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
-          <div class="ai-tx"><div class="ai-m">System Ready</div><div class="ai-s">Basis BCS Academy v1.0</div></div>
+          <div class="ai-tx"><div class="ai-m">System Ready</div><div class="ai-s">Basic BCS Academy v1.0</div></div>
           <div class="ai-t">Now</div>
         </div>
       </div>
@@ -847,7 +847,7 @@ body.dark .bnav { background: rgba(17,24,39,.92); border-top-color: rgba(255,255
         <label>Message</label>
         <textarea class="fta" id="smsMsg" oninput="updCC()">Dear [Student Name], You have 3 absents this month. Your admission is on hold. Please contact the office.
 
-Basis BCS Academy.</textarea>
+Basic BCS Academy.</textarea>
         <div class="cc"><span id="cc">0</span> characters · ~<span id="sc">1</span> SMS per recipient</div>
       </div>
       <div class="fg">
@@ -882,7 +882,7 @@ Basis BCS Academy.</textarea>
       <div class="lic-ic"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
       <div class="lic-info">
         <div class="lic-title">Licence Active</div>
-        <div class="lic-sub">Valid · Basis BCS Academy · v1.0</div>
+        <div class="lic-sub">Valid · Basic BCS Academy · v1.0</div>
       </div>
     </div>
 
@@ -1190,7 +1190,7 @@ Basis BCS Academy.</textarea>
         </div>
       </div>
       <div style="text-align:center;font-size:12px;color:var(--tx4);font-weight:500;margin-top:14px;font-style:italic">
-        Basis BCS Academy · v1.0 · Made in Bangladesh 🇧🇩
+        Basic BCS Academy · v1.0 · Made in Bangladesh 🇧🇩
       </div>
     </div>
   </div>
@@ -1338,7 +1338,7 @@ async function doLogin() {
 
     // Update profile
     document.getElementById('profileName').textContent = res.user.name;
-    document.getElementById('profileRole').textContent = res.user.role + ' · Basis BCS Academy';
+    document.getElementById('profileRole').textContent = res.user.role + ' · Basic BCS Academy';
     document.getElementById('profileAv').textContent = res.user.name.charAt(0).toUpperCase();
 
     // Hide admin-only settings for teachers
@@ -1937,14 +1937,26 @@ async function loadAttendanceList() {
   const total = res.students.filter(s => s.status === 'Active').length;
   document.getElementById('tC').textContent = total;
 
-  attRecords = {};
-  existing.forEach(r => { attRecords[r.regNo] = r.status; });
+attRecords = {};
+aCount = 0; // Reset absent count
 
-  // Count
-  pCount = existing.filter(r => r.status === 'P').length;
-  aCount = existing.filter(r => r.status === 'A').length;
-  document.getElementById('pC').textContent = pCount;
-  document.getElementById('aC').textContent = aCount;
+// ✅ NEW: Default everyone to 'P' unless existing record is 'A'
+const activeStudents = res.students.filter(s => s.status === 'Active');
+activeStudents.forEach(s => {
+  const found = existing.find(r => r.regNo === s.regNo);
+  if (found && found.status === 'A') {
+    attRecords[s.regNo] = 'A';
+    aCount++; // Only count actual absents
+  } else {
+    attRecords[s.regNo] = 'P'; // ✅ Default Present
+  }
+});
+
+// Calculate Present = Total - Absent
+pCount = activeStudents.length - aCount;
+
+document.getElementById('pC').textContent = pCount;
+document.getElementById('aC').textContent = aCount;
 
   const activeStudents = res.students.filter(s => s.status === 'Active');
   allStudents[currentAttBatch] = activeStudents;
@@ -1960,7 +1972,7 @@ function renderAttList(students, existing = {}) {
   }
 
   let html = students.map(s => {
-    const status = existing[s.regNo] || '';
+    const status = existing[s.regNo] === 'A' ? 'A' : 'P';
     return `<div class="ati" id="att-${s.regNo}">
       <div class="ati-info">
         <div class="ati-name">${s.name}</div>
@@ -2238,10 +2250,10 @@ async function loadBatchResults() {
 //  SMS
 // ═══════════════════════════════════════
 const SMS_TEMPLATES = {
-  absence: { to: 'absent', msg: `Dear [Student Name], You have 3 absents this month. Your admission is on hold. Please contact the office.\n\nBasis BCS Academy.` },
-  festival: { to: 'all', msg: `Eid Mubarak! Wishing you and your family a joyful celebration.\n\nBasis BCS Academy.` },
-  announce: { to: 'all', msg: `Dear [Student Name], Important announcement from Basis BCS Academy. Please check the notice board.\n\nBasis BCS Academy.` },
-  custom: { to: 'all', msg: `Basis BCS Academy.` }
+  absence: { to: 'absent', msg: `Dear [Student Name], You have 3 absents this month. Your admission is on hold. Please contact the office.\n\nBasic BCS Academy.` },
+  festival: { to: 'all', msg: `Eid Mubarak! Wishing you and your family a joyful celebration.\n\nBasic BCS Academy.` },
+  announce: { to: 'all', msg: `Dear [Student Name], Important announcement from Basic BCS Academy. Please check the notice board.\n\nBasic BCS Academy.` },
+  custom: { to: 'all', msg: `Basic BCS Academy.` }
 };
 
 function selSms(card, type) {
@@ -2445,7 +2457,7 @@ async function exportAttendance() {
     }
     
     const records = response.records;
-    const centreName = "Basis BCS Academy";
+    const centreName = "Basic BCS Academy";
     const exportDate = new Date().toLocaleDateString('en-BD', { 
       day: '2-digit', month: 'short', year: 'numeric' 
     });
@@ -2564,7 +2576,7 @@ function toast(msg) {
       
       // Update UI
       document.getElementById('profileName').textContent = currentUser.name;
-      document.getElementById('profileRole').textContent = currentUser.role + ' · Basis BCS Academy';
+      document.getElementById('profileRole').textContent = currentUser.role + ' · Basic BCS Academy';
       document.getElementById('profileAv').textContent = currentUser.name.charAt(0).toUpperCase();
       
       // Hide admin settings if it's a teacher
@@ -2633,7 +2645,7 @@ async function exportStudentsPDF() {
     
     if (students.length === 0) { alert('No students found to export.'); return; }
     
-    const centreName = "Basis BCS Academy";
+    const centreName = "Basic BCS Academy";
     const exportDate = new Date().toLocaleDateString('en-BD', { day: '2-digit', month: 'short', year: 'numeric' });
     const studentsPerPage = 25;
     const totalPages = Math.ceil(students.length / studentsPerPage);
