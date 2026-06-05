@@ -660,7 +660,7 @@ body.dark .bnav { background: rgba(17,24,39,.92); border-top-color: rgba(255,255
     <div class="card" style="padding:0" id="studentList">
   <div class="modern-loader">
   <div class="loader-ring"></div>
-  <div class="loader-text">Fetching students from cloud...</div>
+  <div class="loader-text">Loading students data from cloud...</div>
   </div>
     </div>
   </div>
@@ -2611,6 +2611,7 @@ async function exportStudentsPDF() {
     let students = [];
     let exportTitle = batchName;
     
+    // ✅ CHECK IF EXPORTING "ALL" BATCHES
     if (batchName.toLowerCase() === 'all') {
       exportTitle = 'All_Batches';
       if (batches.length === 0) await loadBatches();
@@ -2643,8 +2644,11 @@ async function exportStudentsPDF() {
     
     for (let page = 0; page < totalPages; page++) {
       const pageStudents = students.slice(page * studentsPerPage, (page + 1) * studentsPerPage);
+      
+      // ✅ PERMANENT FIX APPLIED HERE:
+      // Added 'color: #000;' to force black text regardless of Dark Mode
       const container = document.createElement('div');
-      container.style.cssText = 'position:absolute;left:-9999px;width:800px;background:white;padding:30px;font-family:Poppins,sans-serif;';
+      container.style.cssText = 'position:absolute;left:-9999px;width:800px;background:white;padding:30px;font-family:Poppins,sans-serif;color:#000;';
       
       const headerHTML = page === 0 ? `
         <div style="text-align:center;margin-bottom:20px;">
@@ -2654,7 +2658,7 @@ async function exportStudentsPDF() {
         </div>` : '';
       
       container.innerHTML = `${headerHTML}
-        <table style="width:100%;border-collapse:collapse;font-size:11px;">
+        <table style="width:100%;border-collapse:collapse;font-size:11px;color:#000;">
           <thead><tr style="background:#1d4ed8;color:white;">
             <th style="padding:8px;border:1px solid #e2e8f0;text-align:left;width:8%;">SL</th>
             <th style="padding:8px;border:1px solid #e2e8f0;text-align:left;width:15%;">Reg No</th>
@@ -2664,8 +2668,8 @@ async function exportStudentsPDF() {
             <th style="padding:8px;border:1px solid #e2e8f0;text-align:left;width:8%;">Status</th>
           </tr></thead>
           <tbody>${pageStudents.map((s,i)=>`
-            <tr style="background:${i%2===0?'#f8fafc':'white'}">
-              <td style="padding:6px 8px;border:1px solid #e2e8f0">${s.serial}</td>
+            <tr style="background:${i%2===0?'#f8fafc':'white'};color:#000;">
+              <td style="padding:6px 8px;border:1px solid #e2e8f0">${i+1}</td>
               <td style="padding:6px 8px;border:1px solid #e2e8f0">${s.regNo}</td>
               <td style="padding:6px 8px;border:1px solid #e2e8f0">${s.name}</td>
               <td style="padding:6px 8px;border:1px solid #e2e8f0">${s.department||'N/A'}</td>
