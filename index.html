@@ -2607,13 +2607,54 @@ async function exportStudentsPDF() {
     
     if (typeof toast === 'function') toast('📄 Generating PDF...');
     
-    const response = await api('getStudents', { batch: batchName });
-    if (!response.success) { 
-      alert('Failed to load student data.'); 
-      return; 
+    let students = [];
+    let exportTitle = batchName;
+    
+    // ✅ CHECK IF EXPORTING "ALL" BATCHES
+    if (batchName.toLowerCase() === 'all') {
+      exportTitle = 'All_Batches';
+      
+      // Load batches if not already loaded
+      if (batches.length === 0) {
+        await loadBatches();
+      }
+      
+      // Get all active batches
+      const activeBatches = batches.filter(b => b.status === 'Active').map(b => b.name);
+      
+      if (activeBatches.length === 0) {
+        alert('No active batches found to export.');
+        return;
+      }
+      
+      // 🚀 FETCH ALL BATCHES IN PARALLEL
+      const promises = activeBatches.map(async (batch) => {
+        const res = await api('getStudents', { batch: batch });
+        if (res.success) {
+          return res.students.map(s => ({...s, _batch: batch}));
+        }
+        return [];
+      });
+      
+      const results = await Promise.all(promises);
+      students = results.flat();
+      
+    } else {
+      // ✅ SINGLE BATCH EXPORT (original logic)
+      const response = await api('getStudents', { batch: batchName });
+      if (!response.success) { 
+        alert('Failed to load student data.'); 
+        return; 
+      }
+      students = response.students;
     }
     
-    const students = response.students;
+    // Check if we have data
+    if (students.length === 0) {
+      alert('No students found to export.');
+      return;
+    }
+    
     const centreName = "Basis BCS Academy";
     const exportDate = new Date().toLocaleDateString('en-BD', { 
       day: '2-digit', month: 'short', year: 'numeric' 
@@ -2647,8 +2688,8 @@ async function exportStudentsPDF() {
       const headerHTML = page === 0 ? `
         <div style="text-align: center; margin-bottom: 20px;">
           <h1 style="color: #1d4ed8; font-size: 24px; margin: 0 0 8px 0; font-weight: 800;">${centreName}</h1>
-          <h2 style="color: #000; font-size: 18px; margin: 0 0 4px 0; font-weight: 700;">Batch: ${batchName}</h2>
-          <p style="color: #64748b; font-size: 12px; margin: 0;">Exported on: ${exportDate}</p>
+          <h2 style="color: #000; font-size: 18px; margin: 0 0 4px 0; font-weight: 700;">Batch: ${batchName.toLowerCase() === 'all' ? 'All Batches' : batchName}</h2>
+          <p style="color: #64748b; font-size: 12px; margin: 0;">Exported on: ${exportDate} • Total: ${students.length} students</p>
         </div>
       ` : '';
       
@@ -2659,7 +2700,7 @@ async function exportStudentsPDF() {
             <tr style="background: #1d4ed8; color: white;">
               <th style="padding: 8px; border: 1px solid #e2e8f0; text-align: left; width: 8%;">SL</th>
               <th style="padding: 8px; border: 1px solid #e2e8f0; text-align: left; width: 15%;">Reg No</th>
-              <th style="padding: 8px; border: 1px solid #e2e8f0; text-align: left; width: 35%;">Name</th>
+              <th style="padding: 8px; border: 1px solid #e2e8f0; text-align: left; width: 30%;">Name</th>
               <th style="padding: 8px; border: 1px solid #e2e8f0; text-align: left; width: 22%;">Department</th>
               <th style="padding: 8px; border: 1px solid #e2e8f0; text-align: left; width: 12%;">Phone</th>
               <th style="padding: 8px; border: 1px solid #e2e8f0; text-align: left; width: 8%;">Status</th>
@@ -2696,7 +2737,7 @@ async function exportStudentsPDF() {
       document.body.removeChild(container);
       
       const imgData = canvas.toDataURL('image/png');
-      const imgWidth = pageWidth - 20; // 10mm margin on each side
+      const imgWidth = pageWidth - 20;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       
       if (page > 0) {
@@ -2706,13 +2747,13 @@ async function exportStudentsPDF() {
       pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
     }
     
-    pdf.save(`${batchName}_Students_${Date.now()}.pdf`);
+    pdf.save(`${exportTitle}_Students_${Date.now()}.pdf`);
     
-    if (typeof toast === 'function') toast(`✅ PDF downloaded! (${totalPages} pages)`);
+    if (typeof toast === 'function') toast(`✅ PDF downloaded! (${totalPages} pages, ${students.length} students)`);
     
   } catch (err) {
     console.error('PDF Error:', err);
-    alert('Error generating PDF.');
+    alert('Error generating PDF. Please try again.');
   }
 }
 
@@ -2721,45 +2762,108 @@ async function exportStudentsExcel() {
     const activeTab = document.querySelector('.btab.active');
     const batchName = activeTab ? activeTab.innerText : 'Shitalakkhya';
     
-    const response = await api('getStudents', { batch: batchName });
-    if (!response.success) { alert('Failed to load student data.'); return; }
+    if (typeof toast === 'function') toast('📊 Generating Excel...');
     
-    const students = response.students;
-    const centreName = "Basis BCS Academy";
-    const exportDate = new Date().toLocaleDateString('en-BD');
+    let students = [];
+    let exportTitle = batchName;
     
-    const excelData = students.map(s => ({
-      "Serial": s.serial,
-      "Registration No": s.regNo,
-      "Name": s.name,
-      "Department": s.department || "",
-      "Phone": s.phone || "",
-      "Status": s.status
+    // ✅ CHECK IF EXPORTING "ALL" BATCHES
+    if (batchName.toLowerCase() === 'all') {
+      exportTitle = 'All_Batches';
+      
+      // Load batches if not already loaded
+      if (batches.length === 0) {
+        await loadBatches();
+      }
+      
+      // Get all active batches
+      const activeBatches = batches.filter(b => b.status === 'Active').map(b => b.name);
+      
+      if (activeBatches.length === 0) {
+        alert('No active batches found to export.');
+        return;
+      }
+      
+      // 🚀 FETCH ALL BATCHES IN PARALLEL
+      const promises = activeBatches.map(async (batch) => {
+        const res = await api('getStudents', { batch: batch });
+        if (res.success) {
+          return res.students.map(s => ({...s, _batch: batch}));
+        }
+        return [];
+      });
+      
+      const results = await Promise.all(promises);
+      students = results.flat();
+      
+    } else {
+      // ✅ SINGLE BATCH EXPORT (original logic)
+      const response = await api('getStudents', { batch: batchName });
+      if (!response.success) { 
+        alert('Failed to load student data.'); 
+        return; 
+      }
+      students = response.students;
+    }
+    
+    // Check if we have data
+    if (students.length === 0) {
+      alert('No students found to export.');
+      return;
+    }
+    
+    // ✅ PREPARE DATA FOR EXCEL
+    const exportData = students.map((s, index) => ({
+      'SL': s.serial || index + 1,
+      'Reg No': s.regNo,
+      'Name': s.name,
+      'Batch': s._batch || batchName, // ✅ Shows batch name for "All" export
+      'Department': s.department || 'N/A',
+      'Phone': s.phone || 'N/A',
+      'Status': s.status,
+      'Join Date': s.joinDate || 'N/A',
+      'Email': s.email || 'N/A'
     }));
     
-    const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.json_to_sheet(excelData);
+    // ✅ CREATE WORKSHEET & WORKBOOK
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
     
-    const headerData = [
-      [centreName],
-      [`Batch: ${batchName}`],
-      [`Exported on: ${exportDate}`],
-      []
+    // ✅ SET COLUMN WIDTHS (for better readability)
+    worksheet['!cols'] = [
+      { wch: 5 },   // SL
+      { wch: 15 },  // Reg No
+      { wch: 30 },  // Name
+      { wch: 15 },  // Batch
+      { wch: 20 },  // Department
+      { wch: 15 },  // Phone
+      { wch: 10 },  // Status
+      { wch: 12 },  // Join Date
+      { wch: 25 }   // Email
     ];
-    XLSX.utils.sheet_add_aoa(ws, headerData, { origin: "A1" });
     
-    ws['!cols'] = [
-      { wch: 6 }, { wch: 12 }, { wch: 30 }, { wch: 20 }, { wch: 15 }, { wch: 10 }
-    ];
+    // ✅ ADD STYLING (header bold, background)
+    const range = XLSX.utils.decode_range(worksheet['!ref']);
+    for (let C = range.s.c; C <= range.e.c; ++C) {
+      const cellAddress = XLSX.utils.encode_cell({ r: 0, c: C });
+      if (!worksheet[cellAddress]) continue;
+      worksheet[cellAddress].s = {
+        font: { bold: true, color: { rgb: "FFFFFFFF" } },
+        fill: { fgColor: { rgb: "FF1D4ED8" } } // Blue header
+      };
+    }
     
-    XLSX.utils.book_append_sheet(wb, ws, "Students");
-    XLSX.writeFile(wb, `${batchName}_Students_${Date.now()}.xlsx`);
+    XLSX.utils.book_append_sheet(workbook, worksheet, batchName.toLowerCase() === 'all' ? 'All Students' : batchName);
+    
+    // ✅ DOWNLOAD FILE
+    const fileName = `${exportTitle}_Students_${new Date().toISOString().slice(0,10)}.xlsx`;
+    XLSX.writeFile(workbook, fileName);
+    
+    if (typeof toast === 'function') toast(`✅ Excel downloaded! (${students.length} students)`);
     
   } catch (err) {
     console.error('Excel Error:', err);
-    alert('Error generating Excel.');
+    alert('Error generating Excel. Please try again.');
   }
 }
-</script>
-</body>
-</html>
+   
