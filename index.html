@@ -658,7 +658,10 @@ body.dark .bnav { background: rgba(17,24,39,.92); border-top-color: rgba(255,255
       <button class="btn btn-ghost btn-sm" style="flex:1" onclick="exportStudentsExcel()">📊 Excel</button>
     </div>
     <div class="card" style="padding:0" id="studentList">
-      <div class="loading"><div class="spinner"></div></div>
+  <div class="modern-loader">
+  <div class="loader-ring"></div>
+  <div class="loader-text">Fetching students from cloud...</div>
+  </div>
     </div>
   </div>
 </div>
