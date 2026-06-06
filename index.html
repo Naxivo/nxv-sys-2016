@@ -1215,6 +1215,9 @@ async function api(action, data = {}) {
   try {
     const res = await fetch(API_URL, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json"  // ✅ ADD THIS
+      },
       body: JSON.stringify({
         token: SECRET_TOKEN,
         timestamp: Date.now(),
