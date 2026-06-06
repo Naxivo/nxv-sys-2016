@@ -692,7 +692,7 @@ body.dark .bnav { background: rgba(17,24,39,.92); border-top-color: rgba(255,255
         </div>
       </div>
       <div class="btabs" id="attBatchTabs">
-        <div class="btab active" onclick="swAttBatch(this,'Shitalakkhya')">Shitalakkhya</div>
+        <div class="btab active" onclick="swAttBatch(this,'')"></div>
         <div class="btab" onclick="swAttBatch(this,'Bhairab')">Bhairab</div>
       </div>
       <div class="asm">
@@ -712,7 +712,7 @@ body.dark .bnav { background: rgba(17,24,39,.92); border-top-color: rgba(255,255
     <!-- Report -->
     <div id="at-rep" style="display:none">
       <div class="btabs">
-        <div class="btab active" onclick="swBatch(this,'Shitalakkhya')">Shitalakkhya</div>
+        <div class="btab active" onclick="swBatch(this,'Shitalakshya')">Shitalakshya</div>
         <div class="btab" onclick="swBatch(this,'Bhairab')">Bhairab</div>
       </div>
       <div class="card" id="attReport">
@@ -751,7 +751,7 @@ body.dark .bnav { background: rgba(17,24,39,.92); border-top-color: rgba(255,255
     <!-- Add Marks -->
     <div id="ex-marks">
       <div class="btabs">
-        <div class="btab active" onclick="swExamBatch(this,'Shitalakkhya')">Shitalakkhya</div>
+        <div class="btab active" onclick="swExamBatch(this,'Shitalakshya')">Shitalakshya</div>
         <div class="btab" onclick="swExamBatch(this,'Bhairab')">Bhairab</div>
       </div>
       <div class="fg" style="margin-bottom:12px">
@@ -767,7 +767,7 @@ body.dark .bnav { background: rgba(17,24,39,.92); border-top-color: rgba(255,255
     <!-- Results -->
     <div id="ex-result" style="display:none">
       <div class="btabs">
-        <div class="btab active" onclick="swBatch(this,'Shitalakkhya')">Shitalakkhya</div>
+        <div class="btab active" onclick="swBatch(this,'Shitalakshya')">Shitalakshya</div>
         <div class="btab" onclick="swBatch(this,'Bhairab')">Bhairab</div>
       </div>
       <div id="resultsList"><div class="loading"><div class="spinner"></div></div></div>
@@ -775,7 +775,7 @@ body.dark .bnav { background: rgba(17,24,39,.92); border-top-color: rgba(255,255
     <!-- Batch Result -->
     <div id="ex-batch" style="display:none">
       <div class="sg" style="margin-bottom:14px">
-        <div class="st b"><div class="st-ic">📘</div><div class="st-v" id="batchAvgS">—</div><div class="st-l">Shitalakkhya Avg</div></div>
+        <div class="st b"><div class="st-ic">📘</div><div class="st-v" id="batchAvgS">—</div><div class="st-l">Shitalakshya Avg</div></div>
         <div class="st g"><div class="st-ic">📗</div><div class="st-v" id="batchAvgB">—</div><div class="st-l">Bhairab Avg</div></div>
       </div>
       <div class="card" id="batchResultCard"><div class="loading"><div class="spinner"></div></div></div>
@@ -838,7 +838,7 @@ body.dark .bnav { background: rgba(17,24,39,.92); border-top-color: rgba(255,255
         <label>Send To</label>
         <select class="fs" id="smsTo">
           <option value="all">All Students</option>
-          <option value="Shitalakkhya">Shitalakkhya</option>
+          <option value="Shitalakshya">Shitalakshya</option>
           <option value="Bhairab">Bhairab</option>
           <option value="absent">Absent Students Only</option>
         </select>
@@ -1000,7 +1000,7 @@ Basic BCS Academy.</textarea>
         <div class="fg"><label>Reg No *</label><input class="fi" id="stuRegNo" placeholder="e.g. 01"></div>
         <div class="fg"><label>Batch *</label>
           <select class="fs" id="stuBatch">
-            <option value="Shitalakkhya">Shitalakkhya</option>
+            <option value="Shitalakshya">Shitalakshya</option>
             <option value="Bhairab">Bhairab</option>
           </select>
         </div>
@@ -1231,12 +1231,12 @@ async function api(action, data = {}) {
 //  STATE
 // ═══════════════════════════════════════
 let currentUser = null;
-let currentBatch = "Shitalakkhya";
-let currentExamBatch = "Shitalakkhya";
+let currentBatch = "Shitalakshya";
+let currentExamBatch = "Shitalakshya";
 let allStudents = {};
 let attRecords = {};
 let pCount = 0, aCount = 0;
-let currentAttBatch = "Shitalakkhya";
+let currentAttBatch = "Shitalakshya";
 let selectedStudent = null;
 let batches = [];
 let examDates = [];
@@ -1899,7 +1899,7 @@ async function reactivateStudent() {
 }
 
 async function loadDeptSuggestions() {
-  const batch = document.getElementById('stuBatch')?.value || 'Shitalakkhya';
+  const batch = document.getElementById('stuBatch')?.value || 'Shitalakshya';
   const res = await api('getDepartments', { batch });
   if (res.success) {
     const dl = document.getElementById('deptList');
@@ -2067,12 +2067,12 @@ async function loadAttendanceReport() {
   el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
   const bd = getBDDate();
   const month = `${MONTHS[bd.getMonth()]} ${bd.getFullYear()}`;
-  const res = await api('getAttendanceReport', { batch: currentBatch === 'all' ? 'Shitalakkhya' : currentBatch, month });
+  const res = await api('getAttendanceReport', { batch: currentBatch === 'all' ? 'Shitalakshya' : currentBatch, month });
   if (!res.success || !res.report.length) {
     el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3);font-size:13px">No attendance data for this month</div>';
     return;
   }
-  let html = `<div class="ch"><div class="ct">${month} — ${currentBatch === 'all' ? 'Shitalakkhya' : currentBatch}</div></div><div class="cb" style="padding:0 16px">`;
+  let html = `<div class="ch"><div class="ct">${month} — ${currentBatch === 'all' ? 'Shitalakshya' : currentBatch}</div></div><div class="cb" style="padding:0 16px">`;
   res.report.forEach(s => {
     const cl = s.percentage >= 75 ? 'ok' : s.percentage >= 50 ? 'warn' : 'err';
     html += `<div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--bdr)">
@@ -2222,7 +2222,7 @@ async function loadBatchResults() {
   if (!examDates.length) { el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3)">No exam dates found</div>'; return; }
 
   const results = {};
-  for (const b of ['Shitalakkhya', 'Bhairab']) {
+  for (const b of ['Shitalakshya', 'Bhairab']) {
     const res = await api('getMarks', { examDate: examDates[0], batch: b });
     if (res.success && res.marks.length) {
       const avg = Math.round(res.marks.reduce((a, m) => a + Number(m.score), 0) / res.marks.length);
@@ -2230,7 +2230,7 @@ async function loadBatchResults() {
     }
   }
 
-  document.getElementById('batchAvgS').textContent = results['Shitalakkhya'] || '—';
+  document.getElementById('batchAvgS').textContent = results['Shitalakshya'] || '—';
   document.getElementById('batchAvgB').textContent = results['Bhairab'] || '—';
 
   let html = `<div class="ch"><div class="ct">All Batches · ${examDates[0]}</div></div><div class="cb" style="padding:0 16px">`;
@@ -2438,7 +2438,7 @@ async function syncData() {
 async function exportAttendance() {
   try {
     const activeTab = document.querySelector('.btab.active');
-    const batchName = activeTab ? activeTab.innerText : 'Shitalakkhya';
+    const batchName = activeTab ? activeTab.innerText : 'Shitalakshya';
     
     const dateDisplay = document.querySelector('.ad-date');
     const currentDate = dateDisplay ? dateDisplay.innerText : new Date().toLocaleDateString('en-BD');
@@ -2615,7 +2615,7 @@ function toast(msg) {
 async function exportStudentsPDF() {
   try {
     const activeTab = document.querySelector('.btab.active');
-    const batchName = activeTab ? activeTab.innerText : 'Shitalakkhya';
+    const batchName = activeTab ? activeTab.innerText : 'Shitalakshya';
     
     if (typeof toast === 'function') toast('📄 Generating PDF...');
     
@@ -2714,7 +2714,7 @@ async function exportStudentsPDF() {
 async function exportStudentsExcel() {
   try {
     const activeTab = document.querySelector('.btab.active');
-    const batchName = activeTab ? activeTab.innerText : 'Shitalakkhya';
+    const batchName = activeTab ? activeTab.innerText : 'Shitalakshya';
     
     if (typeof toast === 'function') toast('📊 Generating Excel...');
     
