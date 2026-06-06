@@ -851,11 +851,13 @@ Basic BCS Academy.</textarea>
         <div class="cc"><span id="cc">0</span> characters · ~<span id="sc">1</span> SMS per recipient</div>
       </div>
       <div class="fg">
-        <label>Schedule (optional)</label>
-        <input class="fi" type="datetime-local" id="smsSchedule">
-      </div>
-      <button class="btn btn-p" onclick="sendSMS()">Send SMS →</button>
-    </div>
+  <label>Schedule Time *</label>
+  <div style="display:flex;gap:8px">
+    <input class="fi" type="datetime-local" id="smsSchedule" style="flex:1">
+    <button class="btn btn-p btn-sm" style="width:auto;padding:0 12px" onclick="addSchedule()">➕</button>
+  </div>
+</div>
+<div id="scheduleListContainer" style="margin-top:16px"></div>
     <!-- History -->
     <div id="sms-hist" style="display:none">
       <div class="card" style="padding:0" id="smsLogList">
@@ -1401,12 +1403,11 @@ function go(name) {
   window.scrollTo(0, 0);
 
   // Load page data
-  if (name === 'students') ;
-  if (name === 'attendance') loadAttendanceList();
-  if (name === 'settings') { loadBatchManagement(); loadTeachers(); }
-  if (name === 'sms') refreshBalance();
-  if (name === 'exams') loadExamDates();
-}
+if (name === 'students') ;
+if (name === 'attendance') loadAttendanceList();
+if (name === 'settings') { loadBatchManagement(); loadTeachers(); }
+if (name === 'sms') { refreshBalance(); loadScheduleList(); }  // ← Updated Line
+if (name === 'exams') loadExamDates();
 
 // ═══════════════════════════════════════
 //  SUBTABS
@@ -2249,10 +2250,22 @@ async function loadBatchResults() {
 //  SMS
 // ═══════════════════════════════════════
 const SMS_TEMPLATES = {
-  absence: { to: 'absent', msg: `Dear [Student Name], You have 3 absents this month. Your admission is on hold. Please contact the office.\n\nBasic BCS Academy.` },
-  festival: { to: 'all', msg: `Eid Mubarak! Wishing you and your family a joyful celebration.\n\nBasic BCS Academy.` },
-  announce: { to: 'all', msg: `Dear [Student Name], Important announcement from Basic BCS Academy. Please check the notice board.\n\nBasic BCS Academy.` },
-  custom: { to: 'all', msg: `Basic BCS Academy.` }
+  absence: { 
+    to: 'absent', 
+    msg: `Dear [Student Name], Reg: [RegNo], Batch: [Batch], You have 3 absents this month. Your admission is on hold. Please contact the office.\n\nThank you\nBasic BCS Academy\nContact: 01577299970` 
+  },
+  festival: { 
+    to: 'all', 
+    msg: `Dear [Student Name], Reg: [RegNo], Batch: [Batch], Eid Mubarak! Wishing you and your family a joyful celebration.\n\nThank you\nBasic BCS Academy\nContact: 01577299970` 
+  },
+  announce: { 
+    to: 'all', 
+    msg: `Dear [Student Name], Reg: [RegNo], Batch: [Batch], Important announcement from Basic BCS Academy. Please check the notice board.\n\nThank you\nBasic BCS Academy\nContact: 01577299970` 
+  },
+  custom: { 
+    to: 'all', 
+    msg: `Dear [Student Name], Reg: [RegNo], Batch: [Batch], \n\nThank you\nBasic BCS Academy\nContact: 01577299970` 
+  }
 };
 
 function selSms(card, type) {
@@ -2348,6 +2361,92 @@ async function loadSMSLog() {
       </div>
       <div class="slog-t">${log.time}</div>
     </div>`).join('');
+}
+// ═══════════════════════════════════════
+//  SMS SCHEDULING 
+// ═══════════════════════════════════════
+
+// ✅ ADD SCHEDULE
+async function addSchedule() {
+  const time = document.getElementById('smsSchedule').value;
+  const msg = document.getElementById('smsMsg').value.trim();
+  const to = document.getElementById('smsTo').value;
+  
+  if (!time || !msg) { toast('❌ Date & message required'); return; }
+  
+  const res = await api('saveScheduledSMS', {
+    sendDateTime: new Date(time).toISOString(),
+    target: to,
+    message: msg,
+    status: 'Pending'
+  });
+  
+  if (res.success) {
+    toast('✅ Schedule added!');
+    document.getElementById('smsSchedule').value = '';
+    loadScheduleList();
+  } else {
+    toast('❌ ' + res.error);
+  }
+}
+
+// ✅ LOAD & RENDER SCHEDULE LIST
+async function loadScheduleList() {
+  const container = document.getElementById('scheduleListContainer');
+  const res = await api('getScheduledSMS', {});
+  
+  if (!res.success || res.list.length === 0) { 
+    container.innerHTML = ''; 
+    return; 
+  }
+  
+  let html = '<div style="font-size:11px;font-weight:700;color:var(--tx4);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Upcoming Schedules</div>';
+  html += '<div style="display:flex;flex-direction:column;gap:8px">';
+  
+  res.list.forEach(s => {
+    const dateStr = new Date(s.time).toLocaleString('en-BD', { 
+      timeZone: 'Asia/Dhaka', 
+      month: 'short', 
+      day: 'numeric', 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });
+    
+    html += `
+      <div style="background:var(--sur2);border:1px solid var(--bdr);border-radius:10px;padding:10px;display:flex;justify-content:space-between;align-items:center">
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:700">${dateStr}</div>
+          <div style="font-size:11px;color:var(--tx4)">${s.target.toUpperCase()} · ${s.message.substring(0,40)}...</div>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-ghost btn-sm" style="width:auto;padding:4px 8px" onclick="editSchedule('${s.id}','${s.time}','${encodeURIComponent(s.message)}','${s.target}')">✏️</button>
+          <button class="btn btn-err btn-sm" style="width:auto;padding:4px 8px" onclick="deleteSchedule('${s.id}')">🗑️</button>
+        </div>
+      </div>`;
+  });
+  
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+// ✅ EDIT SCHEDULE (Loads data back into inputs)
+function editSchedule(id, time, encodedMsg, target) {
+  document.getElementById('smsSchedule').value = new Date(time).toISOString().slice(0,16);
+  document.getElementById('smsMsg').value = decodeURIComponent(encodedMsg);
+  document.getElementById('smsTo').value = target;
+  toast('📝 Edit mode active. Change & tap ➕ to update.');
+}
+
+// ✅ DELETE SCHEDULE
+async function deleteSchedule(id) {
+  if (!confirm('Delete this scheduled SMS?')) return;
+  const res = await api('deleteScheduledSMS', { id });
+  if (res.success) { 
+    toast('🗑️ Deleted'); 
+    loadScheduleList(); 
+  } else {
+    toast('❌ ' + res.error);
+  }
 }
 
 // ═══════════════════════════════════════
