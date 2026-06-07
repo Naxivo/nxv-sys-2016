@@ -2821,31 +2821,52 @@ alert('Error generating Excel.');
 }
 </script>
 <script>
-// Show/hide nav based on page
+<script>
+// ✅ FIXED: Show/hide nav based on login state
 function checkNavVisibility() {
   const loginPage = document.getElementById('loginPage');
+  const app = document.getElementById('app');
   const bnav = document.querySelector('.bnav');
   
-  if (!loginPage || !bnav) return;
+  if (!bnav) return;
   
-  // If login page is visible, hide nav
-  if (loginPage.style.display !== 'none') {
+  // Method 1: Check if login page element exists AND is not hidden
+  const loginVisible = loginPage && 
+    (loginPage.style.display !== 'none') && 
+    (loginPage.offsetParent !== null);
+  
+  // Method 2: Check if app container is hidden (fallback)
+  const appHidden = app && app.style.display === 'none';
+  
+  // Hide nav if login is visible OR app is hidden
+  if (loginVisible || appHidden) {
     bnav.style.display = 'none';
   } else {
-    // If logged in, show nav
     bnav.style.display = 'flex';
   }
 }
 
-// Run on page load
-setTimeout(checkNavVisibility, 100);
-
-// Also run when go() function is called
-const originalGo = window.go;
-window.go = function(name) {
-  if (originalGo) originalGo(name);
+// Run immediately on DOM ready
+document.addEventListener('DOMContentLoaded', function() {
   checkNavVisibility();
-};
+  
+  // Also run after a short delay (for async loads)
+  setTimeout(checkNavVisibility, 300);
+  setTimeout(checkNavVisibility, 1000);
+});
+
+// Intercept the go() function to re-check on navigation
+if (typeof window.go === 'function') {
+  const originalGo = window.go;
+  window.go = function(name) {
+    const result = originalGo.apply(this, arguments);
+    checkNavVisibility();
+    return result;
+  };
+}
+
+// Also check on window resize (just in case)
+window.addEventListener('resize', checkNavVisibility);
 </script>
 </body>
 </html>
