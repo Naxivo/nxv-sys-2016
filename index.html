@@ -2828,25 +2828,26 @@ function checkNavVisibility() {
   
   if (!bnav) return;
   
-  // Check if login page is actually visible on screen
   const isLoginVisible = loginPage && 
     window.getComputedStyle(loginPage).display !== 'none';
   
   if (isLoginVisible) {
-    bnav.style.display = 'none';
+    // ✅ USE setProperty WITH !important
+    bnav.style.setProperty('display', 'none', 'important');
     console.log('🔒 Nav hidden (login page visible)');
   } else {
-    bnav.style.display = 'flex';
+    // ✅ USE setProperty WITH !important
+    bnav.style.setProperty('display', 'flex', 'important');
     console.log('🔓 Nav shown (logged in)');
   }
 }
 
-// Run multiple times to ensure it works
+// Run multiple times
 setTimeout(checkNavVisibility, 100);
 setTimeout(checkNavVisibility, 500);
 setTimeout(checkNavVisibility, 1000);
 
-// Also run when go() is called
+// Hook into go() function
 if (typeof go === 'function') {
   const orig = go;
   go = function() {
@@ -2854,7 +2855,6 @@ if (typeof go === 'function') {
     setTimeout(checkNavVisibility, 50);
   };
 }
-
 // Also check on window resize (just in case)
 window.addEventListener('resize', checkNavVisibility);
 </script>
