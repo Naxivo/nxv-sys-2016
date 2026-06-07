@@ -1419,10 +1419,16 @@ if (bar) bar.style.width = '30px';
 document.querySelectorAll('.ni:not(.active) .ni-bar').forEach(b => b.style.width = '0');
 window.scrollTo(0, 0);
 // Load page data
-if (name === 'students') loadStudents() ;
+if (name === 'students') loadStudents();
 if (name === 'attendance') loadAttendanceList();
-if (name === 'settings') { loadBatchManagement(); loadTeachers(); }
-if (name === 'sms') { refreshBalance(); loadScheduleList(); }  // ← Updated Line
+if (name === 'settings') {
+  console.log('⚙️ Loading settings page...');
+  loadBatchManagement().catch(err => console.error('❌ Batch management error:', err));
+  if (currentUser?.role === 'Admin') {
+    loadTeachers().catch(err => console.error('❌ Teachers load error:', err));
+  }
+}
+if (name === 'sms') { refreshBalance(); loadScheduleList(); }
 if (name === 'exams') loadExamDates();
 }
 // ═══════════════════════════════════════
@@ -1558,19 +1564,29 @@ smsTo.innerHTML += '<option value="absent">Absent Students Only</option>';
 }
 }
 async function loadBatchManagement() {
+  console.log('🔄 Loading batch management...');
   const el = document.getElementById('batchMgmt');
+  
   if (!el) {
-    console.error('batchMgmt element not found');
+    console.error('❌ batchMgmt element not found!');
     return;
   }
   
   try {
     el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+    
     const res = await api('getBatches');
+    console.log('📊 Batches response:', res);
+    
     if (!res.success) { 
-      el.innerHTML = '<div class="cb" style="text-align:center;color:var(--err)">Could not load batches</div>'; 
-      console.error('Failed to load batches:', res.error);
+      el.innerHTML = '<div class="cb" style="text-align:center;color:var(--err)">Could not load batches: ' + (res.error || 'Unknown error') + '</div>'; 
+      console.error('❌ Failed to load batches:', res.error);
       return; 
+    }
+    
+    if (!res.batches || res.batches.length === 0) {
+      el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3)">No batches found</div>';
+      return;
     }
     
     let html = '';
@@ -1587,9 +1603,10 @@ async function loadBatchManagement() {
     });
     html += `<div style="padding:12px 16px"><button class="btn btn-p" style="font-size:13px" onclick="openSht('addBatch')">＋ Add New Batch</button></div>`;
     el.innerHTML = html;
+    console.log('✅ Batch management loaded successfully');
   } catch (err) {
-    console.error('Error in loadBatchManagement:', err);
-    el.innerHTML = '<div class="cb" style="text-align:center;color:var(--err)">Error loading batches</div>';
+    console.error('❌ Error in loadBatchManagement:', err);
+    el.innerHTML = '<div class="cb" style="text-align:center;color:var(--err)">Error loading batches. Check console.</div>';
   }
 }
 async function toggleBatch(name, checkbox) {
@@ -2363,24 +2380,33 @@ toast('❌ ' + res.error);
 //  TEACHERS
 // ═══════════════════════════════════════
 async function loadTeachers() {
+  console.log('👥 Loading teachers...');
+  
   if (currentUser?.role !== 'Admin') {
-    console.log('Not admin, skipping teacher load');
+    console.log('⚠️ Not admin, skipping teacher load');
     return;
   }
   
   const el = document.getElementById('teacherList');
   if (!el) {
-    console.error('teacherList element not found');
+    console.error('❌ teacherList element not found!');
     return;
   }
   
   try {
     el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
     const res = await api('getTeachers');
+    console.log(' Teachers response:', res);
+    
     if (!res.success) { 
-      el.innerHTML = '<div class="cb">Failed to load teachers</div>'; 
-      console.error('Failed to load teachers:', res.error);
+      el.innerHTML = '<div class="cb">Failed to load teachers: ' + (res.error || 'Unknown error') + '</div>'; 
+      console.error('❌ Failed to load teachers:', res.error);
       return; 
+    }
+    
+    if (!res.teachers || res.teachers.length === 0) {
+      el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3)">No teachers found</div>';
+      return;
     }
     
     el.innerHTML = res.teachers.map(t => `
@@ -2392,9 +2418,10 @@ async function loadTeachers() {
         </div>
         ${t.status === 'Active' && t.role !== 'Admin' ? `<button class="btn btn-sm btn-err" onclick="deactivateTeacher('${t.username}')">Remove</button>` : ''}
       </div>`).join('');
+    console.log('✅ Teachers loaded successfully');
   } catch (err) {
-    console.error('Error in loadTeachers:', err);
-    el.innerHTML = '<div class="cb">Error loading teachers</div>';
+    console.error('❌ Error in loadTeachers:', err);
+    el.innerHTML = '<div class="cb">Error loading teachers. Check console.</div>';
   }
 }
 async function addTeacher() {
