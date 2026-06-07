@@ -568,6 +568,25 @@ animation: pulseText 2s ease-in-out infinite;
   padding-bottom: calc(var(--nh) + 20px) !important;
   overflow-y: auto;
 }
+/* Force all pages to display properly */
+.page {
+  display: none !important;
+}
+
+.page.active {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Ensure settings content is visible */
+#pg-settings {
+  min-height: 100vh;
+}
+
+#pg-settings .con {
+  flex: 1;
+  padding: 16px;
+}
 </style>
 </head>
 <body>
