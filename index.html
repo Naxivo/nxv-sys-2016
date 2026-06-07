@@ -632,6 +632,27 @@ animation: pulseText 2s ease-in-out infinite;
 .page .con {
   flex: 1;
 }
+/* Hide all pages by default */
+.page {
+  display: none !important;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Show only active page */
+.page.active {
+  display: flex !important;
+}
+
+/* Ensure Home page is active on load */
+#pg-home.active {
+  display: flex !important;
+}
+
+/* Hide Settings when not active */
+#pg-settings:not(.active) {
+  display: none !important;
+}
 </style>
 </head>
 <body>
@@ -1082,24 +1103,29 @@ Basic BCS Academy.</textarea>
 <div class="ni-lb">Home</div>
 </button>
 <button class="ni" onclick="go('students')" id="nav-students">
-<div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-<div class="ni-lb">Students</div>
+<div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
+<div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+<div class="ni-lb">Student</div>
 </button>
 <button class="ni" onclick="go('attendance')" id="nav-attendance">
-<div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+<div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
+<div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
 <div class="ni-lb">Attend.</div>
 </button>
 <button class="ni" onclick="go('exams')" id="nav-exams">
-<div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+<div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
+<div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
 <div class="ni-lb">Exams</div>
 </button>
 <button class="ni" onclick="go('sms')" id="nav-sms">
-<div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+<div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
+<div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
 <div class="ni-lb">SMS</div>
 <div class="ni-dot"></div>
 </button>
 <button class="ni" onclick="go('settings')" id="nav-settings">
-<div class="ni-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+<div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
+<div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
 <div class="ni-lb">Settings</div>
 </button>
 </nav>
