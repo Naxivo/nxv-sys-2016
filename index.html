@@ -568,24 +568,29 @@ animation: pulseText 2s ease-in-out infinite;
   padding-bottom: calc(var(--nh) + 20px) !important;
   overflow-y: auto;
 }
-/* Force all pages to display properly */
+/* Fix page visibility */
 .page {
-  display: none !important;
-}
-
-.page.active {
-  display: flex !important;
-  flex-direction: column !important;
-}
-
-/* Ensure settings content is visible */
-#pg-settings {
+  display: none;
+  flex-direction: column;
   min-height: 100vh;
 }
 
+.page.active {
+  display: flex;
+}
+
+/* Ensure settings page has content */
 #pg-settings .con {
-  flex: 1;
   padding: 16px;
+  padding-bottom: calc(var(--nh) + 20px);
+}
+
+/* Bottom nav always visible */
+.bnav {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 9999 !important;
 }
 </style>
 </head>
