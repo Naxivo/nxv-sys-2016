@@ -910,85 +910,102 @@ Basic BCS Academy.</textarea>
 </div>
 <!-- SETTINGS -->
 <div class="page" id="pg-settings">
-<div class="topbar"><div class="tb-info"><div class="tb-name">Settings</div></div></div>
-<div class="con">
-<div class="profile-card">
-<div class="profile-av" id="profileAv">A</div>
-<div>
-<div class="profile-name" id="profileName">Admin</div>
-<div class="profile-role" id="profileRole">Administrator</div>
-</div>
-<button class="btn btn-out btn-sm" style="margin-left:auto" onclick="doLogout()">Logout</button>
-</div>
-<div class="lic-card">
-<div class="lic-ic"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
-<div class="lic-info">
-<div class="lic-title">Licence Active</div>
-<div class="lic-sub">Valid · Basic BCS Academy · v1.0</div>
-</div>
-</div>
-<div class="ss">
-<div class="ss-t">Appearance</div>
-<div class="si">
-<div class="si-ic"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
-<div class="si-info"><div class="si-lb">Dark Mode</div><div class="si-ds">Switch between light and dark theme</div></div>
-<label class="tog"><input type="checkbox" id="darkTog" onchange="toggleTheme()"><span class="tog-sl"></span></label>
-</div>
-</div>
-<div class="ss">
-<div class="ss-t">Batch Management</div>
-<div class="card" style="padding:0" id="batchMgmt">
-<div class="loading"><div class="spinner"></div></div>
-</div>
-</div>
-<div class="ss" id="adminOnlySettings">
-<div class="ss-t">Teachers & Access</div>
-<div class="si" onclick="openSht('manageTeachers')">
-<div class="si-ic"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-<div class="si-info"><div class="si-lb">Manage Teachers</div><div class="si-ds">Add or remove teacher accounts</div></div>
-<div class="si-ar">›</div>
-</div>
-<div class="si" onclick="openSht('changePass')">
-<div class="si-ic"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-<div class="si-info"><div class="si-lb">Change Password</div><div class="si-ds">Update your login password</div></div>
-<div class="si-ar">›</div>
-</div>
-</div>
-<div class="ss" id="adminSMSSettings">
-<div class="ss-t">SMS Configuration</div>
-<div class="si" onclick="toast('📱 Update SMS_API_KEY in Google Sheets Settings tab')">
-<div class="si-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-<div class="si-info"><div class="si-lb">SMS API Key</div><div class="si-ds">Update in Google Sheets Settings tab</div></div>
-<div class="si-ar">›</div>
-</div>
-<div class="si">
-<div class="si-ic"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
-<div class="si-info"><div class="si-lb">Auto Absence SMS</div><div class="si-ds">Trigger at 3 absences per month</div></div>
-<label class="tog"><input type="checkbox" id="autoSmsTog" onchange="toggleAutoSMS()"><span class="tog-sl"></span></label>
-</div>
-</div>
-<div class="ss">
-<div class="ss-t">Data</div>
-<div class="si" onclick="syncData()">
-<div class="si-ic"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
-<div class="si-info"><div class="si-lb">Sync Google Sheets</div><div class="si-ds" id="lastSync">Tap to sync</div></div>
-<div class="si-ar">›</div>
-</div>
-<div class="si" onclick="exportStudentsPDF()">
-<div class="si-ic"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
-<div class="si-info"><div class="si-lb">Export Student Data</div><div class="si-ds">Download as PDF or Excel</div></div>
-<div class="si-ar">›</div>
-</div>
-</div>
-<div class="ss">
-<div class="ss-t">About</div>
-<div class="si" onclick="openSht('about')">
-<div class="si-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
-<div class="si-info"><div class="si-lb">About This App</div><div class="si-ds">Developer · Guide · Do's & Don'ts</div></div>
-<div class="si-ar">›</div>
-</div>
-</div>
-</div>
+  <div class="topbar">
+    <div class="tb-info"><div class="tb-name">Settings</div></div>
+  </div>
+  <div class="con">
+    <!-- Profile Card -->
+    <div class="profile-card">
+      <div class="profile-av" id="profileAv">A</div>
+      <div>
+        <div class="profile-name" id="profileName">Admin</div>
+        <div class="profile-role" id="profileRole">Administrator</div>
+      </div>
+      <button class="btn btn-out btn-sm" style="margin-left:auto" onclick="doLogout()">Logout</button>
+    </div>
+
+    <!-- License Card -->
+    <div class="lic-card">
+      <div class="lic-ic"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      <div class="lic-info">
+        <div class="lic-title">Licence Active</div>
+        <div class="lic-sub">Valid · Basic BCS Academy · v1.0</div>
+      </div>
+    </div>
+
+    <!-- Appearance -->
+    <div class="ss">
+      <div class="ss-t">Appearance</div>
+      <div class="si">
+        <div class="si-ic"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
+        <div class="si-info"><div class="si-lb">Dark Mode</div><div class="si-ds">Switch between light and dark theme</div></div>
+        <label class="tog"><input type="checkbox" id="darkTog" onchange="toggleTheme()"><span class="tog-sl"></span></label>
+      </div>
+    </div>
+
+    <!-- Batch Management -->
+    <div class="ss">
+      <div class="ss-t">Batch Management</div>
+      <div class="card" style="padding:0" id="batchMgmt">
+        <div class="loading"><div class="spinner"></div></div>
+      </div>
+    </div>
+
+    <!-- Admin Only Settings (Teachers & Access) -->
+    <div class="ss" id="adminOnlySettings">
+      <div class="ss-t">Teachers & Access</div>
+      <div class="si" onclick="openSht('manageTeachers')">
+        <div class="si-ic"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div class="si-info"><div class="si-lb">Manage Teachers</div><div class="si-ds">Add or remove teacher accounts</div></div>
+        <div class="si-ar">›</div>
+      </div>
+      <div class="si" onclick="openSht('changePass')">
+        <div class="si-ic"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <div class="si-info"><div class="si-lb">Change Password</div><div class="si-ds">Update your login password</div></div>
+        <div class="si-ar">›</div>
+      </div>
+    </div>
+
+    <!-- Admin SMS Settings -->
+    <div class="ss" id="adminSMSSettings">
+      <div class="ss-t">SMS Configuration</div>
+      <div class="si" onclick="toast(' Update SMS_API_KEY in Google Sheets Settings tab')">
+        <div class="si-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <div class="si-info"><div class="si-lb">SMS API Key</div><div class="si-ds">Update in Google Sheets Settings tab</div></div>
+        <div class="si-ar">›</div>
+      </div>
+      <div class="si">
+        <div class="si-ic"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+        <div class="si-info"><div class="si-lb">Auto Absence SMS</div><div class="si-ds">Trigger at 3 absences per month</div></div>
+        <label class="tog"><input type="checkbox" id="autoSmsTog" onchange="toggleAutoSMS()"><span class="tog-sl"></span></label>
+      </div>
+    </div>
+
+    <!-- Data -->
+    <div class="ss">
+      <div class="ss-t">Data</div>
+      <div class="si" onclick="syncData()">
+        <div class="si-ic"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
+        <div class="si-info"><div class="si-lb">Sync Google Sheets</div><div class="si-ds" id="lastSync">Tap to sync</div></div>
+        <div class="si-ar">›</div>
+      </div>
+      <div class="si" onclick="exportStudentsPDF()">
+        <div class="si-ic"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+        <div class="si-info"><div class="si-lb">Export Student Data</div><div class="si-ds">Download as PDF or Excel</div></div>
+        <div class="si-ar">›</div>
+      </div>
+    </div>
+
+    <!-- About -->
+    <div class="ss">
+      <div class="ss-t">About</div>
+      <div class="si" onclick="openSht('about')">
+        <div class="si-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <div class="si-info"><div class="si-lb">About This App</div><div class="si-ds">Developer · Guide · Do's & Don'ts</div></div>
+        <div class="si-ar">›</div>
+      </div>
+    </div>
+  </div>
 </div>
 </div><!-- /app -->
 <!-- BOTTOM NAV -->
