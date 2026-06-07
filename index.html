@@ -1636,15 +1636,20 @@ async function toggleBatch(name, checkbox) {
   if (res.success) {
     toast(`${name} ${res.status === 'Active' ? 'activated ✅' : 'deactivated ❌'}`);
     
-    // Refresh UI components
+    // ✅ Reload everything to reflect changes
     loadBatchManagement();
     loadBatches();
+    loadHomeData(); // Update student count
     
-    // ✅ NEW: Instantly update Home page student count & active batch count
-    loadHomeData();
-    
+    // ✅ Update checkbox state immediately
+    if (checkbox) {
+      checkbox.checked = res.status === 'Active';
+    }
   } else {
-    checkbox.checked = !checkbox.checked;
+    // ✅ Revert checkbox on failure
+    if (checkbox) {
+      checkbox.checked = !checkbox.checked;
+    }
     toast('❌ Failed to update batch');
   }
 }
@@ -1667,18 +1672,7 @@ loadBatchManagement();
 toast('❌ ' + res.error);
 }
 }
-async function toggleBatch(name, checkbox) {
-const res = await api('toggleBatch', { batchName: name });
-if (res.success) {
-toast(`${name} ${res.status === 'Active' ? 'activated ✅' : 'deactivated ❌'}`);
-delete studentCache['all'];
-loadBatchManagement();
-loadBatches();
-} else {
-checkbox.checked = !checkbox.checked;
-toast('❌ Failed to update batch');
-}
-}
+
 function updBatchPreview() {
 const v = document.getElementById('newBatchName').value.trim() || 'BatchName';
 document.getElementById('batchPreview').innerHTML = `️ A new sheet <strong>"${v}"</strong> will be created in Google Sheets automatically.`;
