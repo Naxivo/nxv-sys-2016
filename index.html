@@ -169,7 +169,7 @@ transition: background .35s, border-color .35s;
 .tb-right { display: flex; gap: 6px; }
 .ib { width: 34px; height: 34px; border-radius: 9px; background: var(--sur2); border: 1px solid var(--bdr); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--tx2); transition: all .2s; }
 .ib:active { transform: scale(.92); background: var(--pl); border-color: var(--pm); }
-/* ══════════════════════════════════════
+/* ═══════════════════════════════════════
 BOTTOM NAV (REFINED)
 ═══════════════════════════════════════ */
 .bnav {
@@ -183,11 +183,11 @@ BOTTOM NAV (REFINED)
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-top: 1px solid var(--bdr); /* ✅ Visible border */
+  border-top: 1px solid var(--bdr);
   display: flex;
   align-items: center;
   justify-content: space-around;
-  z-index: 9999; /* ✅ High stacking order */
+  z-index: 9999;
   box-shadow: 0 -2px 15px rgba(0,0,0,0.05);
   transition: background 0.3s ease, border-color 0.3s ease;
 }
@@ -556,105 +556,42 @@ animation: pulseText 2s ease-in-out infinite;
 /* TOAST */
 .toast { position: fixed; bottom: calc(var(--nh) + 12px); left: 50%; transform: translateX(-50%) translateY(16px); background: var(--tx); color: var(--bg); border-radius: 12px; padding: 11px 20px; font-size: 13px; font-weight: 700; white-space: nowrap; opacity: 0; transition: all .3s cubic-bezier(.34,1.56,.64,1); z-index: 400; box-shadow: var(--sh3); }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-/* Force bottom nav to always show */
-.bnav {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-}
+/* ═══════════════════════════════════════
+SYSTEM FIXES (CLEAN VERSION)
+═══════════════════════════════════════ */
 
-/* Ensure pages don't hide it */
-.page {
-  padding-bottom: calc(var(--nh) + 20px) !important;
-  overflow-y: auto;
-}
-/* Fix page visibility */
-.page {
-  display: none;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.page.active {
-  display: flex;
-}
-
-/* Ensure settings page has content */
-#pg-settings .con {
-  padding: 16px;
-  padding-bottom: calc(var(--nh) + 20px);
-}
-
-/* Bottom nav always visible */
+/* 1. Force Bottom Nav to always show */
 .bnav {
   display: flex !important;
   visibility: visible !important;
   opacity: 1 !important;
   z-index: 9999 !important;
 }
-/* Override all page hiding */
-.page#pg-settings {
-  display: flex !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
 
-.page#pg-settings .con {
-  display: block !important;
-}
-
-/* Show all settings sections */
-.ss {
-  display: block !important;
-  margin-bottom: 24px;
-}
-/* Give settings page proper height */
-#pg-settings {
-  min-height: 100vh !important;
-  height: 100% !important;
-  display: flex !important;
-  flex-direction: column !important;
-}
-
-#pg-settings .con {
-  flex: 1 !important;
-  min-height: calc(100vh - var(--nh)) !important;
-  padding: 16px !important;
-  padding-bottom: calc(var(--nh) + 20px) !important;
-}
-
-/* Ensure all pages have height */
-.page {
-  min-height: 100vh;
-  flex-direction: column;
-}
-
-.page .con {
-  flex: 1;
-}
-/* Hide all pages by default */
+/* 2. Hide all pages by default */
 .page {
   display: none !important;
   flex-direction: column;
   min-height: 100vh;
 }
 
-/* Show only active page */
+/* 3. Show ONLY the active page */
 .page.active {
   display: flex !important;
 }
 
-/* Ensure Home page is active on load */
-#pg-home.active {
-  display: flex !important;
+/* 4. Fix padding so content isn't hidden behind nav */
+.page .con {
+  padding-bottom: calc(var(--nh) + 20px) !important;
 }
 
-/* Hide Settings when not active */
-#pg-settings:not(.active) {
-  display: none !important;
+/* 5. Ensure Settings page has height */
+#pg-settings {
+  min-height: 100vh;
 }
+/* Hide nav when login page is active */
+#app[style*="display: none"] ~ .bnav { display: none !important; }
 </style>
-</head>
 <body>
 <!-- ═══════════ LOGIN ═══════════ -->
 <div id="loginPage">
@@ -1097,37 +1034,48 @@ Basic BCS Academy.</textarea>
 </div><!-- /app -->
 <!-- BOTTOM NAV -->
 <nav class="bnav">
-<button class="ni active" onclick="go('home')" id="nav-home">
-<div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
-<div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-<div class="ni-lb">Home</div>
-</button>
-<button class="ni" onclick="go('students')" id="nav-students">
-<div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
-<div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-<div class="ni-lb">Student</div>
-</button>
-<button class="ni" onclick="go('attendance')" id="nav-attendance">
-<div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
-<div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-<div class="ni-lb">Attend.</div>
-</button>
-<button class="ni" onclick="go('exams')" id="nav-exams">
-<div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
-<div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-<div class="ni-lb">Exams</div>
-</button>
-<button class="ni" onclick="go('sms')" id="nav-sms">
-<div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
-<div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-<div class="ni-lb">SMS</div>
-<div class="ni-dot"></div>
-</button>
-<button class="ni" onclick="go('settings')" id="nav-settings">
-<div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
-<div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-<div class="ni-lb">Settings</div>
-</button>
+  <!-- 1. HOME -->
+  <button class="ni active" onclick="go('home')" id="nav-home">
+    <div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
+    <div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    <div class="ni-lb">Home</div>
+  </button>
+
+  <!-- 2. STUDENTS -->
+  <button class="ni" onclick="go('students')" id="nav-students">
+    <div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
+    <div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+    <div class="ni-lb">Students</div>
+  </button>
+
+  <!-- 3. ATTENDANCE -->
+  <button class="ni" onclick="go('attendance')" id="nav-attendance">
+    <div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
+    <div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+    <div class="ni-lb">Attend.</div>
+  </button>
+
+  <!-- 4. EXAMS -->
+  <button class="ni" onclick="go('exams')" id="nav-exams">
+    <div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
+    <div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+    <div class="ni-lb">Exams</div>
+  </button>
+
+  <!-- 5. SMS -->
+  <button class="ni" onclick="go('sms')" id="nav-sms">
+    <div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
+    <div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+    <div class="ni-lb">SMS</div>
+    <div class="ni-dot"></div>
+  </button>
+
+  <!-- 6. SETTINGS -->
+  <button class="ni" onclick="go('settings')" id="nav-settings">
+    <div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
+    <div class="ni-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+    <div class="ni-lb">Settings</div>
+  </button>
 </nav>
   
 <!-- ═══════════ DRAWERS ═══════════ -->
