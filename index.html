@@ -1620,7 +1620,7 @@ html += `<div class="bmi">
 <div class="bmi-name">${b.name}</div>
 <div class="bmi-det"><span style="color:var(--${on?'ok':'err'});font-weight:700">${on?'Active':'Inactive'}</span></div>
 </div>
-<label class="tog"><input type="checkbox" ${on?'checked':''} onchange="toggleBatch('${b.name}', this)"><span class="tog-sl"></span></label>
+<label class="tog"><input type="checkbox" ${on?'checked':''} onchange="('${b.name}', this)"><span class="tog-sl"></span></label>
 </div>`;
 });
 html += `<div style="padding:12px 16px"><button class="btn btn-p" style="font-size:13px" onclick="openSht('addBatch')">＋ Add New Batch</button></div>`;
@@ -1632,15 +1632,21 @@ el.innerHTML = '<div class="cb" style="text-align:center;color:var(--err)">Error
 }
 }
 async function toggleBatch(name, checkbox) {
-const res = await api('toggleBatch', { batchName: name });
-if (res.success) {
-toast(`${name} ${res.status === 'Active' ? 'activated ✅' : 'deactivated ❌'}`);
-loadBatchManagement();
-loadBatches();
-} else {
-checkbox.checked = !checkbox.checked;
-toast('❌ Failed to update batch');
-}
+  const res = await api('toggleBatch', { batchName: name });
+  if (res.success) {
+    toast(`${name} ${res.status === 'Active' ? 'activated ✅' : 'deactivated ❌'}`);
+    
+    // Refresh UI components
+    loadBatchManagement();
+    loadBatches();
+    
+    // ✅ NEW: Instantly update Home page student count & active batch count
+    loadHomeData();
+    
+  } else {
+    checkbox.checked = !checkbox.checked;
+    toast('❌ Failed to update batch');
+  }
 }
 async function addBatch() {
 const name = document.getElementById('newBatchName').value.trim();
