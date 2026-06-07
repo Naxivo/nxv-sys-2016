@@ -12,7 +12,7 @@
 <!-- ✅ ADD THESE TWO LINES FOR ICONS & MANIFEST -->
 <link rel="apple-touch-icon" href="/nxv-sys-2016/icon.png">
 <link rel="manifest" href="/nxv-sys-2016/manifest.json">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>">
 <title>Basic BCS Academy</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -173,114 +173,114 @@ transition: background .35s, border-color .35s;
 BOTTOM NAV (REFINED)
 ═══════════════════════════════════════ */
 .bnav {
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 480px;
-  height: var(--nh);
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-top: 1px solid var(--bdr);
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  z-index: 9999;
-  box-shadow: 0 -2px 15px rgba(0,0,0,0.05);
-  transition: background 0.3s ease, border-color 0.3s ease;
+position: fixed;
+bottom: 0;
+left: 50%;
+transform: translateX(-50%);
+width: 100%;
+max-width: 480px;
+height: var(--nh);
+background: rgba(255, 255, 255, 0.95);
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
+border-top: 1px solid var(--bdr);
+display: flex;
+align-items: center;
+justify-content: space-around;
+z-index: 9999;
+box-shadow: 0 -2px 15px rgba(0,0,0,0.05);
+transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 body.dark .bnav {
-  background: rgba(17, 24, 39, 0.95);
-  border-top-color: var(--bdr);
+background: rgba(17, 24, 39, 0.95);
+border-top-color: var(--bdr);
 }
 
 .ni {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  padding: 6px 0;
-  border: none;
-  background: none;
-  cursor: pointer;
-  opacity: 0.6;
-  transition: all 0.2s ease;
-  -webkit-tap-highlight-color: transparent;
-  position: relative;
+flex: 1;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 2px;
+padding: 6px 0;
+border: none;
+background: none;
+cursor: pointer;
+opacity: 0.6;
+transition: all 0.2s ease;
+-webkit-tap-highlight-color: transparent;
+position: relative;
 }
 
 .ni.active {
-  opacity: 1;
+opacity: 1;
 }
 
 .ni-ic {
-  width: 24px;
-  height: 24px;
-  transition: transform 0.2s ease;
+width: 24px;
+height: 24px;
+transition: transform 0.2s ease;
 }
 
 .ni.active .ni-ic {
-  transform: translateY(-2px);
+transform: translateY(-2px);
 }
 
 .ni-ic svg {
-  width: 100%;
-  height: 100%;
-  stroke: currentColor;
-  stroke-width: 2;
-  fill: none;
+width: 100%;
+height: 100%;
+stroke: currentColor;
+stroke-width: 2;
+fill: none;
 }
 
 .ni-lb {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  transition: color 0.2s ease;
+font-size: 10px;
+font-weight: 600;
+letter-spacing: 0.3px;
+transition: color 0.2s ease;
 }
 
 .ni.active .ni-lb {
-  color: var(--p);
-  font-weight: 700;
+color: var(--p);
+font-weight: 700;
 }
 
 .ni-bar {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--p), var(--ac));
-  border-radius: 0 0 4px 4px;
-  transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+position: absolute;
+top: 0;
+left: 50%;
+transform: translateX(-50%);
+width: 0;
+height: 3px;
+background: linear-gradient(90deg, var(--p), var(--ac));
+border-radius: 0 0 4px 4px;
+transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .ni.active .ni-bar {
-  width: 28px;
+width: 28px;
 }
 
 .ni-dot {
-  position: absolute;
-  top: 4px;
-  right: 35%;
-  width: 7px;
-  height: 7px;
-  background: var(--err);
-  border-radius: 50%;
-  border: 1.5px solid var(--sur);
-  animation: blink 2s infinite;
+position: absolute;
+top: 4px;
+right: 35%;
+width: 7px;
+height: 7px;
+background: var(--err);
+border-radius: 50%;
+border: 1.5px solid var(--sur);
+animation: blink 2s infinite;
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+0%, 100% { opacity: 1; }
+50% { opacity: 0.4; }
 }
-/* ═══════════════════════════════════════
+/* ══════════════════════════════════════
 CONTENT
 ═══════════════════════════════════════ */
 .con { padding: 16px; flex: 1; }
@@ -317,7 +317,7 @@ STATS
 .st.g { border-top: 3px solid var(--ok); } .st.g .st-v { color: var(--ok); }
 .st.o { border-top: 3px solid var(--warn); } .st.o .st-v { color: var(--warn); }
 .st.r { border-top: 3px solid var(--err); } .st.r .st-v { color: var(--err); }
-/* ═══════════════════════════════════════
+/* ══════════════════════════════════════
 QUICK ACTIONS
 ═══════════════════════════════════════ */
 .qg { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 16px; }
@@ -559,27 +559,27 @@ animation: pulseText 2s ease-in-out infinite;
 /* ═══════════════════════════════════════
 SYSTEM FIXES (FINAL VERSION)
 ═══════════════════════════════════════ */
-
-/* 1. Force Bottom Nav to always show (except login) */
+/* 1. Hide Bottom Nav by default */
 .bnav {
-  display: flex !important;
+  display: none !important;
   visibility: visible !important;
   opacity: 1 !important;
   z-index: 9999 !important;
 }
-
+/* Show Bottom Nav ONLY when logged in */
+body.logged-in .bnav {
+  display: flex !important;
+}
 /* 2. ALL pages hidden by default */
 .page {
   display: none !important;
 }
-
 /* 3. ONLY active page shows */
 .page.active {
   display: flex !important;
   flex-direction: column;
   min-height: 100vh;
 }
-
 /* 4. Content padding */
 .page .con {
   flex: 1;
@@ -587,6 +587,7 @@ SYSTEM FIXES (FINAL VERSION)
   padding-bottom: calc(var(--nh) + 20px);
 }
 </style>
+</head>
 <body>
 <!-- ═══════════ LOGIN ═══════════ -->
 <div id="loginPage">
@@ -606,7 +607,7 @@ SYSTEM FIXES (FINAL VERSION)
 <button class="btn btn-p" onclick="doLogin()" id="loginBtn">Sign In →</button>
 <div id="loginError" style="color:var(--err);font-size:12px;text-align:center;margin-top:10px;display:none;font-weight:600"></div>
 </div>
-<div class="login-ver">Basic BCS Academy · v1.0 · Made in Bangladesh 🇧🇩</div>
+<div class="login-ver">Basic BCS Academy · v1.0 · Made in Bangladesh 🇧</div>
 </div>
 <!-- ═══════════ APP ═══════════ -->
 <div id="app" style="display:none">
@@ -717,7 +718,7 @@ SYSTEM FIXES (FINAL VERSION)
 <div class="btab active" onclick="swBatch(this,'all')" data-batch="all">All</div>
 </div>
 <div class="dl-row">
-<button class="btn btn-ghost btn-sm" style="flex:1" onclick="exportStudentsPDF()">📄 PDF</button>
+<button class="btn btn-ghost btn-sm" style="flex:1" onclick="exportStudentsPDF()"> PDF</button>
 <button class="btn btn-ghost btn-sm" style="flex:1" onclick="exportStudentsExcel()">📊 Excel</button>
 </div>
 <div class="card" style="padding:0" id="studentList">
@@ -926,154 +927,140 @@ Basic BCS Academy.</textarea>
 </div>
 </div>
 </div>
-  
 <!-- SETTINGS -->
 <div class="page" id="pg-settings">
-  <div class="topbar">
-    <div class="tb-info"><div class="tb-name">Settings</div></div>
-  </div>
-  <div class="con">
-    <!-- Profile Card -->
-    <div class="profile-card">
-      <div class="profile-av" id="profileAv">A</div>
-      <div>
-        <div class="profile-name" id="profileName">Admin</div>
-        <div class="profile-role" id="profileRole">Administrator</div>
-      </div>
-      <button class="btn btn-out btn-sm" style="margin-left:auto" onclick="doLogout()">Logout</button>
-    </div>
-
-    <!-- License Card -->
-    <div class="lic-card">
-      <div class="lic-ic"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
-      <div class="lic-info">
-        <div class="lic-title">Licence Active</div>
-        <div class="lic-sub">Valid · Basic BCS Academy · v1.0</div>
-      </div>
-    </div>
-
-    <!-- Appearance -->
-    <div class="ss">
-      <div class="ss-t">Appearance</div>
-      <div class="si">
-        <div class="si-ic"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
-        <div class="si-info"><div class="si-lb">Dark Mode</div><div class="si-ds">Switch between light and dark theme</div></div>
-        <label class="tog"><input type="checkbox" id="darkTog" onchange="toggleTheme()"><span class="tog-sl"></span></label>
-      </div>
-    </div>
-
-    <!-- Batch Management -->
-    <div class="ss">
-      <div class="ss-t">Batch Management</div>
-      <div class="card" style="padding:0" id="batchMgmt">
-        <div class="loading"><div class="spinner"></div></div>
-      </div>
-    </div>
-
-    <!-- Admin Only Settings (Teachers & Access) -->
-    <div class="ss" id="adminOnlySettings">
-      <div class="ss-t">Teachers & Access</div>
-      <div class="si" onclick="openSht('manageTeachers')">
-        <div class="si-ic"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-        <div class="si-info"><div class="si-lb">Manage Teachers</div><div class="si-ds">Add or remove teacher accounts</div></div>
-        <div class="si-ar">›</div>
-      </div>
-      <div class="si" onclick="openSht('changePass')">
-        <div class="si-ic"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-        <div class="si-info"><div class="si-lb">Change Password</div><div class="si-ds">Update your login password</div></div>
-        <div class="si-ar">›</div>
-      </div>
-    </div>
-
-    <!-- Admin SMS Settings -->
-    <div class="ss" id="adminSMSSettings">
-      <div class="ss-t">SMS Configuration</div>
-      <div class="si" onclick="toast(' Update SMS_API_KEY in Google Sheets Settings tab')">
-        <div class="si-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-        <div class="si-info"><div class="si-lb">SMS API Key</div><div class="si-ds">Update in Google Sheets Settings tab</div></div>
-        <div class="si-ar">›</div>
-      </div>
-      <div class="si">
-        <div class="si-ic"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
-        <div class="si-info"><div class="si-lb">Auto Absence SMS</div><div class="si-ds">Trigger at 3 absences per month</div></div>
-        <label class="tog"><input type="checkbox" id="autoSmsTog" onchange="toggleAutoSMS()"><span class="tog-sl"></span></label>
-      </div>
-    </div>
-
-    <!-- Data -->
-    <div class="ss">
-      <div class="ss-t">Data</div>
-      <div class="si" onclick="syncData()">
-        <div class="si-ic"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
-        <div class="si-info"><div class="si-lb">Sync Google Sheets</div><div class="si-ds" id="lastSync">Tap to sync</div></div>
-        <div class="si-ar">›</div>
-      </div>
-      <div class="si" onclick="exportStudentsPDF()">
-        <div class="si-ic"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
-        <div class="si-info"><div class="si-lb">Export Student Data</div><div class="si-ds">Download as PDF or Excel</div></div>
-        <div class="si-ar">›</div>
-      </div>
-    </div>
-
-    <!-- About -->
-    <div class="ss">
-      <div class="ss-t">About</div>
-      <div class="si" onclick="openSht('about')">
-        <div class="si-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
-        <div class="si-info"><div class="si-lb">About This App</div><div class="si-ds">Developer · Guide · Do's & Don'ts</div></div>
-        <div class="si-ar">›</div>
-      </div>
-    </div>
-  </div>
+<div class="topbar">
+<div class="tb-info"><div class="tb-name">Settings</div></div>
+</div>
+<div class="con">
+<!-- Profile Card -->
+<div class="profile-card">
+<div class="profile-av" id="profileAv">A</div>
+<div>
+<div class="profile-name" id="profileName">Admin</div>
+<div class="profile-role" id="profileRole">Administrator</div>
+</div>
+<button class="btn btn-out btn-sm" style="margin-left:auto" onclick="doLogout()">Logout</button>
+</div>
+<!-- License Card -->
+<div class="lic-card">
+<div class="lic-ic"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+<div class="lic-info">
+<div class="lic-title">Licence Active</div>
+<div class="lic-sub">Valid · Basic BCS Academy · v1.0</div>
+</div>
+</div>
+<!-- Appearance -->
+<div class="ss">
+<div class="ss-t">Appearance</div>
+<div class="si">
+<div class="si-ic"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
+<div class="si-info"><div class="si-lb">Dark Mode</div><div class="si-ds">Switch between light and dark theme</div></div>
+<label class="tog"><input type="checkbox" id="darkTog" onchange="toggleTheme()"><span class="tog-sl"></span></label>
+</div>
+</div>
+<!-- Batch Management -->
+<div class="ss">
+<div class="ss-t">Batch Management</div>
+<div class="card" style="padding:0" id="batchMgmt">
+<div class="loading"><div class="spinner"></div></div>
+</div>
+</div>
+<!-- Admin Only Settings (Teachers & Access) -->
+<div class="ss" id="adminOnlySettings">
+<div class="ss-t">Teachers & Access</div>
+<div class="si" onclick="openSht('manageTeachers')">
+<div class="si-ic"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+<div class="si-info"><div class="si-lb">Manage Teachers</div><div class="si-ds">Add or remove teacher accounts</div></div>
+<div class="si-ar">›</div>
+</div>
+<div class="si" onclick="openSht('changePass')">
+<div class="si-ic"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+<div class="si-info"><div class="si-lb">Change Password</div><div class="si-ds">Update your login password</div></div>
+<div class="si-ar">›</div>
+</div>
+</div>
+<!-- Admin SMS Settings -->
+<div class="ss" id="adminSMSSettings">
+<div class="ss-t">SMS Configuration</div>
+<div class="si" onclick="toast(' Update SMS_API_KEY in Google Sheets Settings tab')">
+<div class="si-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+<div class="si-info"><div class="si-lb">SMS API Key</div><div class="si-ds">Update in Google Sheets Settings tab</div></div>
+<div class="si-ar">›</div>
+</div>
+<div class="si">
+<div class="si-ic"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+<div class="si-info"><div class="si-lb">Auto Absence SMS</div><div class="si-ds">Trigger at 3 absences per month</div></div>
+<label class="tog"><input type="checkbox" id="autoSmsTog" onchange="toggleAutoSMS()"><span class="tog-sl"></span></label>
+</div>
+</div>
+<!-- Data -->
+<div class="ss">
+<div class="ss-t">Data</div>
+<div class="si" onclick="syncData()">
+<div class="si-ic"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
+<div class="si-info"><div class="si-lb">Sync Google Sheets</div><div class="si-ds" id="lastSync">Tap to sync</div></div>
+<div class="si-ar">›</div>
+</div>
+<div class="si" onclick="exportStudentsPDF()">
+<div class="si-ic"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+<div class="si-info"><div class="si-lb">Export Student Data</div><div class="si-ds">Download as PDF or Excel</div></div>
+<div class="si-ar">›</div>
+</div>
+</div>
+<!-- About -->
+<div class="ss">
+<div class="ss-t">About</div>
+<div class="si" onclick="openSht('about')">
+<div class="si-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+<div class="si-info"><div class="si-lb">About This App</div><div class="si-ds">Developer · Guide · Do's & Don'ts</div></div>
+<div class="si-ar">›</div>
+</div>
+</div>
+</div>
 </div>
 </div><!-- /app -->
 <!-- BOTTOM NAV -->
 <nav class="bnav">
-  <!-- 1. HOME -->
-  <button class="ni active" onclick="go('home')" id="nav-home">
-    <div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
-    <div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-    <div class="ni-lb">Home</div>
-  </button>
-
-  <!-- 2. STUDENTS -->
-  <button class="ni" onclick="go('students')" id="nav-students">
-    <div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
-    <div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-    <div class="ni-lb">Students</div>
-  </button>
-
-  <!-- 3. ATTENDANCE -->
-  <button class="ni" onclick="go('attendance')" id="nav-attendance">
-    <div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
-    <div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
-    <div class="ni-lb">Attend.</div>
-  </button>
-
-  <!-- 4. EXAMS -->
-  <button class="ni" onclick="go('exams')" id="nav-exams">
-    <div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
-    <div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
-    <div class="ni-lb">Exams</div>
-  </button>
-
-  <!-- 5. SMS -->
-  <button class="ni" onclick="go('sms')" id="nav-sms">
-    <div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
-    <div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-    <div class="ni-lb">SMS</div>
-    <div class="ni-dot"></div>
-  </button>
-
-  <!-- 6. SETTINGS -->
-  <button class="ni" onclick="go('settings')" id="nav-settings">
-    <div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
-    <div class="ni-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
-    <div class="ni-lb">Settings</div>
-  </button>
+<!-- 1. HOME -->
+<button class="ni active" onclick="go('home')" id="nav-home">
+<div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
+<div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+<div class="ni-lb">Home</div>
+</button>
+<!-- 2. STUDENTS -->
+<button class="ni" onclick="go('students')" id="nav-students">
+<div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
+<div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+<div class="ni-lb">Students</div>
+</button>
+<!-- 3. ATTENDANCE -->
+<button class="ni" onclick="go('attendance')" id="nav-attendance">
+<div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
+<div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+<div class="ni-lb">Attend.</div>
+</button>
+<!-- 4. EXAMS -->
+<button class="ni" onclick="go('exams')" id="nav-exams">
+<div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
+<div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+<div class="ni-lb">Exams</div>
+</button>
+<!-- 5. SMS -->
+<button class="ni" onclick="go('sms')" id="nav-sms">
+<div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
+<div class="ni-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+<div class="ni-lb">SMS</div>
+<div class="ni-dot"></div>
+</button>
+<!-- 6. SETTINGS -->
+<button class="ni" onclick="go('settings')" id="nav-settings">
+<div class="ni-bar" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:linear-gradient(90deg,var(--p),var(--ac));border-radius:0 0 4px 4px;transition:width .3s cubic-bezier(.34,1.56,.64,1)"></div>
+<div class="ni-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+<div class="ni-lb">Settings</div>
+</button>
 </nav>
-  
-<!-- ═══════════ DRAWERS ═══════════ -->
+<!-- ═══════════ DRAWERS ══════════ -->
 <!-- Add Student -->
 <div class="ov" id="ov-addStu">
 <div class="sht">
@@ -1398,6 +1385,8 @@ localStorage.setItem('bcsUser', JSON.stringify(res.user));
 document.getElementById('loginPage').style.display = 'none';
 document.getElementById('app').style.display = 'block';
 err.style.display = 'none';
+// ✅ FIX 1: Add class to body to show nav
+document.body.classList.add('logged-in');
 // Update profile
 document.getElementById('profileName').textContent = res.user.name;
 document.getElementById('profileRole').textContent = res.user.role + ' · Basic BCS Academy';
@@ -1432,6 +1421,8 @@ document.getElementById('loginPage').style.display = 'flex';
 document.getElementById('lu').value = '';
 document.getElementById('lp').value = '';
 document.getElementById('loginError').style.display = 'none';
+// ✅ FIX 1: Remove class from body to hide nav
+document.body.classList.remove('logged-in');
 }
 document.addEventListener('keydown', e => {
 if (e.key === 'Enter' && document.getElementById('loginPage').style.display !== 'none') doLogin();
@@ -1450,22 +1441,7 @@ nav.classList.add('active');
 const bar = nav.querySelector('.ni-bar');
 if (bar) bar.style.width = '30px';
 }
-// Force settings page to display
-function forceShowSettings() {
-  const settingsPage = document.getElementById('pg-settings');
-  if (settingsPage) {
-    settingsPage.style.display = 'flex';
-    settingsPage.classList.add('active');
-    console.log('✅ Settings page forced to display');
-  } else {
-    console.error('❌ Settings page element not found!');
-  }
-}
-
-// Call it after loading
-setTimeout(() => {
-  forceShowSettings();
-}, 100);
+// ✅ FIX 2: Removed forceShowSettings() block to prevent Settings from showing everywhere
 // Remove bar from others
 document.querySelectorAll('.ni:not(.active) .ni-bar').forEach(b => b.style.width = '0');
 window.scrollTo(0, 0);
@@ -1473,11 +1449,11 @@ window.scrollTo(0, 0);
 if (name === 'students') loadStudents();
 if (name === 'attendance') loadAttendanceList();
 if (name === 'settings') {
-  console.log('⚙️ Loading settings page...');
-  loadBatchManagement().catch(err => console.error('❌ Batch management error:', err));
-  if (currentUser?.role === 'Admin') {
-    loadTeachers().catch(err => console.error('❌ Teachers load error:', err));
-  }
+console.log('⚙️ Loading settings page...');
+loadBatchManagement().catch(err => console.error('❌ Batch management error:', err));
+if (currentUser?.role === 'Admin') {
+loadTeachers().catch(err => console.error('❌ Teachers load error:', err));
+}
 }
 if (name === 'sms') { refreshBalance(); loadScheduleList(); }
 if (name === 'exams') loadExamDates();
@@ -1536,7 +1512,7 @@ o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'
 });
 // ═══════════════════════════════════════
 //  HOME DATA
-// ═══════════════════════════════════════
+// ══════════════════════════════════════
 async function loadHomeData() {
 // Student count
 const res = await api('getStudentCount');
@@ -1615,50 +1591,44 @@ smsTo.innerHTML += '<option value="absent">Absent Students Only</option>';
 }
 }
 async function loadBatchManagement() {
-  console.log('🔄 Loading batch management...');
-  const el = document.getElementById('batchMgmt');
-  
-  if (!el) {
-    console.error('❌ batchMgmt element not found!');
-    return;
-  }
-  
-  try {
-    el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-    
-    const res = await api('getBatches');
-    console.log('📊 Batches response:', res);
-    
-    if (!res.success) { 
-      el.innerHTML = '<div class="cb" style="text-align:center;color:var(--err)">Could not load batches: ' + (res.error || 'Unknown error') + '</div>'; 
-      console.error('❌ Failed to load batches:', res.error);
-      return; 
-    }
-    
-    if (!res.batches || res.batches.length === 0) {
-      el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3)">No batches found</div>';
-      return;
-    }
-    
-    let html = '';
-    res.batches.forEach(b => {
-      const on = b.status === 'Active';
-      html += `<div class="bmi">
-        <div class="bmi-dot${on?'':' off'}">${b.name.slice(0,4)}</div>
-        <div class="bmi-info">
-          <div class="bmi-name">${b.name}</div>
-          <div class="bmi-det"><span style="color:var(--${on?'ok':'err'});font-weight:700">${on?'Active':'Inactive'}</span></div>
-        </div>
-        <label class="tog"><input type="checkbox" ${on?'checked':''} onchange="toggleBatch('${b.name}', this)"><span class="tog-sl"></span></label>
-      </div>`;
-    });
-    html += `<div style="padding:12px 16px"><button class="btn btn-p" style="font-size:13px" onclick="openSht('addBatch')">＋ Add New Batch</button></div>`;
-    el.innerHTML = html;
-    console.log('✅ Batch management loaded successfully');
-  } catch (err) {
-    console.error('❌ Error in loadBatchManagement:', err);
-    el.innerHTML = '<div class="cb" style="text-align:center;color:var(--err)">Error loading batches. Check console.</div>';
-  }
+console.log('🔄 Loading batch management...');
+const el = document.getElementById('batchMgmt');
+if (!el) {
+console.error('❌ batchMgmt element not found!');
+return;
+}
+try {
+el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+const res = await api('getBatches');
+console.log('📊 Batches response:', res);
+if (!res.success) {
+el.innerHTML = '<div class="cb" style="text-align:center;color:var(--err)">Could not load batches: ' + (res.error || 'Unknown error') + '</div>';
+console.error('❌ Failed to load batches:', res.error);
+return;
+}
+if (!res.batches || res.batches.length === 0) {
+el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3)">No batches found</div>';
+return;
+}
+let html = '';
+res.batches.forEach(b => {
+const on = b.status === 'Active';
+html += `<div class="bmi">
+<div class="bmi-dot${on?'':' off'}">${b.name.slice(0,4)}</div>
+<div class="bmi-info">
+<div class="bmi-name">${b.name}</div>
+<div class="bmi-det"><span style="color:var(--${on?'ok':'err'});font-weight:700">${on?'Active':'Inactive'}</span></div>
+</div>
+<label class="tog"><input type="checkbox" ${on?'checked':''} onchange="toggleBatch('${b.name}', this)"><span class="tog-sl"></span></label>
+</div>`;
+});
+html += `<div style="padding:12px 16px"><button class="btn btn-p" style="font-size:13px" onclick="openSht('addBatch')">＋ Add New Batch</button></div>`;
+el.innerHTML = html;
+console.log('✅ Batch management loaded successfully');
+} catch (err) {
+console.error('❌ Error in loadBatchManagement:', err);
+el.innerHTML = '<div class="cb" style="text-align:center;color:var(--err)">Error loading batches. Check console.</div>';
+}
 }
 async function toggleBatch(name, checkbox) {
 const res = await api('toggleBatch', { batchName: name });
@@ -1704,7 +1674,7 @@ toast('❌ Failed to update batch');
 }
 function updBatchPreview() {
 const v = document.getElementById('newBatchName').value.trim() || 'BatchName';
-document.getElementById('batchPreview').innerHTML = `ℹ️ A new sheet <strong>"${v}"</strong> will be created in Google Sheets automatically.`;
+document.getElementById('batchPreview').innerHTML = `️ A new sheet <strong>"${v}"</strong> will be created in Google Sheets automatically.`;
 }
 // ═══════════════════════════════════════
 //  STUDENTS
@@ -1723,7 +1693,7 @@ return name.split(' ').slice(0,2).map(w => w[0] || '').join('').toUpperCase() ||
 }
 async function loadStudents(batch = null) {
 const el = document.getElementById('studentList');
-console.log('🔍 loadStudents called with batch:', batch);
+console.log(' loadStudents called with batch:', batch);
 console.log('🔍 Current batches:', batches);
 // 1. Wait for batches to load if we are loading 'all'
 if (!batch || batch === 'all') {
@@ -1759,7 +1729,7 @@ return;
 }
 // 6. Fetch from Google Sheets
 let allStu = [];
-// 🚀 START ALL REQUESTS AT ONCE (Parallel)
+//  START ALL REQUESTS AT ONCE (Parallel)
 const promises = batchList.map(async (b) => {
 try {
 const res = await api('getStudents', { batch: b });
@@ -1864,7 +1834,7 @@ openSht('editStu');
 }
 async function saveEditStudent() {
 const name = document.getElementById('editName').value.trim();
-if (!name) { toast('❌ Name required'); return; }
+if (!name) { toast(' Name required'); return; }
 const res = await api('editStudent', {
 batch: document.getElementById('editBatch').value,
 student: {
@@ -1910,7 +1880,7 @@ delete studentCache['all'];
 loadStudents();
 loadHomeData();
 } else {
-toast('❌ ' + res.error);
+toast(' ' + res.error);
 }
 }
 async function deactivateStudent() {
@@ -2065,7 +2035,7 @@ if (!banner) return;
 const active = batches.filter(b => b.status === 'Active');
 const marked = markedBatchesToday.size;
 if (marked === 0) {
-banner.textContent = "⚠️ Today's attendance not marked yet";
+banner.textContent = "️ Today's attendance not marked yet";
 } else if (marked < active.length) {
 banner.textContent = `🕐 ${marked} of ${active.length} batches marked today`;
 } else {
@@ -2122,7 +2092,7 @@ ${currentUser?.role === 'Admin' ? `<button class="btn btn-sm" style="background:
 }
 // ═══════════════════════════════════════
 //  EXAMS
-// ═══════════════════════════════════════
+// ══════════════════════════════════════
 async function loadExamDates() {
 const res = await api('getExamDates', { batch: currentExamBatch });
 const sel = document.getElementById('examDateSelect');
@@ -2176,7 +2146,7 @@ return { regNo: s.regNo, name: s.name, score: input ? Number(input.value) || 0 :
 });
 const res = await api('saveMarks', { examDate: date, batch: currentExamBatch, marks });
 if (res.success) { toast('✅ Marks saved to Google Sheets!'); }
-else { toast('❌ ' + res.error); }
+else { toast(' ' + res.error); }
 }
 function addExamDate() {
 const date = document.getElementById('newExamDate').value;
@@ -2323,7 +2293,7 @@ if (res.success) numbers = numbers.concat(res.students.filter(s => s.phone).map(
 const res = await api('getStudents', { batch: to });
 if (res.success) numbers = res.students.filter(s => s.phone).map(s => s.phone);
 }
-if (!numbers.length) { toast('❌ No phone numbers available'); return; }
+if (!numbers.length) { toast(' No phone numbers available'); return; }
 const res = await api('sendSMS', { numbers, message: msg });
 if (res.success) {
 toast(`📱 SMS sending started for ${numbers.length} recipients!`);
@@ -2348,14 +2318,14 @@ el.innerHTML = res.logs.map(log => `
 <div class="slog-tx">
 <div class="slog-m">${log.phone}</div>
 <div class="slog-d">${log.message}</div>
-<span class="slog-st ${log.status === 'Delivered' ? 'ok' : 'fail'}">${log.status === 'Delivered' ? '✅' : '❌'} ${log.status}</span>
+<span class="slog-st ${log.status === 'Delivered' ? 'ok' : 'fail'}">${log.status === 'Delivered' ? '✅' : ''} ${log.status}</span>
 </div>
 <div class="slog-t">${log.time}</div>
 </div>`).join('');
 }
 // ═══════════════════════════════════════
 //  SMS SCHEDULING
-// ═══════════════════════════════════════
+// ══════════════════════════════════════
 // ✅ ADD SCHEDULE
 async function addSchedule() {
 const time = document.getElementById('smsSchedule').value;
@@ -2431,49 +2401,43 @@ toast('❌ ' + res.error);
 //  TEACHERS
 // ═══════════════════════════════════════
 async function loadTeachers() {
-  console.log('👥 Loading teachers...');
-  
-  if (currentUser?.role !== 'Admin') {
-    console.log('⚠️ Not admin, skipping teacher load');
-    return;
-  }
-  
-  const el = document.getElementById('teacherList');
-  if (!el) {
-    console.error('❌ teacherList element not found!');
-    return;
-  }
-  
-  try {
-    el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-    const res = await api('getTeachers');
-    console.log(' Teachers response:', res);
-    
-    if (!res.success) { 
-      el.innerHTML = '<div class="cb">Failed to load teachers: ' + (res.error || 'Unknown error') + '</div>'; 
-      console.error('❌ Failed to load teachers:', res.error);
-      return; 
-    }
-    
-    if (!res.teachers || res.teachers.length === 0) {
-      el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3)">No teachers found</div>';
-      return;
-    }
-    
-    el.innerHTML = res.teachers.map(t => `
-      <div class="sli">
-        <div class="av" style="background:var(--pl);color:var(--p)">${t.name.charAt(0).toUpperCase()}</div>
-        <div class="sl-info">
-          <div class="sl-name">${t.name}</div>
-          <div class="sl-det">${t.username} · ${t.role} · <span style="color:var(--${t.status==='Active'?'ok':'err'})">${t.status}</span></div>
-        </div>
-        ${t.status === 'Active' && t.role !== 'Admin' ? `<button class="btn btn-sm btn-err" onclick="deactivateTeacher('${t.username}')">Remove</button>` : ''}
-      </div>`).join('');
-    console.log('✅ Teachers loaded successfully');
-  } catch (err) {
-    console.error('❌ Error in loadTeachers:', err);
-    el.innerHTML = '<div class="cb">Error loading teachers. Check console.</div>';
-  }
+console.log('👥 Loading teachers...');
+if (currentUser?.role !== 'Admin') {
+console.log('⚠️ Not admin, skipping teacher load');
+return;
+}
+const el = document.getElementById('teacherList');
+if (!el) {
+console.error('❌ teacherList element not found!');
+return;
+}
+try {
+el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+const res = await api('getTeachers');
+console.log(' Teachers response:', res);
+if (!res.success) {
+el.innerHTML = '<div class="cb">Failed to load teachers: ' + (res.error || 'Unknown error') + '</div>';
+console.error('❌ Failed to load teachers:', res.error);
+return;
+}
+if (!res.teachers || res.teachers.length === 0) {
+el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3)">No teachers found</div>';
+return;
+}
+el.innerHTML = res.teachers.map(t => `
+<div class="sli">
+<div class="av" style="background:var(--pl);color:var(--p)">${t.name.charAt(0).toUpperCase()}</div>
+<div class="sl-info">
+<div class="sl-name">${t.name}</div>
+<div class="sl-det">${t.username} · ${t.role} · <span style="color:var(--${t.status==='Active'?'ok':'err'})">${t.status}</span></div>
+</div>
+${t.status === 'Active' && t.role !== 'Admin' ? `<button class="btn btn-sm btn-err" onclick="deactivateTeacher('${t.username}')">Remove</button>` : ''}
+</div>`).join('');
+console.log('✅ Teachers loaded successfully');
+} catch (err) {
+console.error('❌ Error in loadTeachers:', err);
+el.innerHTML = '<div class="cb">Error loading teachers. Check console.</div>';
+}
 }
 async function addTeacher() {
 const name = document.getElementById('tName').value.trim();
@@ -2520,7 +2484,7 @@ async function toggleAutoSMS() {
 toast('📱 Update AUTO_SMS in Google Sheets Settings tab');
 }
 async function syncData() {
-toast('☁️ Syncing with Google Sheets...');
+toast('️ Syncing with Google Sheets...');
 await loadHomeData();
 await loadBatches();
 const ls = document.getElementById('lastSync');
@@ -2536,7 +2500,7 @@ const activeTab = document.querySelector('.btab.active');
 const batchName = activeTab ? activeTab.innerText : 'Shitalakshya';
 const dateDisplay = document.querySelector('.ad-date');
 const currentDate = dateDisplay ? dateDisplay.innerText : new Date().toLocaleDateString('en-BD');
-if (typeof toast === 'function') toast('📄 Generating attendance report...');
+if (typeof toast === 'function') toast(' Generating attendance report...');
 const response = await api('getAttendance', {
 batch: batchName,
 date: currentDate
@@ -2631,7 +2595,7 @@ alert('Error generating attendance report.');
 }
 // ═══════════════════════════════════════
 //  TOAST
-// ═══════════════════════════════════════
+// ══════════════════════════════════════
 let tt;
 function toast(msg) {
 const t = document.getElementById('toastEl');
@@ -2649,6 +2613,8 @@ currentUser = JSON.parse(saved);
 // Skip login page and go to app
 document.getElementById('loginPage').style.display = 'none';
 document.getElementById('app').style.display = 'block';
+// ✅ FIX 1: Add class to body to show nav
+document.body.classList.add('logged-in');
 // Update UI
 document.getElementById('profileName').textContent = currentUser.name;
 document.getElementById('profileRole').textContent = currentUser.role + ' · Basic BCS Academy';
@@ -2679,7 +2645,7 @@ updCC();
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-// ═══════════════════════════════════════
+// ══════════════════════════════════════
 //  EXPORT FUNCTIONS
 // ═══════════════════════════════════════
 async function exportStudentsPDF() {
@@ -2819,68 +2785,6 @@ console.error('Excel Error:', err);
 alert('Error generating Excel.');
 }
 }
-</script>
-<script>
-// ✅ BULLETPROOF NAV VISIBILITY FIX
-(function() {
-  const loginPage = document.getElementById('loginPage');
-  const app = document.getElementById('app');
-  const bnav = document.querySelector('.bnav');
-  
-  if (!bnav) return;
-  
-  // ✅ STEP 1: Hide nav IMMEDIATELY (prevents flash)
-  bnav.style.setProperty('display', 'none', 'important');
-  
-  // ✅ STEP 2: Function to check and update
-  function updateNav() {
-    setTimeout(() => {
-      const loginDisplay = window.getComputedStyle(loginPage || document.body).display;
-      const appDisplay = window.getComputedStyle(app || document.body).display;
-      
-      // Show nav if: app is visible AND login is hidden
-      if (appDisplay !== 'none' && loginDisplay === 'none') {
-        bnav.style.setProperty('display', 'flex', 'important');
-      } else {
-        bnav.style.setProperty('display', 'none', 'important');
-      }
-    }, 50);
-  }
-  
-  // ✅ STEP 3: Run on multiple triggers
-  updateNav(); // Immediate
-  window.addEventListener('load', updateNav); // After load
-  setTimeout(updateNav, 100); // Fallback
-  
-  // ✅ STEP 4: Hook into login/logout functions
-  if (typeof window.doLogin === 'function') {
-    const origLogin = window.doLogin;
-    window.doLogin = function() {
-      const result = origLogin.apply(this, arguments);
-      setTimeout(updateNav, 300); // After login completes
-      return result;
-    };
-  }
-  
-  if (typeof window.doLogout === 'function') {
-    const origLogout = window.doLogout;
-    window.doLogout = function() {
-      const result = origLogout.apply(this, arguments);
-      setTimeout(updateNav, 100); // After logout
-      return result;
-    };
-  }
-  
-  // ✅ STEP 5: Hook into go() function
-  if (typeof window.go === 'function') {
-    const origGo = window.go;
-    window.go = function(name) {
-      const result = origGo.apply(this, arguments);
-      setTimeout(updateNav, 50);
-      return result;
-    };
-  }
-})();
 </script>
 </body>
 </html>
