@@ -1136,7 +1136,7 @@ try {
 const res = await fetch(API_URL, {
 method: "POST",
 headers: {
-"Content-Type": "application/json"  // ✅ ADD THIS
+"Content-Type": "text/plain;charset=utf-8"  // ✅ ADD THIS
 },
 body: JSON.stringify({
 token: SECRET_TOKEN,
