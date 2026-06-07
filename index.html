@@ -2821,42 +2821,66 @@ alert('Error generating Excel.');
 }
 </script>
 <script>
-// ✅ FIXED: Show/hide nav based on login state
-function checkNavVisibility() {
+// ✅ BULLETPROOF NAV VISIBILITY FIX
+(function() {
   const loginPage = document.getElementById('loginPage');
+  const app = document.getElementById('app');
   const bnav = document.querySelector('.bnav');
   
   if (!bnav) return;
   
-  const isLoginVisible = loginPage && 
-    window.getComputedStyle(loginPage).display !== 'none';
+  // ✅ STEP 1: Hide nav IMMEDIATELY (prevents flash)
+  bnav.style.setProperty('display', 'none', 'important');
   
-  if (isLoginVisible) {
-    // ✅ USE setProperty WITH !important
-    bnav.style.setProperty('display', 'none', 'important');
-    console.log('🔒 Nav hidden (login page visible)');
-  } else {
-    // ✅ USE setProperty WITH !important
-    bnav.style.setProperty('display', 'flex', 'important');
-    console.log('🔓 Nav shown (logged in)');
+  // ✅ STEP 2: Function to check and update
+  function updateNav() {
+    setTimeout(() => {
+      const loginDisplay = window.getComputedStyle(loginPage || document.body).display;
+      const appDisplay = window.getComputedStyle(app || document.body).display;
+      
+      // Show nav if: app is visible AND login is hidden
+      if (appDisplay !== 'none' && loginDisplay === 'none') {
+        bnav.style.setProperty('display', 'flex', 'important');
+      } else {
+        bnav.style.setProperty('display', 'none', 'important');
+      }
+    }, 50);
   }
-}
-
-// Run multiple times
-setTimeout(checkNavVisibility, 100);
-setTimeout(checkNavVisibility, 500);
-setTimeout(checkNavVisibility, 1000);
-
-// Hook into go() function
-if (typeof go === 'function') {
-  const orig = go;
-  go = function() {
-    orig.apply(this, arguments);
-    setTimeout(checkNavVisibility, 50);
-  };
-}
-// Also check on window resize (just in case)
-window.addEventListener('resize', checkNavVisibility);
+  
+  // ✅ STEP 3: Run on multiple triggers
+  updateNav(); // Immediate
+  window.addEventListener('load', updateNav); // After load
+  setTimeout(updateNav, 100); // Fallback
+  
+  // ✅ STEP 4: Hook into login/logout functions
+  if (typeof window.doLogin === 'function') {
+    const origLogin = window.doLogin;
+    window.doLogin = function() {
+      const result = origLogin.apply(this, arguments);
+      setTimeout(updateNav, 300); // After login completes
+      return result;
+    };
+  }
+  
+  if (typeof window.doLogout === 'function') {
+    const origLogout = window.doLogout;
+    window.doLogout = function() {
+      const result = origLogout.apply(this, arguments);
+      setTimeout(updateNav, 100); // After logout
+      return result;
+    };
+  }
+  
+  // ✅ STEP 5: Hook into go() function
+  if (typeof window.go === 'function') {
+    const origGo = window.go;
+    window.go = function(name) {
+      const result = origGo.apply(this, arguments);
+      setTimeout(updateNav, 50);
+      return result;
+    };
+  }
+})();
 </script>
 </body>
 </html>
