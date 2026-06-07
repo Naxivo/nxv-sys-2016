@@ -592,6 +592,22 @@ animation: pulseText 2s ease-in-out infinite;
   opacity: 1 !important;
   z-index: 9999 !important;
 }
+/* Override all page hiding */
+.page#pg-settings {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.page#pg-settings .con {
+  display: block !important;
+}
+
+/* Show all settings sections */
+.ss {
+  display: block !important;
+  margin-bottom: 24px;
+}
 </style>
 </head>
 <body>
@@ -1439,6 +1455,22 @@ nav.classList.add('active');
 const bar = nav.querySelector('.ni-bar');
 if (bar) bar.style.width = '30px';
 }
+// Force settings page to display
+function forceShowSettings() {
+  const settingsPage = document.getElementById('pg-settings');
+  if (settingsPage) {
+    settingsPage.style.display = 'flex';
+    settingsPage.classList.add('active');
+    console.log('✅ Settings page forced to display');
+  } else {
+    console.error('❌ Settings page element not found!');
+  }
+}
+
+// Call it after loading
+setTimeout(() => {
+  forceShowSettings();
+}, 100);
 // Remove bar from others
 document.querySelectorAll('.ni:not(.active) .ni-bar').forEach(b => b.style.width = '0');
 window.scrollTo(0, 0);
