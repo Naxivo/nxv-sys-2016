@@ -557,10 +557,10 @@ animation: pulseText 2s ease-in-out infinite;
 .toast { position: fixed; bottom: calc(var(--nh) + 12px); left: 50%; transform: translateX(-50%) translateY(16px); background: var(--tx); color: var(--bg); border-radius: 12px; padding: 11px 20px; font-size: 13px; font-weight: 700; white-space: nowrap; opacity: 0; transition: all .3s cubic-bezier(.34,1.56,.64,1); z-index: 400; box-shadow: var(--sh3); }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 /* ═══════════════════════════════════════
-SYSTEM FIXES (CLEAN VERSION)
+SYSTEM FIXES (FINAL VERSION)
 ═══════════════════════════════════════ */
 
-/* 1. Force Bottom Nav to always show */
+/* 1. Force Bottom Nav to always show (except login) */
 .bnav {
   display: flex !important;
   visibility: visible !important;
@@ -568,31 +568,23 @@ SYSTEM FIXES (CLEAN VERSION)
   z-index: 9999 !important;
 }
 
-/* 2. Hide all pages by default */
+/* 2. ALL pages hidden by default */
 .page {
   display: none !important;
+}
+
+/* 3. ONLY active page shows */
+.page.active {
+  display: flex !important;
   flex-direction: column;
   min-height: 100vh;
 }
 
-/* 3. Show ONLY the active page */
-.page.active {
-  display: flex !important;
-}
-
-/* 4. Fix padding so content isn't hidden behind nav */
+/* 4. Content padding */
 .page .con {
-  padding-bottom: calc(var(--nh) + 20px) !important;
-}
-
-/* 5. Ensure Settings page has height */
-#pg-settings {
-  min-height: 100vh;
-}
-/* Hide nav when login page is visible */
-#loginPage:not([style*="display: none"]) ~ .bnav,
-body:not(.logged-in) .bnav { 
-  display: none !important; 
+  flex: 1;
+  padding: 16px;
+  padding-bottom: calc(var(--nh) + 20px);
 }
 </style>
 <body>
