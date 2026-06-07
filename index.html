@@ -1633,24 +1633,23 @@ el.innerHTML = '<div class="cb" style="text-align:center;color:var(--err)">Error
 }
 async function toggleBatch(name, checkbox) {
   const res = await api('toggleBatch', { batchName: name });
+  
   if (res.success) {
-    toast(`${name} ${res.status === 'Active' ? 'activated ✅' : 'deactivated ❌'}`);
+    toast(`${name} ${res.status === 'Active' ? 'activated ✅' : 'deactivated '}`);
     
-    // ✅ Reload everything to reflect changes
+    // 1. Clear the student cache so we don't show old data
+    delete studentCache['all'];
+    
+    // 2. Reload the management list (this re-fetches from Sheet and updates the toggle visuals)
     loadBatchManagement();
-    loadBatches();
-    loadHomeData(); // Update student count
     
-    // ✅ Update checkbox state immediately
-    if (checkbox) {
-      checkbox.checked = res.status === 'Active';
-    }
+    // 3. Update dropdowns and other batch lists
+    loadBatches();
+    
   } else {
-    // ✅ Revert checkbox on failure
-    if (checkbox) {
-      checkbox.checked = !checkbox.checked;
-    }
-    toast('❌ Failed to update batch');
+    // Revert the toggle visually if the API failed
+    if (checkbox) checkbox.checked = !checkbox.checked;
+    toast('❌ ' + (res.error || 'Failed to update batch'));
   }
 }
 async function addBatch() {
