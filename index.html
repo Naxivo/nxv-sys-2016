@@ -2828,5 +2828,32 @@ alert('Error generating Excel.');
 }
 }
 </script>
+<script>
+// Show/hide nav based on page
+function checkNavVisibility() {
+  const loginPage = document.getElementById('loginPage');
+  const bnav = document.querySelector('.bnav');
+  
+  if (!loginPage || !bnav) return;
+  
+  // If login page is visible, hide nav
+  if (loginPage.style.display !== 'none') {
+    bnav.style.display = 'none';
+  } else {
+    // If logged in, show nav
+    bnav.style.display = 'flex';
+  }
+}
+
+// Run on page load
+setTimeout(checkNavVisibility, 100);
+
+// Also run when go() function is called
+const originalGo = window.go;
+window.go = function(name) {
+  if (originalGo) originalGo(name);
+  checkNavVisibility();
+};
+</script>
 </body>
 </html>
