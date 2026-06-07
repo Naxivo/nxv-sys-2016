@@ -1402,7 +1402,7 @@ if (bar) bar.style.width = '30px';
 document.querySelectorAll('.ni:not(.active) .ni-bar').forEach(b => b.style.width = '0');
 window.scrollTo(0, 0);
 // Load page data
-if (name === 'students') ;
+if (name === 'students') loadStudents() ;
 if (name === 'attendance') loadAttendanceList();
 if (name === 'settings') { loadBatchManagement(); loadTeachers(); }
 if (name === 'sms') { refreshBalance(); loadScheduleList(); }  // ← Updated Line
@@ -1541,23 +1541,39 @@ smsTo.innerHTML += '<option value="absent">Absent Students Only</option>';
 }
 }
 async function loadBatchManagement() {
-const el = document.getElementById('batchMgmt');
-const res = await api('getBatches');
-if (!res.success) { el.innerHTML = '<div class="cb">Could not load batches</div>'; return; }
-let html = '';
-res.batches.forEach(b => {
-const on = b.status === 'Active';
-html += `<div class="bmi">
-<div class="bmi-dot${on?'':' off'}">${b.name.slice(0,4)}</div>
-<div class="bmi-info">
-<div class="bmi-name">${b.name}</div>
-<div class="bmi-det"><span style="color:var(--${on?'ok':'err'});font-weight:700">${on?'Active':'Inactive'}</span></div>
-</div>
-<label class="tog"><input type="checkbox" ${on?'checked':''} onchange="toggleBatch('${b.name}', this)"><span class="tog-sl"></span></label>
-</div>`;
-});
-html += `<div style="padding:12px 16px"><button class="btn btn-p" style="font-size:13px" onclick="openSht('addBatch')">＋ Add New Batch</button></div>`;
-el.innerHTML = html;
+  const el = document.getElementById('batchMgmt');
+  if (!el) {
+    console.error('batchMgmt element not found');
+    return;
+  }
+  
+  try {
+    el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+    const res = await api('getBatches');
+    if (!res.success) { 
+      el.innerHTML = '<div class="cb" style="text-align:center;color:var(--err)">Could not load batches</div>'; 
+      console.error('Failed to load batches:', res.error);
+      return; 
+    }
+    
+    let html = '';
+    res.batches.forEach(b => {
+      const on = b.status === 'Active';
+      html += `<div class="bmi">
+        <div class="bmi-dot${on?'':' off'}">${b.name.slice(0,4)}</div>
+        <div class="bmi-info">
+          <div class="bmi-name">${b.name}</div>
+          <div class="bmi-det"><span style="color:var(--${on?'ok':'err'});font-weight:700">${on?'Active':'Inactive'}</span></div>
+        </div>
+        <label class="tog"><input type="checkbox" ${on?'checked':''} onchange="toggleBatch('${b.name}', this)"><span class="tog-sl"></span></label>
+      </div>`;
+    });
+    html += `<div style="padding:12px 16px"><button class="btn btn-p" style="font-size:13px" onclick="openSht('addBatch')">＋ Add New Batch</button></div>`;
+    el.innerHTML = html;
+  } catch (err) {
+    console.error('Error in loadBatchManagement:', err);
+    el.innerHTML = '<div class="cb" style="text-align:center;color:var(--err)">Error loading batches</div>';
+  }
 }
 async function toggleBatch(name, checkbox) {
 const res = await api('toggleBatch', { batchName: name });
@@ -2330,21 +2346,39 @@ toast('❌ ' + res.error);
 //  TEACHERS
 // ═══════════════════════════════════════
 async function loadTeachers() {
-if (currentUser?.role !== 'Admin') return;
-const el = document.getElementById('teacherList');
-if (!el) return;
-el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-const res = await api('getTeachers');
-if (!res.success) { el.innerHTML = '<div class="cb">Failed to load</div>'; return; }
-el.innerHTML = res.teachers.map(t => `
-<div class="sli">
-<div class="av" style="background:var(--pl);color:var(--p)">${t.name.charAt(0).toUpperCase()}</div>
-<div class="sl-info">
-<div class="sl-name">${t.name}</div>
-<div class="sl-det">${t.username} · ${t.role} · <span style="color:var(--${t.status==='Active'?'ok':'err'})">${t.status}</span></div>
-</div>
-${t.status === 'Active' && t.role !== 'Admin' ? `<button class="btn btn-sm btn-err" onclick="deactivateTeacher('${t.username}')">Remove</button>` : ''}
-</div>`).join('');
+  if (currentUser?.role !== 'Admin') {
+    console.log('Not admin, skipping teacher load');
+    return;
+  }
+  
+  const el = document.getElementById('teacherList');
+  if (!el) {
+    console.error('teacherList element not found');
+    return;
+  }
+  
+  try {
+    el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+    const res = await api('getTeachers');
+    if (!res.success) { 
+      el.innerHTML = '<div class="cb">Failed to load teachers</div>'; 
+      console.error('Failed to load teachers:', res.error);
+      return; 
+    }
+    
+    el.innerHTML = res.teachers.map(t => `
+      <div class="sli">
+        <div class="av" style="background:var(--pl);color:var(--p)">${t.name.charAt(0).toUpperCase()}</div>
+        <div class="sl-info">
+          <div class="sl-name">${t.name}</div>
+          <div class="sl-det">${t.username} · ${t.role} · <span style="color:var(--${t.status==='Active'?'ok':'err'})">${t.status}</span></div>
+        </div>
+        ${t.status === 'Active' && t.role !== 'Admin' ? `<button class="btn btn-sm btn-err" onclick="deactivateTeacher('${t.username}')">Remove</button>` : ''}
+      </div>`).join('');
+  } catch (err) {
+    console.error('Error in loadTeachers:', err);
+    el.innerHTML = '<div class="cb">Error loading teachers</div>';
+  }
 }
 async function addTeacher() {
 const name = document.getElementById('tName').value.trim();
