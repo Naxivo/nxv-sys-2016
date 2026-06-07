@@ -589,8 +589,11 @@ SYSTEM FIXES (CLEAN VERSION)
 #pg-settings {
   min-height: 100vh;
 }
-/* Hide nav when login page is active */
-#app[style*="display: none"] ~ .bnav { display: none !important; }
+/* Hide nav when login page is visible */
+#loginPage:not([style*="display: none"]) ~ .bnav,
+body:not(.logged-in) .bnav { 
+  display: none !important; 
+}
 </style>
 <body>
 <!-- ═══════════ LOGIN ═══════════ -->
