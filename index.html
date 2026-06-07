@@ -94,6 +94,7 @@ min-height: 100vh;
 max-width: 480px;
 margin: 0 auto;
 overflow-x: hidden;
+overflow-y: auto;
 transition: background .35s, color .35s;
 }
 ::-webkit-scrollbar { width: 3px; }
@@ -168,8 +169,8 @@ transition: background .35s, border-color .35s;
 .tb-right { display: flex; gap: 6px; }
 .ib { width: 34px; height: 34px; border-radius: 9px; background: var(--sur2); border: 1px solid var(--bdr); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--tx2); transition: all .2s; }
 .ib:active { transform: scale(.92); background: var(--pl); border-color: var(--pm); }
-/* ═══════════════════════════════════════
-BOTTOM NAV
+/* ══════════════════════════════════════
+BOTTOM NAV (REFINED)
 ═══════════════════════════════════════ */
 .bnav {
   position: fixed;
@@ -179,20 +180,21 @@ BOTTOM NAV
   width: 100%;
   max-width: 480px;
   height: var(--nh);
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid var(--bdr); /* ✅ Fixed: was invisible white border */
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--bdr); /* ✅ Visible border */
   display: flex;
-  align-items: stretch;
-  z-index: 100;
-  box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.08);
-  transition: background 0.35s ease, border-color 0.35s ease;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 9999; /* ✅ High stacking order */
+  box-shadow: 0 -2px 15px rgba(0,0,0,0.05);
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 body.dark .bnav {
-  background: rgba(17, 24, 39, 0.92);
-  border-top-color: var(--bdr); /* ✅ Consistent border */
+  background: rgba(17, 24, 39, 0.95);
+  border-top-color: var(--bdr);
 }
 
 .ni {
@@ -201,18 +203,52 @@ body.dark .bnav {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  cursor: pointer;
+  gap: 2px;
+  padding: 6px 0;
   border: none;
   background: none;
-  padding: 6px 2px;
+  cursor: pointer;
+  opacity: 0.6;
   transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
   position: relative;
-  -webkit-tap-highlight-color: transparent; /* ✅ Better mobile UX */
 }
 
-.ni::before {
-  content: '';
+.ni.active {
+  opacity: 1;
+}
+
+.ni-ic {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.2s ease;
+}
+
+.ni.active .ni-ic {
+  transform: translateY(-2px);
+}
+
+.ni-ic svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+.ni-lb {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: color 0.2s ease;
+}
+
+.ni.active .ni-lb {
+  color: var(--p);
+  font-weight: 700;
+}
+
+.ni-bar {
   position: absolute;
   top: 0;
   left: 50%;
@@ -224,64 +260,19 @@ body.dark .bnav {
   transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.ni.active::before {
-  width: 30px;
-}
-
-.ni-ic {
-  width: 22px;
-  height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  opacity: 0.45;
-}
-
-.ni-ic svg {
-  width: 100%;
-  height: 100%;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  fill: none;
-  stroke: var(--tx);
-  transition: stroke 0.2s ease;
-}
-
-.ni-lb {
-  font-size: 9px;
-  font-weight: 700;
-  color: var(--tx4);
-  letter-spacing: 0.3px;
-  text-transform: uppercase;
-  transition: color 0.2s ease;
-}
-
-.ni.active .ni-ic {
-  transform: translateY(-2px) scale(1.1);
-  opacity: 1;
-}
-
-.ni.active .ni-ic svg {
-  stroke: var(--p);
-}
-
-.ni.active .ni-lb {
-  color: var(--p);
-  font-weight: 800;
+.ni.active .ni-bar {
+  width: 28px;
 }
 
 .ni-dot {
   position: absolute;
-  top: 8px;
-  right: 50%;
-  transform: translateX(10px);
+  top: 4px;
+  right: 35%;
   width: 7px;
   height: 7px;
-  border-radius: 50%;
   background: var(--err);
-  border: 2px solid var(--sur);
+  border-radius: 50%;
+  border: 1.5px solid var(--sur);
   animation: blink 2s infinite;
 }
 
@@ -565,6 +556,18 @@ animation: pulseText 2s ease-in-out infinite;
 /* TOAST */
 .toast { position: fixed; bottom: calc(var(--nh) + 12px); left: 50%; transform: translateX(-50%) translateY(16px); background: var(--tx); color: var(--bg); border-radius: 12px; padding: 11px 20px; font-size: 13px; font-weight: 700; white-space: nowrap; opacity: 0; transition: all .3s cubic-bezier(.34,1.56,.64,1); z-index: 400; box-shadow: var(--sh3); }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+/* Force bottom nav to always show */
+.bnav {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Ensure pages don't hide it */
+.page {
+  padding-bottom: calc(var(--nh) + 20px) !important;
+  overflow-y: auto;
+}
 </style>
 </head>
 <body>
@@ -987,6 +990,7 @@ Basic BCS Academy.</textarea>
 </div>
 </div>
 </div>
+</div><!-- /app -->
 <!-- BOTTOM NAV -->
 <nav class="bnav">
 <button class="ni active" onclick="go('home')" id="nav-home">
@@ -1016,7 +1020,7 @@ Basic BCS Academy.</textarea>
 <div class="ni-lb">Settings</div>
 </button>
 </nav>
-</div><!-- /app -->
+  
 <!-- ═══════════ DRAWERS ═══════════ -->
 <!-- Add Student -->
 <div class="ov" id="ov-addStu">
