@@ -1306,6 +1306,7 @@ let examDates = [];
 let currentDate = new Date();
 let markedBatchesToday = new Set();
 let studentCache = {};
+let editScheduleId = null; // Track if we're editing a schedule
 // ═══════════════════════════════════════
 //  THEME
 // ═══════════════════════════════════════
@@ -2251,11 +2252,17 @@ if (sel) sel.value = t.to;
 }
 }
 function updCC() {
-const l = document.getElementById('smsMsg')?.value.length || 0;
-const cc = document.getElementById('cc');
-const sc = document.getElementById('sc');
-if (cc) cc.textContent = l;
-if (sc) sc.textContent = Math.ceil(l / 160) || 1;
+  const msg = document.getElementById('smsMsg');
+  const cc = document.getElementById('cc');
+  const sc = document.getElementById('sc');
+  if (!msg) return;
+  
+  const len = msg.value.length;
+  // ✅ Logic: 0 chars = 0 SMS. Otherwise, divide by 160 and round up.
+  const smsCount = len === 0 ? 0 : Math.ceil(len / 160);
+  
+  if (cc) cc.textContent = len;
+  if (sc) sc.textContent = smsCount;
 }
 async function refreshBalance() {
 const amt = document.getElementById('balAmt');
@@ -2328,23 +2335,35 @@ el.innerHTML = res.logs.map(log => `
 // ══════════════════════════════════════
 // ✅ ADD SCHEDULE
 async function addSchedule() {
-const time = document.getElementById('smsSchedule').value;
-const msg = document.getElementById('smsMsg').value.trim();
-const to = document.getElementById('smsTo').value;
-if (!time || !msg) { toast('❌ Date & message required'); return; }
-const res = await api('saveScheduledSMS', {
-sendDateTime: new Date(time).toISOString(),
-target: to,
-message: msg,
-status: 'Pending'
-});
-if (res.success) {
-toast('✅ Schedule added!');
-document.getElementById('smsSchedule').value = '';
-loadScheduleList();
-} else {
-toast('❌ ' + res.error);
-}
+  const time = document.getElementById('smsSchedule').value;
+  const msg = document.getElementById('smsMsg').value.trim();
+  const to = document.getElementById('smsTo').value;
+  if (!time || !msg) { toast('❌ Date & message required'); return; }
+  
+  const payload = {
+    sendDateTime: new Date(time).toISOString(),
+    target: to,
+    message: msg,
+    status: 'Pending'
+  };
+  
+  // ✅ If editing, include the ID to UPDATE instead of CREATE
+  if (editScheduleId) {
+    payload.id = editScheduleId;
+  }
+  
+  const res = await api('saveScheduledSMS', payload);
+  if (res.success) {
+    // ✅ Show correct message based on action
+    toast(editScheduleId ? '✅ Schedule updated!' : '✅ Schedule added!');
+    
+    // ✅ Reset edit mode
+    editScheduleId = null;
+    document.getElementById('smsSchedule').value = '';
+    loadScheduleList();
+  } else {
+    toast('❌ ' + res.error);
+  }
 }
 // ✅ LOAD & RENDER SCHEDULE LIST
 async function loadScheduleList() {
@@ -2381,10 +2400,24 @@ container.innerHTML = html;
 }
 // ✅ EDIT SCHEDULE (Loads data back into inputs)
 function editSchedule(id, time, encodedMsg, target) {
-document.getElementById('smsSchedule').value = new Date(time).toISOString().slice(0,16);
-document.getElementById('smsMsg').value = decodeURIComponent(encodedMsg);
-document.getElementById('smsTo').value = target;
-toast('📝 Edit mode active. Change & tap ➕ to update.');
+  // ✅ Store the ID for update mode
+  editScheduleId = id;
+  
+  // ✅ Parse ISO time correctly for datetime-local input
+  // Input expects: YYYY-MM-DDTHH:mm
+  let dateObj = new Date(time);
+  let year = dateObj.getFullYear();
+  let month = String(dateObj.getMonth() + 1).padStart(2, '0');
+  let day = String(dateObj.getDate()).padStart(2, '0');
+  let hours = String(dateObj.getHours()).padStart(2, '0');
+  let minutes = String(dateObj.getMinutes()).padStart(2, '0');
+  let localTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+  
+  document.getElementById('smsSchedule').value = localTime;
+  document.getElementById('smsMsg').value = decodeURIComponent(encodedMsg);
+  document.getElementById('smsTo').value = target;
+  
+  toast('📝 Edit mode active. Change & tap ➕ to update.');
 }
 // ✅ DELETE SCHEDULE
 async function deleteSchedule(id) {
