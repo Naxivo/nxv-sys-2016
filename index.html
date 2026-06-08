@@ -1265,7 +1265,7 @@ console.log('✅ Script loaded successfully');
 // ═══════════════════════════════════════
 //  CONFIGURATION — Fill these values
 // ═══════════════════════════════════════
-const API_URL = "https://script.google.com/macros/s/AKfycbzrcDAcgUCRJu8omRe2Zurh0wBXHOHaSEBmTbyzLN8Zo29JwSX8l1KVa_dk-C8fKeKf/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyqQIb2IDBfQy9OfxY6q1bsogoKnVVSAWwLEuSKziJAvL4ioR7l70d0laAIgScqCrbF/exec";
 const SECRET_TOKEN = "d6bf785b7cfcca40a85e3376cfb930da27a2842eb1d5a5b51105bf190edd07a2"; // ← paste your token here
 // ═══════════════════════════════════════
 //  API HELPER
@@ -1620,7 +1620,7 @@ html += `<div class="bmi">
 <div class="bmi-name">${b.name}</div>
 <div class="bmi-det"><span style="color:var(--${on?'ok':'err'});font-weight:700">${on?'Active':'Inactive'}</span></div>
 </div>
-<label class="tog"><input type="checkbox" ${on?'checked':''} onchange="('${b.name}', this)"><span class="tog-sl"></span></label>
+<label class="tog"><input type="checkbox" ${on?'checked':''} onchange="window.toggleBatch('${b.name}', this)"><span class="tog-sl"></span></label>
 </div>`;
 });
 html += `<div style="padding:12px 16px"><button class="btn btn-p" style="font-size:13px" onclick="openSht('addBatch')">＋ Add New Batch</button></div>`;
@@ -1635,20 +1635,23 @@ async function toggleBatch(name, checkbox) {
   const res = await api('toggleBatch', { batchName: name });
   
   if (res.success) {
-    toast(`${name} ${res.status === 'Active' ? 'activated ✅' : 'deactivated '}`);
+    toast(`${name} ${res.status === 'Active' ? 'activated ✅' : 'deactivated ❌'}`);
     
-    // 1. Clear the student cache so we don't show old data
+    // ✅ FIX: Explicitly set checkbox to match server response
+    if (checkbox) {
+      checkbox.checked = res.status === 'Active';
+    }
+    
+    // Clear cache and reload UI
     delete studentCache['all'];
-    
-    // 2. Reload the management list (this re-fetches from Sheet and updates the toggle visuals)
     loadBatchManagement();
-    
-    // 3. Update dropdowns and other batch lists
     loadBatches();
     
   } else {
-    // Revert the toggle visually if the API failed
-    if (checkbox) checkbox.checked = !checkbox.checked;
+    // Revert checkbox on failure
+    if (checkbox) {
+      checkbox.checked = !checkbox.checked;
+    }
     toast('❌ ' + (res.error || 'Failed to update batch'));
   }
 }
