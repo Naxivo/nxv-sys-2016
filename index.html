@@ -774,13 +774,26 @@ body.logged-in .bnav {
 </div>
 <!-- Report -->
 <div id="at-rep" style="display:none">
-<div class="btabs">
-<div class="btab active" onclick="swBatch(this,'Shitalakshya')">Shitalakshya</div>
-<div class="btab" onclick="swBatch(this,'Bhairab')">Bhairab</div>
-</div>
-<div class="card" id="attReport">
-<div class="loading"><div class="spinner"></div></div>
-</div>
+  <!-- Daily Report Section -->
+  <div class="report-section">
+    <div class="section-title">📅 Daily Report</div>
+    <div class="adb" style="margin-bottom:10px">
+      <div><div class="ad-lbl">Date</div><div class="ad-date" id="repDailyDate">—</div></div>
+      <div class="ad-nav">
+        <button class="ad-btn" onclick="changeRepDate(-1)">‹</button>
+        <button class="ad-btn" onclick="changeRepDate(1)">›</button>
+      </div>
+    </div>
+    <div class="btabs" id="repDailyBatchTabs" style="margin-bottom:10px"></div>
+    <div class="card" id="repDailyList"><div class="loading"><div class="spinner"></div></div></div>
+  </div>
+
+  <!-- Monthly Summary Section -->
+  <div class="report-section">
+    <div class="section-title">📊 Monthly Summary</div>
+    <div class="btabs" id="repMonthBatchTabs"></div>
+    <div class="card" id="attReport"><div class="loading"><div class="spinner"></div></div></div>
+  </div>
 </div>
 <!-- Absent List -->
 <div id="at-abs" style="display:none">
@@ -1464,15 +1477,22 @@ if (name === 'exams') loadExamDates();
 // ═══════════════════════════════════════
 const SUBS = ['at-mark','at-rep','at-abs','ex-marks','ex-result','ex-batch','sms-send','sms-hist'];
 function swSub(btn, id) {
-btn.closest('.stabs').querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
-btn.classList.add('active');
-SUBS.forEach(k => { const el = document.getElementById(k); if (el) el.style.display = 'none'; });
-const el = document.getElementById(id);
-if (el) el.style.display = 'block';
-if (id === 'at-abs') loadAbsentStudents();
-if (id === 'at-rep') loadAttendanceReport();
-if (id === 'ex-result') loadResults();
-if (id === 'ex-batch') loadBatchResults();
+  btn.closest('.stabs').querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  SUBS.forEach(k => { const el = document.getElementById(k); if (el) el.style.display = 'none'; });
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'block';
+  
+  if (id === 'at-abs') loadAbsentStudents();
+  
+  // ✅ UPDATED: Load both Daily and Monthly reports
+  if (id === 'at-rep') {
+    loadDailyAttendanceReport();
+    loadAttendanceReport();
+  }
+  
+  if (id === 'ex-result') loadResults();
+  if (id === 'ex-batch') loadBatchResults();
 }
 // ═══════════════════════════════════════
 //  BATCH TABS
@@ -1590,6 +1610,30 @@ smsTo.innerHTML += `<option value="${b.name}">${b.name}</option>`;
 });
 smsTo.innerHTML += '<option value="absent">Absent Students Only</option>';
 }
+    // ═══════════════════════════════════════
+    //  NEW: Populate Report Batch Tabs
+    // ══════════════════════════════════════
+    
+    // 1. Daily Report Batch Tabs
+    const repDailyBatchTabs = document.getElementById('repDailyBatchTabs');
+    if (repDailyBatchTabs) {
+        repDailyBatchTabs.innerHTML = '';
+        batches.filter(b => b.status === 'Active').forEach(b => {
+            repDailyBatchTabs.innerHTML += `<div class="btab" onclick="loadDailyAttendanceReport('${b.name}', this)">${b.name}</div>`;
+        });
+        if (repDailyBatchTabs.children[0]) repDailyBatchTabs.children[0].classList.add('active');
+    }
+
+    // 2. Monthly Report Batch Tabs
+    const repMonthBatchTabs = document.getElementById('repMonthBatchTabs');
+    if (repMonthBatchTabs) {
+        repMonthBatchTabs.innerHTML = '';
+        batches.filter(b => b.status === 'Active').forEach(b => {
+            // Set currentBatch so the existing loadAttendanceReport works correctly
+            repMonthBatchTabs.innerHTML += `<div class="btab" onclick="currentBatch='${b.name}'; loadAttendanceReport()">${b.name}</div>`;
+        });
+        if (repMonthBatchTabs.children[0]) repMonthBatchTabs.children[0].classList.add('active');
+    }
 }
 async function loadBatchManagement() {
 console.log('🔄 Loading batch management...');
@@ -2092,6 +2136,59 @@ el.innerHTML = res.students.map(s => `
 <div class="sl-info"><div class="sl-name">${s.name}</div><div class="sl-det">Reg: ${s.regNo} · ${s.batch} · ${s.count} absences</div></div>
 ${currentUser?.role === 'Admin' ? `<button class="btn btn-sm" style="background:var(--errl);color:var(--err);border:1px solid var(--errm);cursor:pointer;font-weight:700" onclick="sendAbsenceSMS('${s.name}','${s.regNo}')">SMS</button>` : ''}
 </div>`).join('');
+}
+// NEW: Daily Report Variables
+let reportDate = new Date();
+
+// NEW: Load Daily Attendance Report
+async function loadDailyAttendanceReport(batchName = null, btn = null) {
+  if (btn) {
+    btn.closest('.btabs').querySelectorAll('.btab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  
+  const batch = batchName || (btn ? btn.textContent : currentBatch);
+  const el = document.getElementById('repDailyList');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  
+  const dateStr = formatDateShort(reportDate);
+  document.getElementById('repDailyDate').textContent = dateStr;
+  
+  const res = await api('getDailyAttendance', { date: dateStr, batch: batch });
+  
+  if (res.success) {
+    if (res.records.length === 0) {
+      el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3);font-size:13px">No attendance data for this date</div>';
+      return;
+    }
+    
+    let html = `<div style="padding:12px 16px"><table style="width:100%;border-collapse:collapse;font-size:12px">
+      <thead><tr style="border-bottom:1px solid var(--bdr)">
+        <th style="text-align:left;padding:8px 0">Name</th>
+        <th style="text-align:center;padding:8px 0">Status</th>
+      </tr></thead><tbody>`;
+      
+    res.records.forEach(r => {
+      const color = r.status === 'P' ? 'var(--ok)' : 'var(--err)';
+      const text = r.status === 'P' ? 'Present' : 'Absent';
+      html += `<tr style="border-bottom:1px solid var(--sur3)">
+        <td style="padding:8px 0;font-weight:600">${r.name}</td>
+        <td style="text-align:center;color:${color};font-weight:700">${text}</td>
+      </tr>`;
+    });
+    
+    html += '</tbody></table></div>';
+    el.innerHTML = html;
+  } else {
+    el.innerHTML = '<div class="cb" style="text-align:center;color:var(--err)">Error</div>';
+  }
+}
+
+// NEW: Change Report Date
+function changeRepDate(dir) {
+  reportDate.setDate(reportDate.getDate() + dir);
+  document.getElementById('repDailyDate').textContent = formatDateShort(reportDate);
+  loadDailyAttendanceReport();
 }
 // ═══════════════════════════════════════
 //  EXAMS
