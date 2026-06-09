@@ -684,16 +684,12 @@ body.logged-in .bnav {
 <div class="card" id="batchOverview">
 <div class="loading"><div class="spinner"></div></div>
 </div>
-<div class="sh" style="margin-top:16px"><div class="sh-t">Recent Activity</div></div>
-<div class="card">
-<div class="cb" style="padding:0 16px" id="recentActivity">
-<div class="ai">
-<div class="ai-dot g"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
-<div class="ai-tx"><div class="ai-m">System Ready</div><div class="ai-s">Basic BCS Academy v1.0</div></div>
-<div class="ai-t">Now</div>
-</div>
-</div>
-</div>
+          <div class="sh" style="margin-top:16px"><div class="sh-t">Today's Activity</div></div>
+          <div class="card">
+            <div class="cb" style="padding:0 16px" id="recentActivity">
+              <div class="loading"><div class="spinner"></div></div>
+            </div>
+          </div>
 </div>
 </div>
 <!-- STUDENTS -->
@@ -701,10 +697,11 @@ body.logged-in .bnav {
 <div class="topbar">
 <div class="tb-info"><div class="tb-name">Students</div></div>
 <div class="tb-right">
-<button class="ib" onclick="exportStudentsPDF()" title="PDF">
-<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--tx2);stroke-width:2;fill:none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-</button>
-<button class="ib" onclick="openSht('addStu')" title="Add Student">
+            <button class="ib" onclick="exportStudentsPDF()" title="PDF">
+              <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--tx2);stroke-width:2;fill:none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </button>
+            <button class="ib" onclick="openTransferDrawer()" title="Transfer Student">🔄</button>
+            <button class="ib" onclick="openSht('addStu')" title="Add Student">
 <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--tx2);stroke-width:2;fill:none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
 </button>
 </div>
@@ -772,39 +769,53 @@ body.logged-in .bnav {
 </div>
 <button class="btn btn-ok" onclick="saveAttendance()">Save Attendance</button>
 </div>
-<!-- Report -->
-<div id="at-rep" style="display:none">
-  <!-- Daily Report Section -->
-  <div class="report-section">
-    <div class="section-title">📅 Daily Report</div>
-    <div class="adb" style="margin-bottom:10px">
-      <div><div class="ad-lbl">Date</div><div class="ad-date" id="repDailyDate">—</div></div>
-      <div class="ad-nav">
-        <button class="ad-btn" onclick="changeRepDate(-1)">‹</button>
-        <button class="ad-btn" onclick="changeRepDate(1)">›</button>
+      <!-- Report -->
+      <div id="at-rep" style="display:none">
+        <div class="adb" style="margin-top:0">
+          <div><div class="ad-lbl">Daily Report</div><div class="ad-date" id="repDate">—</div></div>
+          <div class="ad-nav">
+            <button class="ad-btn" onclick="changeRepDate(-1)">‹</button>
+            <button class="ad-btn" onclick="changeRepDate(1)">›</button>
+          </div>
+        </div>
+        <div class="btabs" id="repBatchTabs">
+          <div class="btab active" onclick="swRepBatch(this,'Shitalakshya')">Shitalakshya</div>
+          <div class="btab" onclick="swRepBatch(this,'Bhairab')">Bhairab</div>
+        </div>
+        <div class="card" style="padding:0;margin-bottom:14px" id="dailyReportTable">
+          <div class="empty" style="padding:16px"><p>Select date to view daily report</p></div>
+        </div>
+        <div class="sh"><div class="sh-t">Monthly Summary</div></div>
+        <div class="card" id="attReport">
+          <div class="loading"><div class="spinner"></div></div>
+        </div>
       </div>
-    </div>
-    <div class="btabs" id="repDailyBatchTabs" style="margin-bottom:10px"></div>
-    <div class="card" id="repDailyList"><div class="loading"><div class="spinner"></div></div></div>
-  </div>
-
-  <!-- Monthly Summary Section -->
-  <div class="report-section">
-    <div class="section-title">📊 Monthly Summary</div>
-    <div class="btabs" id="repMonthBatchTabs"></div>
-    <div class="card" id="attReport"><div class="loading"><div class="spinner"></div></div></div>
-  </div>
-</div>
-<!-- Absent List -->
-<div id="at-abs" style="display:none">
-<div class="abanner">
-<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-<div class="abanner-tx" id="absentBannerTxt">Checking absent students…</div>
-</div>
-<div class="card" style="padding:0" id="absentList">
-<div class="loading"><div class="spinner"></div></div>
-</div>
-</div>
+      <!-- Absent List -->
+      <div id="at-abs" style="display:none">
+        <div class="sh"><div class="sh-t">Daily Absent</div></div>
+        <div class="adb" style="margin-top:0">
+          <div><div class="ad-lbl">Date</div><div class="ad-date" id="absDate">—</div></div>
+          <div class="ad-nav">
+            <button class="ad-btn" onclick="changeAbsDate(-1)">‹</button>
+            <button class="ad-btn" onclick="changeAbsDate(1)">›</button>
+          </div>
+        </div>
+        <div class="btabs" id="absBatchTabs">
+          <div class="btab active" onclick="swAbsBatch(this,'Shitalakshya')">Shitalakshya</div>
+          <div class="btab" onclick="swAbsBatch(this,'Bhairab')">Bhairab</div>
+        </div>
+        <div class="card" style="padding:0;margin-bottom:16px" id="dailyAbsentList">
+          <div class="empty" style="padding:16px"><p>No absent data for this date</p></div>
+        </div>
+        <div class="sh"><div class="sh-t">Monthly Total</div></div>
+        <div class="abanner">
+          <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="abanner-tx" id="absentBannerTxt">Checking absent students…</div>
+        </div>
+        <div class="card" style="padding:0" id="absentList">
+          <div class="loading"><div class="spinner"></div></div>
+        </div>
+      </div>
 </div>
 </div>
 <!-- EXAMS -->
@@ -868,10 +879,11 @@ body.logged-in .bnav {
 </div>
 </div>
 <div class="con">
-<div class="stabs" id="smsStabs">
-<button class="stab active" onclick="swSub(this,'sms-send')">Send SMS</button>
-<button class="stab" onclick="swSub(this,'sms-hist');loadSMSLog()">History</button>
-</div>
+      <div class="stabs" id="smsStabs">
+        <button class="stab active" onclick="swSub(this,'sms-send')">Send SMS</button>
+        <button class="stab" onclick="swSub(this,'sms-hist');loadSMSLog()">History</button>
+        <button class="stab" onclick="swSub(this,'sms-exstudents');loadExStudentsUI()">Ex Students</button>
+      </div>
 <!-- Send SMS -->
 <div id="sms-send">
 <div class="bal" id="balCard">
@@ -931,13 +943,38 @@ Basic BCS Academy.</textarea>
 </div>
 </div>
 <div id="scheduleListContainer" style="margin-top:16px"></div>
-<!-- History -->
-<div id="sms-hist" style="display:none">
-<div class="card" style="padding:0" id="smsLogList">
-<div class="loading"><div class="spinner"></div></div>
-</div>
-</div>
-</div>
+      <!-- History -->
+      <div id="sms-hist" style="display:none">
+        <div class="fail-banner" id="failedBanner" style="display:none;margin-bottom:13px;cursor:pointer" onclick="loadFailedSMS()">
+          <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="fail-tx" id="failedBannerTxt">Some SMS failed. Tap to view & retry →</div>
+        </div>
+        <div class="card" style="padding:0" id="smsLogList">
+          <div class="loading"><div class="spinner"></div></div>
+        </div>
+        <!-- Failed SMS section (shown inside history when tapped) -->
+        <div id="failedSMSList" style="display:none;margin-top:13px">
+          <div class="sh"><div class="sh-t">Failed SMS — Retry</div><div class="sh-l" onclick="document.getElementById('failedSMSList').style.display='none'">Back →</div></div>
+          <div class="card" style="padding:0" id="failedSMSItems">
+            <div class="loading"><div class="spinner"></div></div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+    <!-- Ex Students -->
+    <div id="sms-exstudents" style="display:none">
+      <div class="card" style="padding:0 16px" id="exStudentsContent">
+        <div class="loading"><div class="spinner"></div></div>
+      </div>
+      <div class="fg" style="margin-top:12px">
+        <label>Message</label>
+        <textarea class="fta" id="exSmsMsgInline" oninput="updExSmsCC()" placeholder="Type message for ex students..."></textarea>
+        <div class="cc"><span id="exCC">0</span> characters · ~<span id="exSC">0</span> SMS · <span id="exCount">0</span> recipients</div>
+      </div>
+      <button class="btn btn-p" onclick="sendExStudentsSMS()">📱 Send SMS to Selected</button>
+    </div>
+  </div>
 </div>
 </div>
 <!-- SETTINGS -->
@@ -1111,6 +1148,44 @@ Basic BCS Academy.</textarea>
 </div>
 </div>
 </div>
+<!-- Transfer Student -->
+<div class="ov" id="ov-transferStu">
+<div class="sht">
+<div class="sht-handle"></div>
+<div class="sht-title">Transfer Student</div>
+<div class="sht-body">
+<div class="fg"><label>FROM Batch *</label>
+<select class="fs" id="transferFromBatch" onchange="loadTransferStudents()">
+<option value="">— Select batch —</option>
+</select>
+</div>
+<div class="fg"><label>TO Batch *</label>
+<select class="fs" id="transferToBatch">
+<option value="">— Select batch —</option>
+</select>
+</div>
+<div class="srch" style="margin-bottom:13px">
+<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<input type="text" placeholder="Search student…" id="transferSearch" oninput="filterTransferList(this.value)">
+</div>
+<div class="card" style="padding:0;margin-bottom:13px" id="transferStudentList">
+<div class="cb" style="text-align:center;color:var(--tx3);font-size:13px">Select FROM batch to load students</div>
+</div>
+<div class="fg">
+<label>Batch Type in new batch</label>
+<div style="display:flex;gap:8px">
+<label style="flex:1;display:flex;align-items:center;gap:8px;background:var(--pl);border:2px solid var(--pm);border-radius:10px;padding:11px 13px;cursor:pointer;font-size:14px;font-weight:700;color:var(--p)">
+<input type="radio" name="transferBtype" value="Regular" checked style="accent-color:var(--p)"> 📚 Regular
+</label>
+<label style="flex:1;display:flex;align-items:center;gap:8px;background:var(--sur2);border:2px solid var(--bdr);border-radius:10px;padding:11px 13px;cursor:pointer;font-size:14px;font-weight:700;color:var(--tx2)">
+<input type="radio" name="transferBtype" value="Exam" style="accent-color:var(--p)"> 📝 Exam
+</label>
+</div>
+</div>
+<button class="btn btn-p" onclick="doTransferStudent()" id="transferBtn" disabled>Select a student →</button>
+</div>
+</div>
+</div>
 <!-- Student Detail -->
 <div class="ov" id="ov-stuDtl">
 <div class="sht">
@@ -1278,7 +1353,7 @@ console.log('✅ Script loaded successfully');
 // ═══════════════════════════════════════
 //  CONFIGURATION — Fill these values
 // ═══════════════════════════════════════
-const API_URL = "https://script.google.com/macros/s/AKfycbxY6vS8Jlkt_Re4gI09YMZPGjeEti80d23oNPy8S5qXquAgaF167Z3cK-wjzmkI39o/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxHT0j-dL5VpoQpS54MUmgCAN1DiB3HVWWqnuwhc_feV_4FFoUrQLoR0PUOPcc8knbw/exec";
 const SECRET_TOKEN = "d6bf785b7cfcca40a85e3376cfb930da27a2842eb1d5a5b51105bf190edd07a2"; // ← paste your token here
 // ═══════════════════════════════════════
 //  API HELPER
@@ -1320,6 +1395,7 @@ let currentDate = new Date();
 let markedBatchesToday = new Set();
 let studentCache = {};
 let editScheduleId = null; // Track if we're editing a schedule
+let _batchMgmtCache = null; // Cache for batch management (Feature 6)
 // ═══════════════════════════════════════
 //  THEME
 // ═══════════════════════════════════════
@@ -1378,8 +1454,12 @@ const wd = document.getElementById('wbDate');
 if (wd) wd.textContent = full;
 const wg = document.getElementById('wbGreeting');
 if (wg) wg.textContent = getGreeting();
-const ad = document.getElementById('attDate');
-if (ad) ad.textContent = formatDateShort(currentDate);
+  const ad = document.getElementById('attDate');
+  if (ad) ad.textContent = formatDateShort(currentDate);
+  const rd = document.getElementById('repDate');
+  if (rd) rd.textContent = formatDateShort(repDate);
+  const abd = document.getElementById('absDate');
+  if (abd) abd.textContent = formatDateShort(absDate);
 }
 // ═══════════════════════════════════════
 //  LOGIN
@@ -1475,24 +1555,17 @@ if (name === 'exams') loadExamDates();
 // ═══════════════════════════════════════
 //  SUBTABS
 // ═══════════════════════════════════════
-const SUBS = ['at-mark','at-rep','at-abs','ex-marks','ex-result','ex-batch','sms-send','sms-hist'];
+const SUBS = ['at-mark','at-rep','at-abs','ex-marks','ex-result','ex-batch','sms-send','sms-hist','sms-exstudents'];
 function swSub(btn, id) {
-  btn.closest('.stabs').querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-  SUBS.forEach(k => { const el = document.getElementById(k); if (el) el.style.display = 'none'; });
-  const el = document.getElementById(id);
-  if (el) el.style.display = 'block';
-  
-  if (id === 'at-abs') loadAbsentStudents();
-  
-  // ✅ UPDATED: Load both Daily and Monthly reports
-  if (id === 'at-rep') {
-    loadDailyAttendanceReport();
-    loadAttendanceReport();
-  }
-  
-  if (id === 'ex-result') loadResults();
-  if (id === 'ex-batch') loadBatchResults();
+btn.closest('.stabs').querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
+btn.classList.add('active');
+SUBS.forEach(k => { const el = document.getElementById(k); if (el) el.style.display = 'none'; });
+const el = document.getElementById(id);
+if (el) el.style.display = 'block';
+  if (id === 'at-abs') { loadAbsentStudents(); loadDailyAbsent(); }
+  if (id === 'at-rep') { loadAttendanceReport(); loadDailyReport(); }
+if (id === 'ex-result') loadResults();
+if (id === 'ex-batch') loadBatchResults();
 }
 // ═══════════════════════════════════════
 //  BATCH TABS
@@ -1535,21 +1608,26 @@ o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'
 //  HOME DATA
 // ══════════════════════════════════════
 async function loadHomeData() {
-// Student count
-const res = await api('getStudentCount');
-if (res.success) {
-document.getElementById('statTotal').textContent = res.count;
-document.getElementById('totalStudentCount').textContent = res.count;
-}
-// Absent alerts
-const absRes = await api('getAbsentStudents', {});
-if (absRes.success) {
-document.getElementById('statAbsent').textContent = absRes.students.length;
-}
-document.getElementById('statAtt').textContent = '—%';
-document.getElementById('statSMS').textContent = '—';
-// Batch overview
-await loadBatchOverview();
+  const [stuRes, absRes, statsRes] = await Promise.all([
+    api('getStudentCount'),
+    api('getAbsentStudents', {}),
+    api('getDashboardStats')
+  ]);
+  if (stuRes.success) {
+    document.getElementById('statTotal').textContent = stuRes.count;
+    document.getElementById('totalStudentCount').textContent = stuRes.count;
+  }
+  if (absRes.success) {
+    document.getElementById('statAbsent').textContent = absRes.students.length;
+  }
+  if (statsRes.success) {
+    document.getElementById('statAtt').textContent = statsRes.avgAttendance + '%';
+    document.getElementById('statSMS').textContent = statsRes.smsToday;
+  } else {
+    document.getElementById('statAtt').textContent = '—%';
+    document.getElementById('statSMS').textContent = '—';
+  }
+  await loadBatchOverview();
 }
 async function loadBatchOverview() {
 const el = document.getElementById('batchOverview');
@@ -1586,16 +1664,36 @@ batches.filter(b => b.status === 'Active').forEach(b => {
 stuTabs.innerHTML += `<div class="btab" onclick="swBatch(this,'${b.name}')" data-batch="${b.name}">${b.name}</div>`;
 });
 }
-// Update attendance batch tabs
-const attTabs = document.getElementById('attBatchTabs');
-if (attTabs) {
-attTabs.innerHTML = '';
-const active = batches.filter(b => b.status === 'Active');
-active.forEach((b, i) => {
-attTabs.innerHTML += `<div class="btab${i===0?' active':''}" onclick="swAttBatch(this,'${b.name}')">${b.name}</div>`;
-});
-if (active.length > 0) currentAttBatch = active[0].name;
-}
+  // Update attendance batch tabs
+  const attTabs = document.getElementById('attBatchTabs');
+  if (attTabs) {
+    attTabs.innerHTML = '';
+    const active = batches.filter(b => b.status === 'Active');
+    active.forEach((b, i) => {
+      attTabs.innerHTML += `<div class="btab${i===0?' active':''}" onclick="swAttBatch(this,'${b.name}')">${b.name}</div>`;
+    });
+    if (active.length > 0) currentAttBatch = active[0].name;
+  }
+  // Update report batch tabs
+  const repTabs = document.getElementById('repBatchTabs');
+  if (repTabs) {
+    repTabs.innerHTML = '';
+    const active = batches.filter(b => b.status === 'Active');
+    active.forEach((b, i) => {
+      repTabs.innerHTML += `<div class="btab${i===0?' active':''}" onclick="swRepBatch(this,'${b.name}')">${b.name}</div>`;
+    });
+    if (active.length > 0) { repBatch = active[0].name; }
+  }
+  // Update absent batch tabs
+  const absTabs = document.getElementById('absBatchTabs');
+  if (absTabs) {
+    absTabs.innerHTML = '';
+    const active = batches.filter(b => b.status === 'Active');
+    active.forEach((b, i) => {
+      absTabs.innerHTML += `<div class="btab${i===0?' active':''}" onclick="swAbsBatch(this,'${b.name}')">${b.name}</div>`;
+    });
+    if (active.length > 0) { absBatch = active[0].name; }
+  }
 // Update add student batch select
 const stuBatchSel = document.getElementById('stuBatch');
 if (stuBatchSel) {
@@ -1610,41 +1708,18 @@ smsTo.innerHTML += `<option value="${b.name}">${b.name}</option>`;
 });
 smsTo.innerHTML += '<option value="absent">Absent Students Only</option>';
 }
-    // ═══════════════════════════════════════
-    //  NEW: Populate Report Batch Tabs
-    // ══════════════════════════════════════
-    
-    // 1. Daily Report Batch Tabs
-    const repDailyBatchTabs = document.getElementById('repDailyBatchTabs');
-    if (repDailyBatchTabs) {
-        repDailyBatchTabs.innerHTML = '';
-        batches.filter(b => b.status === 'Active').forEach(b => {
-            repDailyBatchTabs.innerHTML += `<div class="btab" onclick="loadDailyAttendanceReport('${b.name}', this)">${b.name}</div>`;
-        });
-        if (repDailyBatchTabs.children[0]) repDailyBatchTabs.children[0].classList.add('active');
-    }
-
-    // 2. Monthly Report Batch Tabs
-    const repMonthBatchTabs = document.getElementById('repMonthBatchTabs');
-    if (repMonthBatchTabs) {
-        repMonthBatchTabs.innerHTML = '';
-        batches.filter(b => b.status === 'Active').forEach(b => {
-            // Set currentBatch so the existing loadAttendanceReport works correctly
-            repMonthBatchTabs.innerHTML += `<div class="btab" onclick="currentBatch='${b.name}'; loadAttendanceReport()">${b.name}</div>`;
-        });
-        if (repMonthBatchTabs.children[0]) repMonthBatchTabs.children[0].classList.add('active');
-    }
 }
 async function loadBatchManagement() {
-console.log('🔄 Loading batch management...');
-const el = document.getElementById('batchMgmt');
-if (!el) {
-console.error('❌ batchMgmt element not found!');
-return;
-}
-try {
-el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-const res = await api('getBatches');
+  const el = document.getElementById('batchMgmt');
+  if (!el) return;
+  // Use cache if available (Feature 6)
+  if (_batchMgmtCache) {
+    el.innerHTML = _batchMgmtCache;
+    return;
+  }
+  try {
+    el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+    const res = await api('getBatches');
 console.log('📊 Batches response:', res);
 if (!res.success) {
 el.innerHTML = '<div class="cb" style="text-align:center;color:var(--err)">Could not load batches: ' + (res.error || 'Unknown error') + '</div>';
@@ -1667,9 +1742,9 @@ html += `<div class="bmi">
 <label class="tog"><input type="checkbox" ${on?'checked':''} onchange="window.toggleBatch('${b.name}', this)"><span class="tog-sl"></span></label>
 </div>`;
 });
-html += `<div style="padding:12px 16px"><button class="btn btn-p" style="font-size:13px" onclick="openSht('addBatch')">＋ Add New Batch</button></div>`;
-el.innerHTML = html;
-console.log('✅ Batch management loaded successfully');
+    html += `<div style="padding:12px 16px"><button class="btn btn-p" style="font-size:13px" onclick="openSht('addBatch')">＋ Add New Batch</button></div>`;
+    _batchMgmtCache = html;
+    el.innerHTML = html;
 } catch (err) {
 console.error('❌ Error in loadBatchManagement:', err);
 el.innerHTML = '<div class="cb" style="text-align:center;color:var(--err)">Error loading batches. Check console.</div>';
@@ -1681,12 +1756,11 @@ async function toggleBatch(name, checkbox) {
   if (res.success) {
     toast(`${name} ${res.status === 'Active' ? 'activated ✅' : 'deactivated ❌'}`);
     
-    // ✅ FIX: Explicitly set checkbox to match server response
     if (checkbox) {
       checkbox.checked = res.status === 'Active';
     }
-    
-    // Clear cache and reload UI
+    // Clear caches and reload UI
+    _batchMgmtCache = null;
     delete studentCache['all'];
     loadBatchManagement();
     loadBatches();
@@ -1705,15 +1779,16 @@ const timing = document.getElementById('newBatchTiming').value.trim();
 const cap = document.getElementById('newBatchCap').value;
 if (!name) { toast('❌ Batch name required'); return; }
 const res = await api('addBatch', { batchName: name, timing, capacity: cap });
-if (res.success) {
-toast(`✅ ${name} created!`);
-closeSht('addBatch');
-document.getElementById('newBatchName').value = '';
-document.getElementById('newBatchTiming').value = '';
-document.getElementById('newBatchCap').value = '';
-delete studentCache['all'];
-loadBatches();
-loadBatchManagement();
+  if (res.success) {
+    toast(`✅ ${name} created!`);
+    closeSht('addBatch');
+    document.getElementById('newBatchName').value = '';
+    document.getElementById('newBatchTiming').value = '';
+    document.getElementById('newBatchCap').value = '';
+    _batchMgmtCache = null;
+    delete studentCache['all'];
+    loadBatches();
+    loadBatchManagement();
 } else {
 toast('❌ ' + res.error);
 }
@@ -2137,59 +2212,6 @@ el.innerHTML = res.students.map(s => `
 ${currentUser?.role === 'Admin' ? `<button class="btn btn-sm" style="background:var(--errl);color:var(--err);border:1px solid var(--errm);cursor:pointer;font-weight:700" onclick="sendAbsenceSMS('${s.name}','${s.regNo}')">SMS</button>` : ''}
 </div>`).join('');
 }
-// NEW: Daily Report Variables
-let reportDate = new Date();
-
-// NEW: Load Daily Attendance Report
-async function loadDailyAttendanceReport(batchName = null, btn = null) {
-  if (btn) {
-    btn.closest('.btabs').querySelectorAll('.btab').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
-  }
-  
-  const batch = batchName || (btn ? btn.textContent : currentBatch);
-  const el = document.getElementById('repDailyList');
-  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-  
-  const dateStr = formatDateShort(reportDate);
-  document.getElementById('repDailyDate').textContent = dateStr;
-  
-  const res = await api('getDailyAttendance', { date: dateStr, batch: batch });
-  
-  if (res.success) {
-    if (res.records.length === 0) {
-      el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3);font-size:13px">No attendance data for this date</div>';
-      return;
-    }
-    
-    let html = `<div style="padding:12px 16px"><table style="width:100%;border-collapse:collapse;font-size:12px">
-      <thead><tr style="border-bottom:1px solid var(--bdr)">
-        <th style="text-align:left;padding:8px 0">Name</th>
-        <th style="text-align:center;padding:8px 0">Status</th>
-      </tr></thead><tbody>`;
-      
-    res.records.forEach(r => {
-      const color = r.status === 'P' ? 'var(--ok)' : 'var(--err)';
-      const text = r.status === 'P' ? 'Present' : 'Absent';
-      html += `<tr style="border-bottom:1px solid var(--sur3)">
-        <td style="padding:8px 0;font-weight:600">${r.name}</td>
-        <td style="text-align:center;color:${color};font-weight:700">${text}</td>
-      </tr>`;
-    });
-    
-    html += '</tbody></table></div>';
-    el.innerHTML = html;
-  } else {
-    el.innerHTML = '<div class="cb" style="text-align:center;color:var(--err)">Error</div>';
-  }
-}
-
-// NEW: Change Report Date
-function changeRepDate(dir) {
-  reportDate.setDate(reportDate.getDate() + dir);
-  document.getElementById('repDailyDate').textContent = formatDateShort(reportDate);
-  loadDailyAttendanceReport();
-}
 // ═══════════════════════════════════════
 //  EXAMS
 // ══════════════════════════════════════
@@ -2411,13 +2433,23 @@ async function sendAbsenceSMS(name, regNo) {
 toast(`📱 Sending SMS to ${name}...`);
 }
 async function loadSMSLog() {
-const el = document.getElementById('smsLogList');
-el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-const res = await api('getSMSLog');
-if (!res.success || !res.logs.length) {
-el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><p>No SMS history yet</p></div>';
-return;
-}
+  const el = document.getElementById('smsLogList');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  // Check for failed SMS
+  const failRes = await api('getFailedSMS');
+  const failBanner = document.getElementById('failedBanner');
+  const failTxt = document.getElementById('failedBannerTxt');
+  if (failRes.success && failRes.logs.length > 0) {
+    if (failBanner) failBanner.style.display = 'flex';
+    if (failTxt) failTxt.innerHTML = `${failRes.logs.length} SMS failed. <span style="text-decoration:underline;cursor:pointer">Tap to view & retry →</span>`;
+  } else {
+    if (failBanner) failBanner.style.display = 'none';
+  }
+  const res = await api('getSMSLog');
+  if (!res.success || !res.logs.length) {
+    el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><p>No SMS history yet</p></div>';
+    return;
+  }
 el.innerHTML = res.logs.map(log => `
 <div class="slog">
 <div class="slog-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
@@ -2758,12 +2790,13 @@ const adminSMS = document.getElementById('adminSMSSettings');
 if (adminSettings) adminSettings.style.display = 'none';
 if (adminSMS) adminSMS.style.display = 'none';
 }
-// Load app data
-initDates();
-loadHomeData();
-await loadBatches();
-updCC();
-return;
+    // Load app data
+    initDates();
+    loadHomeData();
+    await loadBatches();
+    updCC();
+    loadRecentActivity();
+    return;
 } catch(e) {
 localStorage.removeItem('bcsUser');
 initDates();
@@ -2771,6 +2804,345 @@ updCC();
 }
 }
 })();
+
+// ═══════════════════════════════════════
+//  NEW FEATURE: TRANSFER STUDENT
+// ═══════════════════════════════════════
+let transferStudents = [];
+let selectedTransferStudent = null;
+
+function openTransferDrawer() {
+  selectedTransferStudent = null;
+  document.getElementById('transferBtn').disabled = true;
+  document.getElementById('transferBtn').textContent = 'Select a student →';
+  // Load batches
+  const fromSel = document.getElementById('transferFromBatch');
+  const toSel = document.getElementById('transferToBatch');
+  const active = batches.filter(b => b.status === 'Active');
+  fromSel.innerHTML = '<option value="">— Select batch —</option>';
+  toSel.innerHTML = '<option value="">— Select batch —</option>';
+  active.forEach(b => {
+    fromSel.innerHTML += `<option value="${b.name}">${b.name}</option>`;
+    toSel.innerHTML += `<option value="${b.name}">${b.name}</option>`;
+  });
+  document.getElementById('transferStudentList').innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3);font-size:13px">Select FROM batch to load students</div>';
+  openSht('transferStu');
+}
+
+async function loadTransferStudents() {
+  const batch = document.getElementById('transferFromBatch').value;
+  if (!batch) {
+    document.getElementById('transferStudentList').innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3);font-size:13px">Select FROM batch to load students</div>';
+    return;
+  }
+  document.getElementById('transferStudentList').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  const res = await api('getStudents', { batch });
+  if (res.success) {
+    transferStudents = res.students.filter(s => s.status === 'Active');
+    renderTransferList(transferStudents);
+  } else {
+    document.getElementById('transferStudentList').innerHTML = '<div class="cb" style="text-align:center;color:var(--err)">Failed to load students</div>';
+  }
+}
+
+function renderTransferList(students) {
+  const el = document.getElementById('transferStudentList');
+  if (!students.length) {
+    el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><p>No active students in this batch</p></div>';
+    return;
+  }
+  el.innerHTML = students.map(s => {
+    const [bg, fg] = getAvColor(s.name);
+    return `<div class="sli" onclick="selectTransferStudent('${s.regNo}')" id="ts-${s.regNo}">
+      <div class="av" style="background:${bg};color:${fg}">${getInitials(s.name)}</div>
+      <div class="sl-info">
+        <div class="sl-name">${s.name}</div>
+        <div class="sl-det">Reg: ${s.regNo} · ${s.department||'—'}</div>
+      </div>
+      <span class="bdg bdg-b">${s.batch||'—'}</span>
+    </div>`;
+  }).join('');
+}
+
+function filterTransferList(q) {
+  if (!q) { renderTransferList(transferStudents); return; }
+  const filtered = transferStudents.filter(s =>
+    s.name.toLowerCase().includes(q.toLowerCase()) || s.regNo.toString().includes(q)
+  );
+  renderTransferList(filtered);
+}
+
+function selectTransferStudent(regNo) {
+  selectedTransferStudent = transferStudents.find(s => s.regNo == regNo);
+  document.querySelectorAll('#transferStudentList .sli').forEach(el => el.style.background = '');
+  const el = document.getElementById('ts-' + regNo);
+  if (el) el.style.background = 'var(--pl)';
+  document.getElementById('transferBtn').disabled = false;
+  document.getElementById('transferBtn').textContent = `Transfer ${selectedTransferStudent.name} →`;
+}
+
+async function doTransferStudent() {
+  if (!selectedTransferStudent) { toast('❌ Select a student first'); return; }
+  const fromBatch = document.getElementById('transferFromBatch').value;
+  const toBatch = document.getElementById('transferToBatch').value;
+  if (!fromBatch || !toBatch) { toast('❌ Select both FROM and TO batches'); return; }
+  if (fromBatch === toBatch) { toast('❌ FROM and TO batches must be different'); return; }
+  const btype = document.querySelector('input[name="transferBtype"]:checked')?.value || 'Regular';
+  const btn = document.getElementById('transferBtn');
+  btn.textContent = 'Transferring...';
+  btn.disabled = true;
+  const res = await api('transferStudent', {
+    fromBatch, toBatch, regNo: selectedTransferStudent.regNo,
+    newRegNo: selectedTransferStudent.regNo, batchType: btype
+  });
+  if (res.success) {
+    toast(`✅ ${res.message}`);
+    closeSht('transferStu');
+    delete studentCache[fromBatch];
+    delete studentCache[toBatch];
+    delete studentCache['all'];
+    loadStudents();
+    loadHomeData();
+  } else {
+    toast('❌ ' + (res.error || 'Transfer failed'));
+  }
+  btn.textContent = 'Transfer Student →';
+  btn.disabled = false;
+}
+
+// ═══════════════════════════════════════
+//  NEW FEATURE: EX STUDENTS SMS
+// ═══════════════════════════════════════
+let exBatchStudents = [];
+let exSelectedBatches = new Set();
+
+async function loadExStudentsUI() {
+  const el = document.getElementById('exStudentsContent');
+  if (!el) return;
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  const res = await api('getExBatches');
+  if (!res.success || !res.batches.length) {
+    el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><p>No ex-batches found. Deactivate a batch in Settings first.</p></div>';
+    return;
+  }
+  exSelectedBatches = new Set();
+  let html = '<div style="font-size:12px;font-weight:700;color:var(--tx4);margin-bottom:8px">Select batches to send SMS:</div>';
+  res.batches.forEach(b => {
+    html += `<label style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--sur2);border:1px solid var(--bdr);border-radius:10px;margin-bottom:6px;cursor:pointer">
+      <input type="checkbox" value="${b.name}" onchange="toggleExBatch(this)" style="accent-color:var(--p);width:18px;height:18px">
+      <span style="font-weight:700;font-size:14px">${b.name}</span>
+      <span class="bdg bdg-gr" style="margin-left:auto">EX</span>
+    </label>`;
+  });
+  html += `<div style="margin-top:10px;font-size:13px;color:var(--tx3);font-weight:600">Selected: <span id="exBatchCount">0</span> · Recipients: <span id="exRecipientCount">0</span></div>`;
+  el.innerHTML = html;
+  updExSmsCC();
+}
+
+function toggleExBatch(checkbox) {
+  if (checkbox.checked) exSelectedBatches.add(checkbox.value);
+  else exSelectedBatches.delete(checkbox.value);
+  document.getElementById('exBatchCount').textContent = exSelectedBatches.size;
+  updateExRecipientCount();
+}
+
+async function updateExRecipientCount() {
+  if (exSelectedBatches.size === 0) {
+    document.getElementById('exRecipientCount').textContent = '0';
+    return;
+  }
+  const res = await api('getExStudents', { batches: Array.from(exSelectedBatches) });
+  if (res.success) {
+    exBatchStudents = res.students;
+    document.getElementById('exRecipientCount').textContent = res.students.length;
+    document.getElementById('exCount').textContent = res.students.length;
+  }
+}
+
+function updExSmsCC() {
+  const msg = document.getElementById('exSmsMsgInline');
+  const cc = document.getElementById('exCC');
+  const sc = document.getElementById('exSC');
+  if (!msg) return;
+  const len = msg.value.length;
+  const smsCount = len === 0 ? 0 : Math.ceil(len / 160);
+  if (cc) cc.textContent = len;
+  if (sc) sc.textContent = smsCount;
+}
+
+async function sendExStudentsSMS() {
+  const msg = document.getElementById('exSmsMsgInline');
+  if (!msg || !msg.value.trim()) { toast('❌ Message required'); return; }
+  if (exBatchStudents.length === 0) { toast('❌ No recipients. Select ex-batches with students.'); return; }
+  const res = await api('sendSMSToExStudents', { students: exBatchStudents, message: msg.value.trim() });
+  if (res.success) {
+    toast(`📱 ${res.message}`);
+  } else {
+    toast('❌ ' + (res.error || 'SMS failed'));
+  }
+}
+
+// ═══════════════════════════════════════
+//  NEW FEATURE: DAILY ATTENDANCE REPORT
+// ═══════════════════════════════════════
+let repDate = new Date();
+let repBatch = 'Shitalakshya';
+
+function changeRepDate(dir) {
+  repDate.setDate(repDate.getDate() + dir);
+  loadDailyReport();
+}
+
+function swRepBatch(el, batch) {
+  el.closest('.btabs').querySelectorAll('.btab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  repBatch = batch;
+  loadDailyReport();
+}
+
+async function loadDailyReport() {
+  const dateStr = formatDateShort(repDate);
+  document.getElementById('repDate').textContent = dateStr;
+  const el = document.getElementById('dailyReportTable');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  const res = await api('getAttendance', { date: dateStr, batch: repBatch });
+  if (!res.success || !res.records.length) {
+    el.innerHTML = '<div class="empty" style="padding:16px"><p>No attendance data for this date</p></div>';
+    return;
+  }
+  const present = res.records.filter(r => r.status === 'P').length;
+  const absent = res.records.filter(r => r.status === 'A').length;
+  let html = `<div class="ch"><div class="ct">${repBatch} · ${dateStr}</div></div>`;
+  html += `<div style="display:flex;gap:10px;padding:0 16px 10px">
+    <div class="asp p" style="flex:1;text-align:center;padding:8px">Present<br><strong>${present}</strong></div>
+    <div class="asp a" style="flex:1;text-align:center;padding:8px">Absent<br><strong>${absent}</strong></div>
+  </div>`;
+  html += `<div class="cb" style="padding:0">`;
+  res.records.forEach((r, i) => {
+    const cl = r.status === 'P' ? 'ok' : 'err';
+    html += `<div style="display:flex;align-items:center;gap:10px;padding:8px 16px;border-bottom:1px solid var(--bdr)">
+      <span style="font-size:11px;color:var(--tx4);font-weight:600;width:30px">${i+1}</span>
+      <span style="font-size:11px;color:var(--tx4);font-weight:600;width:50px">${r.regNo}</span>
+      <span style="flex:1;font-size:13px;font-weight:700">${r.name}</span>
+      <span class="bdg bdg-${cl}" style="font-size:12px">${r.status === 'P' ? '✅ P' : '❌ A'}</span>
+    </div>`;
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+// ═══════════════════════════════════════
+//  NEW FEATURE: DAILY + MONTHLY ABSENT
+// ═══════════════════════════════════════
+let absDate = new Date();
+let absBatch = 'Shitalakshya';
+
+function changeAbsDate(dir) {
+  absDate.setDate(absDate.getDate() + dir);
+  loadDailyAbsent();
+}
+
+function swAbsBatch(el, batch) {
+  el.closest('.btabs').querySelectorAll('.btab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  absBatch = batch;
+  loadDailyAbsent();
+}
+
+async function loadDailyAbsent() {
+  const dateStr = formatDateShort(absDate);
+  document.getElementById('absDate').textContent = dateStr;
+  const el = document.getElementById('dailyAbsentList');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  const res = await api('getDailyAbsent', { date: dateStr, batch: absBatch });
+  if (!res.success || !res.students.length) {
+    el.innerHTML = '<div class="empty" style="padding:16px"><p>✅ No absent students for this date</p></div>';
+    return;
+  }
+  el.innerHTML = res.students.map(s => `
+    <div class="sli">
+      <div class="av" style="background:var(--errl);color:var(--err)">${getInitials(s.name)}</div>
+      <div class="sl-info">
+        <div class="sl-name">${s.name}</div>
+        <div class="sl-det">Reg: ${s.regNo} · ${s.batch}</div>
+      </div>
+      <span class="bdg bdg-r">Absent</span>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════
+//  NEW FEATURE: RECENT ACTIVITY
+// ═══════════════════════════════════════
+async function loadRecentActivity() {
+  const el = document.getElementById('recentActivity');
+  if (!el) return;
+  const res = await api('getRecentActivity');
+  if (!res.success || !res.activities.length) {
+    el.innerHTML = '<div class="ai"><div class="ai-dot g"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><div class="ai-tx"><div class="ai-m">No activity today</div><div class="ai-s">Activities will appear here</div></div><div class="ai-t">—</div></div>';
+    return;
+  }
+  el.innerHTML = res.activities.map(a => {
+    const dotCl = a.message.includes('Attendance') ? 'b' : a.message.includes('added') || a.message.includes('transferred') ? 'g' : 'o';
+    return `<div class="ai">
+      <div class="ai-dot ${dotCl}"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="ai-tx"><div class="ai-m">${a.message}</div></div>
+      <div class="ai-t">${a.time ? a.time.split(', ')[1] || a.time : ''}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════
+//  NEW FEATURE: FAILED SMS
+// ═══════════════════════════════════════
+async function loadFailedSMS() {
+  const el = document.getElementById('failedSMSItems');
+  const list = document.getElementById('failedSMSList');
+  const banner = document.getElementById('failedBanner');
+  list.style.display = 'block';
+  if (banner) banner.style.display = 'none';
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  const res = await api('getFailedSMS');
+  if (!res.success || !res.logs.length) {
+    el.innerHTML = '<div class="cb" style="text-align:center;color:var(--ok);font-weight:700">✅ No failed SMS</div>';
+    return;
+  }
+  window._failedSMSList = res.logs;
+  el.innerHTML = res.logs.map((log, idx) => `
+    <div class="slog">
+      <div class="slog-ic"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <div class="slog-tx">
+        <div class="slog-m">${log.phone}</div>
+        <div class="slog-d">${log.message}</div>
+        <span class="slog-st fail">❌ Failed</span>
+      </div>
+      <div class="slog-t">${log.time}</div>
+      <button class="btn btn-err btn-sm" style="width:auto;padding:4px 8px;font-size:10px" onclick="resendFailedSMS(${idx})">↻</button>
+    </div>
+  `).join('');
+}
+
+async function resendFailedSMS(idx) {
+  const list = window._failedSMSList || [];
+  const log = list[idx];
+  if (!log) { toast('❌ Not found'); return; }
+  const res = await api('retryFailedSMS', { numbers: [log.phone], message: log.message });
+  if (res.success) {
+    toast(`↻ Resending to ${log.phone}...`);
+  } else {
+    toast('❌ ' + (res.error || 'Resend failed'));
+  }
+}
+
+// ═══════════════════════════════════════
+//  OVERRIDE: Update swSub to load right content
+// ═══════════════════════════════════════
+// Also override go() to load recent activity on home
+const origGo = go;
+go = function(name) {
+  origGo(name);
+  if (name === 'home') { loadRecentActivity(); }
+};
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
