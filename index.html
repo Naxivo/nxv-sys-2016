@@ -931,8 +931,10 @@ body.logged-in .bnav {
 </div>
 <div class="fg">
 <label>Message</label>
-<textarea class="fta" id="smsMsg" oninput="updCC()">Dear [Student Name], You have 3 absents this month. Your admission is on hold. Please contact the office.
-Basic BCS Academy.</textarea>
+<textarea class="fta" id="smsMsg" oninput="updCC()">Dear [Student Name], Reg: [RegNo], Batch: [Batch], You have 3 absents this month. Your admission is on hold. Please contact the office.
+Thank you
+Basic BCS Academy
+Contact: 01577299970</textarea>
 <div class="cc"><span id="cc">0</span> characters · ~<span id="sc">1</span> SMS per recipient</div>
 </div>
 <div class="fg">
@@ -943,21 +945,11 @@ Basic BCS Academy.</textarea>
 </div>
 </div>
 <div id="scheduleListContainer" style="margin-top:16px"></div>
+      <button class="btn btn-p" onclick="sendSMS()" style="margin-top:14px">📤 Send SMS Now</button>
       <!-- History -->
       <div id="sms-hist" style="display:none">
-        <div class="fail-banner" id="failedBanner" style="display:none;margin-bottom:13px;cursor:pointer" onclick="loadFailedSMS()">
-          <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div class="fail-tx" id="failedBannerTxt">Some SMS failed. Tap to view & retry →</div>
-        </div>
         <div class="card" style="padding:0" id="smsLogList">
           <div class="loading"><div class="spinner"></div></div>
-        </div>
-        <!-- Failed SMS section (shown inside history when tapped) -->
-        <div id="failedSMSList" style="display:none;margin-top:13px">
-          <div class="sh"><div class="sh-t">Failed SMS — Retry</div><div class="sh-l" onclick="document.getElementById('failedSMSList').style.display='none'">Back →</div></div>
-          <div class="card" style="padding:0" id="failedSMSItems">
-            <div class="loading"><div class="spinner"></div></div>
-          </div>
         </div>
       </div>
       </div>
@@ -1353,7 +1345,7 @@ console.log('✅ Script loaded successfully');
 // ═══════════════════════════════════════
 //  CONFIGURATION — Fill these values
 // ═══════════════════════════════════════
-const API_URL = "https://script.google.com/macros/s/AKfycbwpuae3HgPtUszFbCAgDdqtwg2mnHzZFJNxVJU6Azo8lRoYIOYfIh3vpNNAVmgp3k1w/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwIfRtCyvlGha5Q8z9h-0ZWqOsvQh9uyvmNSZYFniSs7m9bNzNOJczFNaawHMFPZslR/exec";
 const SECRET_TOKEN = "d6bf785b7cfcca40a85e3376cfb930da27a2842eb1d5a5b51105bf190edd07a2"; // ← paste your token here
 // ═══════════════════════════════════════
 //  API HELPER
@@ -1539,9 +1531,19 @@ if (bar) bar.style.width = '30px';
 // Remove bar from others
 document.querySelectorAll('.ni:not(.active) .ni-bar').forEach(b => b.style.width = '0');
 window.scrollTo(0, 0);
-// Load page data
-if (name === 'students') loadStudents();
-if (name === 'attendance') loadAttendanceList();
+// Hide all subsections initially, show only the active one
+SUBS.forEach(k => { const el = document.getElementById(k); if (el) el.style.display = 'none'; });
+const activeStab = document.querySelector('#pg-' + name + ' .stab.active');
+if (activeStab) {
+const targetId = activeStab.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+if (targetId) {
+const el = document.getElementById(targetId);
+if (el) el.style.display = 'block';
+}
+}
+// Load page data with error handling so page doesn't stay blank
+if (name === 'students') loadStudents().catch(err => console.error('Students load error:', err));
+if (name === 'attendance') loadAttendanceList().catch(err => console.error('Attendance load error:', err));
 if (name === 'settings') {
 console.log('⚙️ Loading settings page...');
 loadBatchManagement().catch(err => console.error('❌ Batch management error:', err));
@@ -1549,15 +1551,17 @@ if (currentUser?.role === 'Admin') {
 loadTeachers().catch(err => console.error('❌ Teachers load error:', err));
 }
 }
-if (name === 'sms') { refreshBalance(); loadScheduleList(); }
-if (name === 'exams') loadExamDates();
+if (name === 'sms') { refreshBalance().catch(err => console.error('Balance error:', err)); loadScheduleList().catch(err => console.error('Schedule error:', err)); }
+if (name === 'exams') loadExamDates().catch(err => console.error('Exam dates error:', err));
 }
 // ═══════════════════════════════════════
 //  SUBTABS
 // ═══════════════════════════════════════
 const SUBS = ['at-mark','at-rep','at-abs','ex-marks','ex-result','ex-batch','sms-send','sms-hist','sms-exstudents'];
 function swSub(btn, id) {
-btn.closest('.stabs').querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
+if (!btn) return;
+const stabs = btn.closest('.stabs');
+if (stabs) stabs.querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
 btn.classList.add('active');
 SUBS.forEach(k => { const el = document.getElementById(k); if (el) el.style.display = 'none'; });
 const el = document.getElementById(id);
@@ -2205,11 +2209,12 @@ if (!res.students.length) {
 el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><p>No absent alerts this month!</p></div>';
 return;
 }
-el.innerHTML = res.students.map(s => `
+window._absentStudents = res.students;
+el.innerHTML = res.students.map((s, idx) => `
 <div class="sli">
 <div class="av" style="background:var(--errl);color:var(--err)">${getInitials(s.name)}</div>
 <div class="sl-info"><div class="sl-name">${s.name}</div><div class="sl-det">Reg: ${s.regNo} · ${s.batch} · ${s.count} absences</div></div>
-${currentUser?.role === 'Admin' ? `<button class="btn btn-sm" style="background:var(--errl);color:var(--err);border:1px solid var(--errm);cursor:pointer;font-weight:700" onclick="sendAbsenceSMS('${s.name}','${s.regNo}')">SMS</button>` : ''}
+${currentUser?.role === 'Admin' ? `<button class="btn btn-sm" style="background:var(--errl);color:var(--err);border:1px solid var(--errm);cursor:pointer;font-weight:700" onclick="sendAbsenceSMS(${idx})">SMS</button>` : ''}
 </div>`).join('');
 }
 // ═══════════════════════════════════════
@@ -2405,60 +2410,59 @@ async function sendSMS() {
 const msg = document.getElementById('smsMsg')?.value;
 const to = document.getElementById('smsTo')?.value;
 if (!msg) { toast('❌ Message required'); return; }
-// Get numbers based on selection
-let numbers = [];
+let students = [];
 if (to === 'absent') {
 const res = await api('getAbsentStudents', {});
 if (res.success) {
-numbers = res.students.map(s => s.phone).filter(p => p && p !== '');
+students = res.students.filter(s => s.phone).map(s => ({ phone: s.phone, name: s.name, regNo: s.regNo, batch: s.batch }));
 }
 } else if (to === 'all') {
 for (const b of batches.filter(b => b.status === 'Active')) {
 const res = await api('getStudents', { batch: b.name });
-if (res.success) numbers = numbers.concat(res.students.filter(s => s.phone).map(s => s.phone));
+if (res.success) students = students.concat(res.students.filter(s => s.phone).map(s => ({ phone: s.phone, name: s.name, regNo: s.regNo, batch: b.name })));
 }
 } else {
 const res = await api('getStudents', { batch: to });
-if (res.success) numbers = res.students.filter(s => s.phone).map(s => s.phone);
+if (res.success) students = res.students.filter(s => s.phone).map(s => ({ phone: s.phone, name: s.name, regNo: s.regNo, batch: to }));
 }
-if (!numbers.length) { toast(' No phone numbers available'); return; }
-const res = await api('sendSMS', { numbers, message: msg });
+if (!students.length) { toast(' No phone numbers available'); return; }
+const res = await api('sendSMS', { students, message: msg });
 if (res.success) {
-toast(`📱 SMS sending started for ${numbers.length} recipients!`);
+toast(`📱 SMS sending started for ${students.length} recipients!`);
 } else {
 toast('❌ ' + (res.error || 'SMS failed'));
 }
 }
-async function sendAbsenceSMS(name, regNo) {
-toast(`📱 Sending SMS to ${name}...`);
+async function sendAbsenceSMS(idx) {
+const s = window._absentStudents?.[idx];
+if (!s || !s.phone) { toast('❌ No phone number'); return; }
+const msg = SMS_TEMPLATES.absence.msg
+.replace(/\[Student Name\]/g, s.name)
+.replace(/\[RegNo\]/g, s.regNo)
+.replace(/\[Batch\]/g, s.batch);
+const res = await api('sendSMS', { students: [{ phone: s.phone, name: s.name, regNo: s.regNo, batch: s.batch }], message: msg });
+if (res.success) toast(`📱 Absence SMS sent to ${s.name}`);
+else toast('❌ ' + (res.error || 'SMS failed'));
 }
 async function loadSMSLog() {
   const el = document.getElementById('smsLogList');
   el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-  // Check for failed SMS
-  const failRes = await api('getFailedSMS');
-  const failBanner = document.getElementById('failedBanner');
-  const failTxt = document.getElementById('failedBannerTxt');
-  if (failRes.success && failRes.logs.length > 0) {
-    if (failBanner) failBanner.style.display = 'flex';
-    if (failTxt) failTxt.innerHTML = `${failRes.logs.length} SMS failed. <span style="text-decoration:underline;cursor:pointer">Tap to view & retry →</span>`;
-  } else {
-    if (failBanner) failBanner.style.display = 'none';
-  }
-  const res = await api('getSMSLog');
+  const res = await api('getFailedSMS');
   if (!res.success || !res.logs.length) {
-    el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><p>No SMS history yet</p></div>';
+    el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><p>No failed SMS</p></div>';
     return;
   }
-el.innerHTML = res.logs.map(log => `
+  window._failedSMSList = res.logs;
+  el.innerHTML = res.logs.map((log, idx) => `
 <div class="slog">
-<div class="slog-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+<div class="slog-ic"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
 <div class="slog-tx">
 <div class="slog-m">${log.phone}</div>
 <div class="slog-d">${log.message}</div>
-<span class="slog-st ${log.status === 'Delivered' ? 'ok' : 'fail'}">${log.status === 'Delivered' ? '✅' : ''} ${log.status}</span>
+<span class="slog-st fail">❌ Failed</span>
 </div>
 <div class="slog-t">${log.time}</div>
+<button class="btn btn-err btn-sm" style="width:auto;padding:4px 8px;font-size:10px" onclick="resendFailedSMS(${idx})">↻ Send</button>
 </div>`).join('');
 }
 // ═══════════════════════════════════════
@@ -2772,12 +2776,18 @@ tt = setTimeout(() => t.classList.remove('show'), 2800);
 (async function() {
 const saved = localStorage.getItem('bcsUser');
 if (saved) {
+let parsed = null;
 try {
-currentUser = JSON.parse(saved);
+parsed = JSON.parse(saved);
+} catch(e) {
+localStorage.removeItem('bcsUser');
+return;
+}
+if (!parsed || !parsed.name) return;
+currentUser = parsed;
 // Skip login page and go to app
 document.getElementById('loginPage').style.display = 'none';
 document.getElementById('app').style.display = 'block';
-// ✅ FIX 1: Add class to body to show nav
 document.body.classList.add('logged-in');
 // Update UI
 document.getElementById('profileName').textContent = currentUser.name;
@@ -2790,17 +2800,15 @@ const adminSMS = document.getElementById('adminSMSSettings');
 if (adminSettings) adminSettings.style.display = 'none';
 if (adminSMS) adminSMS.style.display = 'none';
 }
-    // Load app data
-    initDates();
-    loadHomeData();
-    await loadBatches();
-    updCC();
-    loadRecentActivity();
-    return;
-} catch(e) {
-localStorage.removeItem('bcsUser');
+// Load app data
 initDates();
 updCC();
+try {
+loadHomeData();
+await loadBatches();
+loadRecentActivity();
+} catch(e) {
+console.error('Auto-login data load error:', e);
 }
 }
 })();
