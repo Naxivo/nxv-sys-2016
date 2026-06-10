@@ -2452,16 +2452,14 @@ sel.innerHTML = '<option value="">-- Select student --</option>';
 if (errMsg) {
 sel.innerHTML += `<option value="" disabled>Error: ${errMsg}</option>`;
 }
-const filtered = all.filter(s => s.phone);
 if (!all.length && !errMsg) {
 sel.innerHTML += '<option value="" disabled>No students found in this batch</option>';
-} else if (!filtered.length && all.length) {
-sel.innerHTML += '<option value="" disabled>All students missing phone numbers</option>';
 }
-filtered.forEach(s => {
+all.forEach(s => {
+const phone = s.phone || 'No phone';
 const opt = document.createElement('option');
-opt.value = JSON.stringify({ phone: s.phone, name: s.name, regNo: s.regNo, batch: s.batch || to });
-opt.textContent = `${s.name} (${s.regNo}) - ${s.phone}`;
+opt.value = JSON.stringify({ phone: s.phone || '', name: s.name, regNo: s.regNo, batch: s.batch || to });
+opt.textContent = `${s.name} (${s.regNo}) - ${phone}`;
 sel.appendChild(opt);
 });
 }
@@ -2472,7 +2470,9 @@ if (!msg) { toast('❌ Message required'); return; }
 let students = [];
 const indSel = document.getElementById('smsStudent');
 if (indSel.value) {
-students = [JSON.parse(indSel.value)];
+const stu = JSON.parse(indSel.value);
+if (!stu.phone) { toast('❌ Selected student has no phone number'); return; }
+students = [stu];
 } else if (to === 'absent') {
 const res = await api('getAbsentStudents', {});
 if (res.success) {
