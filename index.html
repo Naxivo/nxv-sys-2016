@@ -860,10 +860,7 @@ body.logged-in .bnav {
 </div>
 <!-- Batch Result -->
 <div id="ex-batch" style="display:none">
-<div class="sg" style="margin-bottom:14px">
-<div class="st b"><div class="st-ic">📘</div><div class="st-v" id="batchAvgS">—</div><div class="st-l">Shitalakshya Avg</div></div>
-<div class="st g"><div class="st-ic">📗</div><div class="st-v" id="batchAvgB">—</div><div class="st-l">Bhairab Avg</div></div>
-</div>
+<div class="sg" style="margin-bottom:14px" id="batchAvgContainer"></div>
 <div class="card" id="batchResultCard"><div class="loading"><div class="spinner"></div></div></div>
 </div>
 </div>
@@ -1345,7 +1342,7 @@ console.log('✅ Script loaded successfully');
 // ═══════════════════════════════════════
 //  CONFIGURATION — Fill these values
 // ═══════════════════════════════════════
-const API_URL = "https://script.google.com/macros/s/AKfycbwIfRtCyvlGha5Q8z9h-0ZWqOsvQh9uyvmNSZYFniSs7m9bNzNOJczFNaawHMFPZslR/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbx5S1tQTYnAdh5Ti1-fev4JVUK7u1GBXdcSZ1nfbT_joCB1lFyyItbFkuDP__6O0UM/exec";
 const SECRET_TOKEN = "d6bf785b7cfcca40a85e3376cfb930da27a2842eb1d5a5b51105bf190edd07a2"; // ← paste your token here
 // ═══════════════════════════════════════
 //  API HELPER
@@ -2180,12 +2177,12 @@ const el = document.getElementById('attReport');
 el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
 const bd = getBDDate();
 const month = `${MONTHS[bd.getMonth()]} ${bd.getFullYear()}`;
-const res = await api('getAttendanceReport', { batch: currentBatch === 'all' ? 'Shitalakshya' : currentBatch, month });
+  const res = await api('getAttendanceReport', { batch: repBatch, month });
 if (!res.success || !res.report.length) {
 el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3);font-size:13px">No attendance data for this month</div>';
 return;
 }
-let html = `<div class="ch"><div class="ct">${month} — ${currentBatch === 'all' ? 'Shitalakshya' : currentBatch}</div></div><div class="cb" style="padding:0 16px">`;
+let html = `<div class="ch"><div class="ct">${month} — ${repBatch}</div></div><div class="cb" style="padding:0 16px">`;
 res.report.forEach(s => {
 const cl = s.percentage >= 75 ? 'ok' : s.percentage >= 50 ? 'warn' : 'err';
 html += `<div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--bdr)">
@@ -2313,15 +2310,24 @@ const el = document.getElementById('batchResultCard');
 el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
 if (!examDates.length) { el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3)">No exam dates found</div>'; return; }
 const results = {};
-for (const b of ['Shitalakshya', 'Bhairab']) {
+  const activeBatchNames = batches.filter(b => b.status === 'Active').map(b => b.name);
+  if (!activeBatchNames.length) { el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3)">No active batches</div>'; return; }
+  for (const b of activeBatchNames) {
 const res = await api('getMarks', { examDate: examDates[0], batch: b });
 if (res.success && res.marks.length) {
 const avg = Math.round(res.marks.reduce((a, m) => a + Number(m.score), 0) / res.marks.length);
 results[b] = avg;
 }
 }
-document.getElementById('batchAvgS').textContent = results['Shitalakshya'] || '—';
-document.getElementById('batchAvgB').textContent = results['Bhairab'] || '—';
+  const avgContainer = document.getElementById('batchAvgContainer');
+  if (avgContainer) {
+    avgContainer.innerHTML = activeBatchNames.map((b, i) => {
+      const colors = ['b','g','o','r'];
+      const icons = ['📘','📗','📙','📕'];
+      const avg = results[b] || '—';
+      return `<div class="st ${colors[i % colors.length]}"><div class="st-ic">${icons[i % icons.length]}</div><div class="st-v">${avg}</div><div class="st-l">${b} Avg</div></div>`;
+    }).join('');
+  }
 let html = `<div class="ch"><div class="ct">All Batches · ${examDates[0]}</div></div><div class="cb" style="padding:0 16px">`;
 Object.entries(results).forEach(([b, avg]) => {
 html += `<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--bdr)">
@@ -2447,23 +2453,25 @@ else toast('❌ ' + (res.error || 'SMS failed'));
 async function loadSMSLog() {
   const el = document.getElementById('smsLogList');
   el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-  const res = await api('getFailedSMS');
+  const res = await api('getSMSLog');
   if (!res.success || !res.logs.length) {
-    el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><p>No failed SMS</p></div>';
+    el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><p>No SMS history</p></div>';
     return;
   }
-  window._failedSMSList = res.logs;
-  el.innerHTML = res.logs.map((log, idx) => `
-<div class="slog">
-<div class="slog-ic"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+  window._smsLogList = res.logs;
+  el.innerHTML = res.logs.map((log, idx) => {
+    const isFailed = log.status === 'Failed';
+    return `<div class="slog">
+<div class="slog-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
 <div class="slog-tx">
 <div class="slog-m">${log.phone}</div>
 <div class="slog-d">${log.message}</div>
-<span class="slog-st fail">❌ Failed</span>
+<span class="slog-st ${isFailed ? 'fail' : 'ok'}">${isFailed ? '❌ Failed' : '✅ ' + log.status}</span>
 </div>
 <div class="slog-t">${log.time}</div>
-<button class="btn btn-err btn-sm" style="width:auto;padding:4px 8px;font-size:10px" onclick="resendFailedSMS(${idx})">↻ Send</button>
-</div>`).join('');
+${isFailed ? `<button class="btn btn-err btn-sm" style="width:auto;padding:4px 8px;font-size:10px" onclick="resendSMSFromLog(${idx})">↻ Retry</button>` : ''}
+</div>`;
+  }).join('');
 }
 // ═══════════════════════════════════════
 //  SMS SCHEDULING
@@ -2994,7 +3002,7 @@ async function sendExStudentsSMS() {
 //  NEW FEATURE: DAILY ATTENDANCE REPORT
 // ═══════════════════════════════════════
 let repDate = new Date();
-let repBatch = 'Shitalakshya';
+let repBatch = '';
 
 function changeRepDate(dir) {
   repDate.setDate(repDate.getDate() + dir);
@@ -3132,6 +3140,18 @@ async function loadFailedSMS() {
 
 async function resendFailedSMS(idx) {
   const list = window._failedSMSList || [];
+  const log = list[idx];
+  if (!log) { toast('❌ Not found'); return; }
+  const res = await api('retryFailedSMS', { numbers: [log.phone], message: log.message });
+  if (res.success) {
+    toast(`↻ Resending to ${log.phone}...`);
+  } else {
+    toast('❌ ' + (res.error || 'Resend failed'));
+  }
+}
+
+async function resendSMSFromLog(idx) {
+  const list = window._smsLogList || [];
   const log = list[idx];
   if (!log) { toast('❌ Not found'); return; }
   const res = await api('retryFailedSMS', { numbers: [log.phone], message: log.message });
