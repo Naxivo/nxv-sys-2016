@@ -873,9 +873,9 @@ body.logged-in .bnav {
 </div>
 <div class="con">
       <div class="stabs" id="smsStabs">
-        <button class="stab active" onclick="swSub(this,'sms-send')">Send SMS</button>
+        <button class="stab active" onclick="swSub(this,'sms-send');setTimeout(updCC,50)">Send SMS</button>
         <button class="stab" onclick="swSub(this,'sms-hist');loadSMSLog()">History</button>
-        <button class="stab" onclick="swSub(this,'sms-exstudents');loadExStudentsUI()">Ex Students</button>
+        <button class="stab" onclick="swSub(this,'sms-exstudents');loadExStudentsUI();setTimeout(updExSmsCC,50)">Ex Students</button>
       </div>
 <!-- Send SMS -->
 <div id="sms-send">
@@ -920,13 +920,16 @@ body.logged-in .bnav {
 <option value="Shitalakshya">Shitalakshya</option>
 <option value="Bhairab">Bhairab</option>
 <option value="absent">Absent Students Only</option>
-<option value="individual">Individual Student</option>
 </select>
 </div>
-<div class="fg" id="smsStudentSelect" style="display:none">
-<label>Select Student</label>
-<select class="fs" id="smsStudent"></select>
+<details style="margin-top:8px" id="individualSmsDetails">
+<summary style="cursor:pointer;font-size:13px;font-weight:600;color:var(--p);padding:6px 0">📋 Select Individual Student</summary>
+<div class="fg" style="margin-top:6px">
+<select class="fs" id="smsStudent" onchange="onIndividualStudentChange()">
+<option value="">-- Select a student --</option>
+</select>
 </div>
+</details>
 <div class="fg">
 <label>Message</label>
 <textarea class="fta" id="smsMsg" oninput="updCC()">Dear [Student Name], Reg: [RegNo], Batch: [Batch], You have 3 absents this month. Your admission is on hold. Please contact the office.
@@ -959,7 +962,8 @@ Contact: 01577299970</textarea>
       </div>
       <div class="fg" style="margin-top:12px">
         <label>Message</label>
-        <textarea class="fta" id="exSmsMsgInline" oninput="updExSmsCC()">Dear [Student Name], Reg: [RegNo], Batch: [Batch], We hope you are doing well. Please contact the office to complete your admission/reegistration process.
+        <textarea class="fta" id="exSmsMsgInline" oninput="updExSmsCC()">Dear [Student Name],
+
 Thank you
 Basic BCS Academy
 Contact: 01577299970</textarea>
@@ -1346,7 +1350,7 @@ console.log('✅ Script loaded successfully');
 // ═══════════════════════════════════════
 //  CONFIGURATION — Fill these values
 // ═══════════════════════════════════════
-const API_URL = "https://script.google.com/macros/s/AKfycbz2_fEV9Vl2kSqn7oShKJgGGQAwjnQGAUmFWHngH7-ykUHN9bGjSlyaFzdCoeUSvRE/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxhzKrMlK7PkW1RAcT6NJGW1r-G_6JT6XQ8WlGm2HQnmaKTs2COduF2SEmgcCrjxjci/exec";
 const SECRET_TOKEN = "d6bf785b7cfcca40a85e3376cfb930da27a2842eb1d5a5b51105bf190edd07a2"; // ← paste your token here
 // ═══════════════════════════════════════
 //  API HELPER
@@ -2380,11 +2384,8 @@ function updCC() {
   const cc = document.getElementById('cc');
   const sc = document.getElementById('sc');
   if (!msg) return;
-  
   const len = msg.value.length;
-  // ✅ Logic: 0 chars = 0 SMS. Otherwise, divide by 160 and round up.
-  const smsCount = len === 0 ? 0 : Math.ceil(len / 160);
-  
+  const smsCount = len === 0 ? 0 : Math.ceil(len / SMS_CHARS_PER_SEGMENT);
   if (cc) cc.textContent = len;
   if (sc) sc.textContent = smsCount;
 }
@@ -2404,42 +2405,48 @@ if (amt) amt.textContent = 'SMS not configured';
 if (time) time.textContent = 'Configure API key first';
 }
 }
+const SMS_CHARS_PER_SEGMENT = 166;
 function onSmsToChange() {
-const sel = document.getElementById('smsTo');
-const ind = document.getElementById('smsStudentSelect');
-if (sel.value === 'individual') {
-ind.style.display = '';
-loadSmsStudentDropdown();
-} else {
-ind.style.display = 'none';
-}
+const sel = document.getElementById('smsStudent');
+if (sel) sel.value = '';
+const det = document.getElementById('individualSmsDetails');
+if (det && det.open) loadSmsStudentDropdown();
 }
 async function loadSmsStudentDropdown() {
 const sel = document.getElementById('smsStudent');
+if (!sel) return;
+const to = document.getElementById('smsTo')?.value;
 sel.innerHTML = '<option>Loading...</option>';
-const b = batches.filter(b => b.status === 'Active');
 let all = [];
+if (to === 'all' || to === 'absent') {
+const b = batches.filter(b => b.status === 'Active');
 for (const batch of b) {
 const res = await api('getStudents', { batch: batch.name });
 if (res.success) all = all.concat(res.students);
 }
+} else {
+const res = await api('getStudents', { batch: to });
+if (res.success) all = res.students;
+}
 sel.innerHTML = '<option value="">-- Select student --</option>';
 all.filter(s => s.phone).forEach(s => {
 const opt = document.createElement('option');
-opt.value = JSON.stringify({ phone: s.phone, name: s.name, regNo: s.regNo, batch: s.batch || '' });
+opt.value = JSON.stringify({ phone: s.phone, name: s.name, regNo: s.regNo, batch: s.batch || to });
 opt.textContent = `${s.name} (${s.regNo}) - ${s.phone}`;
 sel.appendChild(opt);
 });
+}
+function onIndividualStudentChange() {
+const sel = document.getElementById('smsStudent');
 }
 async function sendSMS() {
 const msg = document.getElementById('smsMsg')?.value;
 const to = document.getElementById('smsTo')?.value;
 if (!msg) { toast('❌ Message required'); return; }
 let students = [];
-if (to === 'individual') {
-const sel = document.getElementById('smsStudent');
-if (!sel.value) { toast('❌ Select a student'); return; }
-students = [JSON.parse(sel.value)];
+const indSel = document.getElementById('smsStudent');
+if (indSel.value) {
+students = [JSON.parse(indSel.value)];
 } else if (to === 'absent') {
 const res = await api('getAbsentStudents', {});
 if (res.success) {
@@ -3004,7 +3011,7 @@ function updExSmsCC() {
   const sc = document.getElementById('exSC');
   if (!msg) return;
   const len = msg.value.length;
-  const smsCount = len === 0 ? 0 : Math.ceil(len / 160);
+  const smsCount = len === 0 ? 0 : Math.ceil(len / SMS_CHARS_PER_SEGMENT);
   if (cc) cc.textContent = len;
   if (sc) sc.textContent = smsCount;
 }
