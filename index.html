@@ -680,11 +680,7 @@ body.logged-in .bnav {
 <div class="qb-lb">Add Marks</div>
 </div>
 </div>
-<div class="sh"><div class="sh-t">Batch Overview</div><div class="sh-l" onclick="go('attendance')">See all →</div></div>
-<div class="card" id="batchOverview">
-<div class="loading"><div class="spinner"></div></div>
-</div>
-          <div class="sh" style="margin-top:16px"><div class="sh-t">Today's Activity</div></div>
+          <div class="sh"><div class="sh-t">Today's Activity</div></div>
           <div class="card">
             <div class="cb" style="padding:0 16px" id="recentActivity">
               <div class="loading"><div class="spinner"></div></div>
@@ -919,12 +915,17 @@ body.logged-in .bnav {
 </div>
 <div class="fg">
 <label>Send To</label>
-<select class="fs" id="smsTo">
+<select class="fs" id="smsTo" onchange="onSmsToChange()">
 <option value="all">All Students</option>
 <option value="Shitalakshya">Shitalakshya</option>
 <option value="Bhairab">Bhairab</option>
 <option value="absent">Absent Students Only</option>
+<option value="individual">Individual Student</option>
 </select>
+</div>
+<div class="fg" id="smsStudentSelect" style="display:none">
+<label>Select Student</label>
+<select class="fs" id="smsStudent"></select>
 </div>
 <div class="fg">
 <label>Message</label>
@@ -934,7 +935,8 @@ Basic BCS Academy
 Contact: 01577299970</textarea>
 <div class="cc"><span id="cc">0</span> characters · ~<span id="sc">1</span> SMS per recipient</div>
 </div>
-<div class="fg">
+      <button class="btn btn-p" onclick="sendSMS()" style="margin-top:8px">📤 Send SMS Now</button>
+<div class="fg" style="margin-top:16px">
 <label>Schedule Time *</label>
 <div style="display:flex;gap:8px">
 <input class="fi" type="datetime-local" id="smsSchedule" style="flex:1">
@@ -942,7 +944,6 @@ Contact: 01577299970</textarea>
 </div>
 </div>
 <div id="scheduleListContainer" style="margin-top:16px"></div>
-      <button class="btn btn-p" onclick="sendSMS()" style="margin-top:14px">📤 Send SMS Now</button>
       <!-- History -->
       <div id="sms-hist" style="display:none">
         <div class="card" style="padding:0" id="smsLogList">
@@ -958,7 +959,10 @@ Contact: 01577299970</textarea>
       </div>
       <div class="fg" style="margin-top:12px">
         <label>Message</label>
-        <textarea class="fta" id="exSmsMsgInline" oninput="updExSmsCC()" placeholder="Type message for ex students..."></textarea>
+        <textarea class="fta" id="exSmsMsgInline" oninput="updExSmsCC()">Dear [Student Name], Reg: [RegNo], Batch: [Batch], We hope you are doing well. Please contact the office to complete your admission/reegistration process.
+Thank you
+Basic BCS Academy
+Contact: 01577299970</textarea>
         <div class="cc"><span id="exCC">0</span> characters · ~<span id="exSC">0</span> SMS · <span id="exCount">0</span> recipients</div>
       </div>
       <button class="btn btn-p" onclick="sendExStudentsSMS()">📱 Send SMS to Selected</button>
@@ -1106,7 +1110,7 @@ Contact: 01577299970</textarea>
 <div class="sht-handle"></div>
 <div class="sht-title">Add New Student</div>
 <div class="sht-body">
-<div class="fg"><label>Full Name *</label><input class="fi" id="stuName" placeholder="e.g. রাফিক আহমেদ"></div>
+<div class="fg"><label>Full Name *</label><input class="fi" id="stuName" placeholder="e.g. Karim Ahmed"></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
 <div class="fg"><label>Reg No *</label><input class="fi" id="stuRegNo" placeholder="e.g. 01"></div>
 <div class="fg"><label>Batch *</label>
@@ -1118,7 +1122,7 @@ Contact: 01577299970</textarea>
 </div>
 <div class="fg">
 <label>Department</label>
-<input class="fi" id="stuDept" placeholder="e.g. বিজ্ঞান" list="deptList" oninput="loadDeptSuggestions()">
+<input class="fi" id="stuDept" placeholder="e.g. Statistics" list="deptList" oninput="loadDeptSuggestions()">
 <datalist id="deptList"></datalist>
 </div>
 <div class="fg"><label>Phone (optional)</label><input class="fi" id="stuPhone" type="tel" placeholder="01XXXXXXXXX"></div>
@@ -1342,7 +1346,7 @@ console.log('✅ Script loaded successfully');
 // ═══════════════════════════════════════
 //  CONFIGURATION — Fill these values
 // ═══════════════════════════════════════
-const API_URL = "https://script.google.com/macros/s/AKfycbx5S1tQTYnAdh5Ti1-fev4JVUK7u1GBXdcSZ1nfbT_joCB1lFyyItbFkuDP__6O0UM/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbztmNCU8qyJsn-lsk-greZBXXCONCn2Qq98fbOdph0-od7wLKP5ARFko3OV0rhdtaMf/exec";
 const SECRET_TOKEN = "d6bf785b7cfcca40a85e3376cfb930da27a2842eb1d5a5b51105bf190edd07a2"; // ← paste your token here
 // ═══════════════════════════════════════
 //  API HELPER
@@ -1385,6 +1389,10 @@ let markedBatchesToday = new Set();
 let studentCache = {};
 let editScheduleId = null; // Track if we're editing a schedule
 let _batchMgmtCache = null; // Cache for batch management (Feature 6)
+let repDate = new Date();
+let repBatch = '';
+let absDate = new Date();
+let absBatch = 'Shitalakshya';
 // ═══════════════════════════════════════
 //  THEME
 // ═══════════════════════════════════════
@@ -1609,14 +1617,19 @@ o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'
 //  HOME DATA
 // ══════════════════════════════════════
 async function loadHomeData() {
-  const [stuRes, absRes, statsRes] = await Promise.all([
+  const [stuRes, absRes, statsRes, batchRes] = await Promise.all([
     api('getStudentCount'),
     api('getAbsentStudents', {}),
-    api('getDashboardStats')
+    api('getDashboardStats'),
+    api('getBatches')
   ]);
   if (stuRes.success) {
     document.getElementById('statTotal').textContent = stuRes.count;
     document.getElementById('totalStudentCount').textContent = stuRes.count;
+  }
+  if (batchRes.success) {
+    const activeBatches = batchRes.batches.filter(b => b.status === 'Active');
+    document.getElementById('activeBatchCount').textContent = activeBatches.length;
   }
   if (absRes.success) {
     document.getElementById('statAbsent').textContent = absRes.students.length;
@@ -1628,27 +1641,6 @@ async function loadHomeData() {
     document.getElementById('statAtt').textContent = '—%';
     document.getElementById('statSMS').textContent = '—';
   }
-  await loadBatchOverview();
-}
-async function loadBatchOverview() {
-const el = document.getElementById('batchOverview');
-const batchRes = await api('getBatches');
-if (!batchRes.success) { el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3);font-size:13px">Could not load batches</div>'; return; }
-const activeBatches = batchRes.batches.filter(b => b.status === 'Active');
-document.getElementById('activeBatchCount').textContent = activeBatches.length;
-const colors = ['ok','p','warn','err'];
-let html = '<div class="cb" style="padding:0">';
-for (let i = 0; i < activeBatches.length; i++) {
-const b = activeBatches[i];
-const cl = colors[i % colors.length];
-html += `<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--bdr)">
-<div style="width:34px;height:34px;border-radius:9px;background:var(--pl);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--p);font-size:11px;border:1px solid var(--pm);text-align:center">${b.name.slice(0,4)}</div>
-<div style="flex:1"><div style="font-size:13px;font-weight:700">${b.name}</div><div class="pb"><div class="pf" style="width:75%;background:var(--${cl})"></div></div></div>
-<div style="text-align:right"><div style="font-size:14px;font-weight:800;color:var(--${cl})">—%</div><div style="font-size:11px;color:var(--tx4);font-weight:600">— students</div></div>
-</div>`;
-}
-html += '</div>';
-el.innerHTML = html;
 }
 // ═══════════════════════════════════════
 //  BATCHES
@@ -2145,7 +2137,7 @@ records,
 markedBy: currentUser?.name || 'Teacher'
 });
 if (res.success) {
-toast('✅ Attendance saved to Google Sheets!');
+toast(`✅ Attendance saved to Google Sheets!\nMarked by: ${currentUser?.name || 'Teacher'}`);
 markedBatchesToday.add(currentAttBatch);
 updateAttStatusBanner();
 } else {
@@ -2412,12 +2404,43 @@ if (amt) amt.textContent = 'SMS not configured';
 if (time) time.textContent = 'Configure API key first';
 }
 }
+function onSmsToChange() {
+const sel = document.getElementById('smsTo');
+const ind = document.getElementById('smsStudentSelect');
+if (sel.value === 'individual') {
+ind.style.display = '';
+loadSmsStudentDropdown();
+} else {
+ind.style.display = 'none';
+}
+}
+async function loadSmsStudentDropdown() {
+const sel = document.getElementById('smsStudent');
+sel.innerHTML = '<option>Loading...</option>';
+const b = batches.filter(b => b.status === 'Active');
+let all = [];
+for (const batch of b) {
+const res = await api('getStudents', { batch: batch.name });
+if (res.success) all = all.concat(res.students);
+}
+sel.innerHTML = '<option value="">-- Select student --</option>';
+all.filter(s => s.phone).forEach(s => {
+const opt = document.createElement('option');
+opt.value = JSON.stringify({ phone: s.phone, name: s.name, regNo: s.regNo, batch: s.batch || '' });
+opt.textContent = `${s.name} (${s.regNo}) - ${s.phone}`;
+sel.appendChild(opt);
+});
+}
 async function sendSMS() {
 const msg = document.getElementById('smsMsg')?.value;
 const to = document.getElementById('smsTo')?.value;
 if (!msg) { toast('❌ Message required'); return; }
 let students = [];
-if (to === 'absent') {
+if (to === 'individual') {
+const sel = document.getElementById('smsStudent');
+if (!sel.value) { toast('❌ Select a student'); return; }
+students = [JSON.parse(sel.value)];
+} else if (to === 'absent') {
 const res = await api('getAbsentStudents', {});
 if (res.success) {
 students = res.students.filter(s => s.phone).map(s => ({ phone: s.phone, name: s.name, regNo: s.regNo, batch: s.batch }));
@@ -3001,9 +3024,6 @@ async function sendExStudentsSMS() {
 // ═══════════════════════════════════════
 //  NEW FEATURE: DAILY ATTENDANCE REPORT
 // ═══════════════════════════════════════
-let repDate = new Date();
-let repBatch = '';
-
 function changeRepDate(dir) {
   repDate.setDate(repDate.getDate() + dir);
   loadDailyReport();
@@ -3050,9 +3070,6 @@ async function loadDailyReport() {
 // ═══════════════════════════════════════
 //  NEW FEATURE: DAILY + MONTHLY ABSENT
 // ═══════════════════════════════════════
-let absDate = new Date();
-let absBatch = 'Shitalakshya';
-
 function changeAbsDate(dir) {
   absDate.setDate(absDate.getDate() + dir);
   loadDailyAbsent();
