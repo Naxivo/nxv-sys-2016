@@ -12,7 +12,7 @@
 <!-- ✅ ADD THESE TWO LINES FOR ICONS & MANIFEST -->
 <link rel="apple-touch-icon" href="/nxv-sys-2016/icon.png">
 <link rel="manifest" href="/nxv-sys-2016/manifest.json">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231A73E8'/><text y='.72em' font-size='70' text-anchor='middle' x='50' dominant-baseline='middle' fill='white'>🎓</text></svg>">
 <title>Basic BCS Academy</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -922,7 +922,7 @@ body.logged-in .bnav {
 <option value="absent">Absent Students Only</option>
 </select>
 </div>
-<details style="margin-top:8px" id="individualSmsDetails">
+<details style="margin-top:8px" id="individualSmsDetails" ontoggle="if(this.open)loadSmsStudentDropdown()">
 <summary style="cursor:pointer;font-size:13px;font-weight:600;color:var(--p);padding:6px 0">📋 Select Individual Student</summary>
 <div class="fg" style="margin-top:6px">
 <select class="fs" id="smsStudent" onchange="onIndividualStudentChange()">
@@ -1350,7 +1350,7 @@ console.log('✅ Script loaded successfully');
 // ═══════════════════════════════════════
 //  CONFIGURATION — Fill these values
 // ═══════════════════════════════════════
-const API_URL = "https://script.google.com/macros/s/AKfycbxhzKrMlK7PkW1RAcT6NJGW1r-G_6JT6XQ8WlGm2HQnmaKTs2COduF2SEmgcCrjxjci/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxRtl6lhFYm79HJR9lZ0q15KDCJF7ZGkd1VztqGUlPbl8nXDSejD9qrktHNaagqFEK1/exec";
 const SECRET_TOKEN = "d6bf785b7cfcca40a85e3376cfb930da27a2842eb1d5a5b51105bf190edd07a2"; // ← paste your token here
 // ═══════════════════════════════════════
 //  API HELPER
