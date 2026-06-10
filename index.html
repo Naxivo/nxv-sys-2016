@@ -922,14 +922,16 @@ body.logged-in .bnav {
 <option value="absent">Absent Students Only</option>
 </select>
 </div>
-<details style="margin-top:8px" id="individualSmsDetails" ontoggle="if(this.open)loadSmsStudentDropdown()">
-<summary style="cursor:pointer;font-size:13px;font-weight:600;color:var(--p);padding:6px 0">📋 Select Individual Student</summary>
-<div class="fg" style="margin-top:6px">
-<select class="fs" id="smsStudent" onchange="onIndividualStudentChange()">
-<option value="">-- Select a student --</option>
+<div style="margin-top:8px">
+<div style="cursor:pointer;font-size:13px;font-weight:600;color:var(--p);padding:6px 0" onclick="toggleIndividualSms(this)">
+<span>▶</span><span style="margin-left:6px">📋 Select Individual Student</span>
+</div>
+<div class="fg" id="individualSmsSection" style="display:none;margin-top:6px">
+<select class="fs" id="smsStudent">
+<option value="">-- Select student --</option>
 </select>
 </div>
-</details>
+</div>
 <div class="fg">
 <label>Message</label>
 <textarea class="fta" id="smsMsg" oninput="updCC()">Dear [Student Name], Reg: [RegNo], Batch: [Batch], You have 3 absents this month. Your admission is on hold. Please contact the office.
@@ -2409,8 +2411,19 @@ const SMS_CHARS_PER_SEGMENT = 166;
 function onSmsToChange() {
 const sel = document.getElementById('smsStudent');
 if (sel) sel.value = '';
-const det = document.getElementById('individualSmsDetails');
-if (det && det.open) loadSmsStudentDropdown();
+}
+function toggleIndividualSms(el) {
+const section = document.getElementById('individualSmsSection');
+if (!section) return;
+const arrow = el.querySelector('span:first-child');
+if (section.style.display === 'none') {
+section.style.display = '';
+arrow.textContent = '▼';
+loadSmsStudentDropdown();
+} else {
+section.style.display = 'none';
+arrow.textContent = '▶';
+}
 }
 async function loadSmsStudentDropdown() {
 const sel = document.getElementById('smsStudent');
@@ -2418,26 +2431,39 @@ if (!sel) return;
 const to = document.getElementById('smsTo')?.value;
 sel.innerHTML = '<option>Loading...</option>';
 let all = [];
+let errMsg = '';
+try {
 if (to === 'all' || to === 'absent') {
 const b = batches.filter(b => b.status === 'Active');
 for (const batch of b) {
 const res = await api('getStudents', { batch: batch.name });
 if (res.success) all = all.concat(res.students);
+else errMsg = res.error || 'API failed';
 }
 } else {
 const res = await api('getStudents', { batch: to });
 if (res.success) all = res.students;
+else errMsg = res.error || 'API failed';
+}
+} catch (e) {
+errMsg = e.message;
 }
 sel.innerHTML = '<option value="">-- Select student --</option>';
-all.filter(s => s.phone).forEach(s => {
+if (errMsg) {
+sel.innerHTML += `<option value="" disabled>Error: ${errMsg}</option>`;
+}
+const filtered = all.filter(s => s.phone);
+if (!all.length && !errMsg) {
+sel.innerHTML += '<option value="" disabled>No students found in this batch</option>';
+} else if (!filtered.length && all.length) {
+sel.innerHTML += '<option value="" disabled>All students missing phone numbers</option>';
+}
+filtered.forEach(s => {
 const opt = document.createElement('option');
 opt.value = JSON.stringify({ phone: s.phone, name: s.name, regNo: s.regNo, batch: s.batch || to });
 opt.textContent = `${s.name} (${s.regNo}) - ${s.phone}`;
 sel.appendChild(opt);
 });
-}
-function onIndividualStudentChange() {
-const sel = document.getElementById('smsStudent');
 }
 async function sendSMS() {
 const msg = document.getElementById('smsMsg')?.value;
