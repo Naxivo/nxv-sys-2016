@@ -374,8 +374,14 @@ QUICK ACTIONS
 .btn-ok:active { transform: scale(.98); }
 .btn-out { background: transparent; color: var(--p); border: 2px solid var(--p); box-shadow: none; }
 .btn-err { background: var(--err); color: #fff; }
+.btn-warn { background: var(--warn); color: #fff; }
 .btn-ghost { background: var(--sur2); color: var(--tx2); border: 1px solid var(--bdr); box-shadow: none; }
 .btn-sm { padding: 8px 13px; font-size: 12px; border-radius: 9px; width: auto; }
+.btn-loading { opacity: 0.7; cursor: not-allowed; pointer-events: none; }
+.btn-loading::after { content: ' ⟳'; display: inline-block; animation: spinBtn .8s linear infinite; }
+@keyframes spinBtn { to { transform: rotate(360deg); } }
+.btn-success { background: var(--ok) !important; color: #fff !important; box-shadow: 0 4px 14px rgba(5,150,105,.2) !important; pointer-events: none; }
+.btn-error { background: var(--err) !important; color: #fff !important; box-shadow: 0 4px 14px rgba(220,38,38,.2) !important; pointer-events: none; }
 /* PROGRESS */
 .pb { height: 5px; background: var(--bdr); border-radius: 5px; overflow: hidden; margin-top: 5px; }
 .pf { height: 100%; border-radius: 5px; transition: width .5s ease; }
@@ -424,6 +430,23 @@ QUICK ACTIONS
 .bal-time { font-size: 10px; opacity: .6; margin-top: 3px; font-weight: 600; }
 .bal-btn { background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.3); border-radius: 9px; padding: 8px 12px; color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; font-family: var(--font); transition: background .2s; }
 .bal-btn:active { background: rgba(255,255,255,.3); }
+/* SMS PROGRESS CARD (Feature 3) */
+.sms-progress { border-radius: var(--r); padding: 16px; margin-bottom: 14px; border: 1px solid var(--bdr); background: var(--sur); box-shadow: var(--sh); transition: all .3s; }
+.sms-progress.sending { border-color: var(--pm); background: var(--pl); }
+.sms-progress.done { border-color: var(--okm); background: var(--okl); }
+.sms-progress.partial { border-color: var(--warnm); background: var(--warnl); }
+.sms-progress.failed { border-color: var(--errm); background: var(--errl); }
+.sms-progress-title { font-size: 14px; font-weight: 800; margin-bottom: 6px; }
+.sms-progress-detail { font-size: 12px; color: var(--tx3); font-weight: 600; margin-bottom: 10px; }
+.sms-progress-bar { height: 8px; background: var(--bdr); border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
+.sms-progress-fill { height: 100%; border-radius: 8px; transition: width .5s ease; background: var(--p); }
+.sms-progress.done .sms-progress-fill { background: var(--ok); }
+.sms-progress.partial .sms-progress-fill { background: var(--warn); }
+.sms-progress.failed .sms-progress-fill { background: var(--err); }
+.sms-progress-stats { display: flex; gap: 12px; font-size: 12px; font-weight: 700; }
+.sms-progress-stats span { display: flex; align-items: center; gap: 4px; }
+.sms-progress-actions { display: flex; gap: 8px; margin-top: 10px; }
+.sms-progress-actions .btn { flex: 1; }
 /* FAIL BANNER */
 .fail-banner { background: var(--errl); border: 1px solid var(--errm); border-radius: 10px; padding: 11px 13px; display: flex; gap: 9px; align-items: flex-start; margin-bottom: 13px; }
 .fail-banner svg { width: 16px; height: 16px; stroke: var(--err); stroke-width: 2; fill: none; flex-shrink: 0; margin-top: 2px; }
@@ -547,6 +570,20 @@ animation: pulseText 2s ease-in-out infinite;
 0%, 100% { opacity: 0.6; }
 50% { opacity: 1; }
 }
+/* SKELETON LOADING (Feature 6) */
+@keyframes shimmer { 0% { background-position: -200px 0; } 100% { background-position: calc(200px + 100%) 0; } }
+.skel { background: linear-gradient(90deg, var(--sur3) 25%, var(--bdr) 50%, var(--sur3) 75%); background-size: 200px 100%; animation: shimmer 1.5s ease-in-out infinite; border-radius: 6px; }
+.skel-line { height: 14px; margin-bottom: 10px; width: 100%; }
+.skel-line.w60 { width: 60%; }
+.skel-line.w40 { width: 40%; }
+.skel-line.w30 { width: 30%; }
+.skel-avatar { width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0; }
+.skel-card { padding: 16px; display: flex; gap: 12px; align-items: center; border-bottom: 1px solid var(--bdr); }
+.skel-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.skel-stat { padding: 14px; border-radius: var(--r); background: var(--sur); border: 1px solid var(--bdr); }
+.skel-stat .skel-line:first-child { width: 30px; height: 28px; margin-bottom: 8px; }
+.skel-student { display: flex; gap: 11px; padding: 12px 16px; align-items: center; border-bottom: 1px solid var(--bdr); }
+.skel-student .skel-info { flex: 1; }
 /* EMPTY STATE */
 .empty { text-align: center; padding: 40px 20px; color: var(--tx3); }
 .empty svg { width: 48px; height: 48px; stroke: var(--bdr2); stroke-width: 1.5; fill: none; margin-bottom: 12px; }
@@ -639,25 +676,25 @@ body.logged-in .bnav {
 <div class="wb-pill">👥 <span id="totalStudentCount">—</span> Students</div>
 </div>
 </div>
-<div class="sg">
+        <div class="sg" id="statsGrid">
 <div class="st b">
 <div class="st-ic">👥</div>
-<div class="st-v" id="statTotal">—</div>
+<div class="st-v" id="statTotal"><span class="skel" style="display:inline-block;width:50px;height:28px;vertical-align:middle"></span></div>
 <div class="st-l">Total Students</div>
 </div>
 <div class="st g">
 <div class="st-ic">✅</div>
-<div class="st-v" id="statAtt">—%</div>
+<div class="st-v" id="statAtt"><span class="skel" style="display:inline-block;width:50px;height:28px;vertical-align:middle"></span></div>
 <div class="st-l">Avg Attendance</div>
 </div>
 <div class="st o">
 <div class="st-ic">⚠️</div>
-<div class="st-v" id="statAbsent">—</div>
+<div class="st-v" id="statAbsent"><span class="skel" style="display:inline-block;width:50px;height:28px;vertical-align:middle"></span></div>
 <div class="st-l">Absent Alerts</div>
 </div>
 <div class="st r">
 <div class="st-ic">📱</div>
-<div class="st-v" id="statSMS">—</div>
+<div class="st-v" id="statSMS"><span class="skel" style="display:inline-block;width:50px;height:28px;vertical-align:middle"></span></div>
 <div class="st-l">SMS Sent Today</div>
 </div>
 </div>
@@ -940,6 +977,7 @@ Basic BCS Academy
 Contact: 01577299970</textarea>
 <div class="cc"><span id="cc">0</span> characters · ~<span id="sc">1</span> SMS per recipient</div>
 </div>
+      <div id="smsProgressCard" style="display:none"></div>
       <button class="btn btn-p" onclick="sendSMS()" style="margin-top:8px">📤 Send SMS Now</button>
 <div class="fg" style="margin-top:16px">
 <label>Schedule Time *</label>
@@ -1352,7 +1390,7 @@ console.log('✅ Script loaded successfully');
 // ═══════════════════════════════════════
 //  CONFIGURATION — Fill these values
 // ═══════════════════════════════════════
-const API_URL = "https://script.google.com/macros/s/AKfycbxRtl6lhFYm79HJR9lZ0q15KDCJF7ZGkd1VztqGUlPbl8nXDSejD9qrktHNaagqFEK1/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbw_DSjuusVqCPbylLW4Ic-lxb-7h3ucx5om9RAPXw7ouY3z77UDu8f1TBptL11XTy-A/exec";
 const SECRET_TOKEN = "d6bf785b7cfcca40a85e3376cfb930da27a2842eb1d5a5b51105bf190edd07a2"; // ← paste your token here
 // ═══════════════════════════════════════
 //  API HELPER
@@ -1393,12 +1431,55 @@ let examDates = [];
 let currentDate = new Date();
 let markedBatchesToday = new Set();
 let studentCache = {};
-let editScheduleId = null; // Track if we're editing a schedule
-let _batchMgmtCache = null; // Cache for batch management (Feature 6)
+let editScheduleId = null;
+let _batchMgmtCache = null;
+let _teachersCache = null;
+let _examDatesCache = {};
+let _homeStatsCache = null;
 let repDate = new Date();
 let repBatch = '';
 let absDate = new Date();
 let absBatch = 'Shitalakshya';
+// ═══════════════════════════════════════
+//  SMART CACHING SYSTEM (Feature 1)
+// ═══════════════════════════════════════
+const CACHE = {
+  _data: {},
+  get(key) { return this._data[key]; },
+  set(key, val) { this._data[key] = val; try { localStorage.setItem('bcs_cache_' + key, JSON.stringify(val)); } catch(e) {} },
+  clear(key) { delete this._data[key]; localStorage.removeItem('bcs_cache_' + key); },
+  clearAll() { this._data = {}; Object.keys(localStorage).filter(k => k.startsWith('bcs_cache_')).forEach(k => localStorage.removeItem(k)); },
+  init() {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('bcs_cache_')) {
+        try { this._data[key.replace('bcs_cache_', '')] = JSON.parse(localStorage.getItem(key)); } catch(e) {}
+      }
+    }
+  }
+};
+CACHE.init();
+
+function clearCachesFor(action) {
+  switch (action) {
+    case 'addStudent': case 'editStudent': case 'transferStudent':
+    case 'deactivateStudent': case 'reactivateStudent':
+      CACHE.clear('students_all');
+      delete studentCache['all'];
+      break;
+    case 'addBatch': case 'toggleBatch':
+      CACHE.clear('batches');
+      _batchMgmtCache = null;
+      break;
+    case 'addTeacher': case 'editTeacher':
+      _teachersCache = null;
+      break;
+    case 'saveMarks':
+      CACHE.clear('examDates_' + currentExamBatch);
+      break;
+  }
+}
+
 // ═══════════════════════════════════════
 //  THEME
 // ═══════════════════════════════════════
@@ -1473,8 +1554,9 @@ const p = document.getElementById('lp').value;
 const btn = document.getElementById('loginBtn');
 const err = document.getElementById('loginError');
 if (!u || !p) { showLoginError('Please enter username and password'); return; }
-btn.textContent = 'Signing in...';
+btn.textContent = 'Signing in... ⟳';
 btn.disabled = true;
+btn.classList.add('btn-loading');
 const res = await api('login', { username: u, password: p });
 if (res.success) {
 currentUser = res.user;
@@ -1482,13 +1564,10 @@ localStorage.setItem('bcsUser', JSON.stringify(res.user));
 document.getElementById('loginPage').style.display = 'none';
 document.getElementById('app').style.display = 'block';
 err.style.display = 'none';
-// ✅ FIX 1: Add class to body to show nav
 document.body.classList.add('logged-in');
-// Update profile
 document.getElementById('profileName').textContent = res.user.name;
 document.getElementById('profileRole').textContent = res.user.role + ' · Basic BCS Academy';
 document.getElementById('profileAv').textContent = res.user.name.charAt(0).toUpperCase();
-// Hide admin-only settings for teachers
 if (res.user.role !== 'Admin') {
 const adminSettings = document.getElementById('adminOnlySettings');
 const adminSMS = document.getElementById('adminSMSSettings');
@@ -1498,11 +1577,17 @@ if (adminSMS) adminSMS.style.display = 'none';
 initDates();
 loadHomeData();
 loadBatches();
+btn.textContent = '✅ Signed in!';
+btn.classList.remove('btn-loading');
+btn.classList.add('btn-success');
+setTimeout(() => { btn.textContent = 'Sign In →'; btn.classList.remove('btn-success'); btn.disabled = false; }, 2000);
 } else {
 showLoginError('Invalid username or password');
+btn.textContent = '❌ Failed!';
+btn.classList.remove('btn-loading');
+btn.classList.add('btn-error');
+setTimeout(() => { btn.textContent = 'Sign In →'; btn.classList.remove('btn-error'); btn.disabled = false; }, 3000);
 }
-btn.textContent = 'Sign In →';
-btn.disabled = false;
 }
 function showLoginError(msg) {
 const err = document.getElementById('loginError');
@@ -1622,7 +1707,19 @@ o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'
 // ═══════════════════════════════════════
 //  HOME DATA
 // ══════════════════════════════════════
-async function loadHomeData() {
+async function loadHomeData(force = false) {
+  if (!force) {
+    const cached = CACHE.get('home');
+    if (cached) {
+      document.getElementById('statTotal').textContent = cached.count;
+      document.getElementById('totalStudentCount').textContent = cached.count;
+      document.getElementById('activeBatchCount').textContent = cached.activeBatches;
+      document.getElementById('statAbsent').textContent = cached.absent;
+      document.getElementById('statAtt').textContent = cached.avgAtt + '%';
+      document.getElementById('statSMS').textContent = cached.smsToday;
+      return;
+    }
+  }
   const [stuRes, absRes, statsRes, batchRes] = await Promise.all([
     api('getStudentCount'),
     api('getAbsentStudents', {}),
@@ -1647,6 +1744,13 @@ async function loadHomeData() {
     document.getElementById('statAtt').textContent = '—%';
     document.getElementById('statSMS').textContent = '—';
   }
+  CACHE.set('home', {
+    count: stuRes.success ? stuRes.count : 0,
+    activeBatches: batchRes.success ? batchRes.batches.filter(b => b.status === 'Active').length : 0,
+    absent: absRes.success ? absRes.students.length : 0,
+    avgAtt: statsRes.success ? statsRes.avgAttendance : 0,
+    smsToday: statsRes.success ? statsRes.smsToday : 0
+  });
 }
 // ═══════════════════════════════════════
 //  BATCHES
@@ -1758,9 +1862,10 @@ async function toggleBatch(name, checkbox) {
     if (checkbox) {
       checkbox.checked = res.status === 'Active';
     }
-    // Clear caches and reload UI
+    clearCachesFor('toggleBatch');
     _batchMgmtCache = null;
     delete studentCache['all'];
+    CACHE.clear('home');
     loadBatchManagement();
     loadBatches();
     
@@ -1777,20 +1882,22 @@ const name = document.getElementById('newBatchName').value.trim();
 const timing = document.getElementById('newBatchTiming').value.trim();
 const cap = document.getElementById('newBatchCap').value;
 if (!name) { toast('❌ Batch name required'); return; }
-const res = await api('addBatch', { batchName: name, timing, capacity: cap });
+const btn = document.querySelector('#ov-addBatch .btn-p');
+await withButtonState(btn, async () => {
+  const res = await api('addBatch', { batchName: name, timing, capacity: cap });
   if (res.success) {
-    toast(`✅ ${name} created!`);
     closeSht('addBatch');
     document.getElementById('newBatchName').value = '';
     document.getElementById('newBatchTiming').value = '';
     document.getElementById('newBatchCap').value = '';
+    CACHE.clear('home');
     _batchMgmtCache = null;
     delete studentCache['all'];
     loadBatches();
     loadBatchManagement();
-} else {
-toast('❌ ' + res.error);
-}
+  }
+  return res;
+}, { loading: 'Creating...', success: '✅ Created!', error: '❌ Failed!' });
 }
 
 function updBatchPreview() {
@@ -1829,13 +1936,17 @@ renderStudentList(studentCache[batch]);
 return; // Instant load for individual batches!
 }
 }
-// 3. Show loading spinner
-el.innerHTML = `
-<div class="modern-loader">
-<div class="loader-ring"></div>
-<div class="loader-text">Loading students data from cloud...</div>
+  // 3. Show skeleton loading
+  el.innerHTML = Array(5).fill(`
+<div class="skel-student">
+<div class="skel skel-avatar"></div>
+<div class="skel-info">
+<div class="skel skel-line w60"></div>
+<div class="skel skel-line w40"></div>
 </div>
-`;
+<div class="skel skel-line w30" style="height:20px;width:40px"></div>
+</div>
+`).join('');
 // 4. Determine which batches to load
 let batchList = [];
 if (batch && batch !== 'all') {
@@ -1954,64 +2065,69 @@ closeSht('stuDtl');
 openSht('editStu');
 }
 async function saveEditStudent() {
-const name = document.getElementById('editName').value.trim();
-if (!name) { toast(' Name required'); return; }
-const res = await api('editStudent', {
-batch: document.getElementById('editBatch').value,
-student: {
-regNo: document.getElementById('editRegNo').value,
-name,
-department: document.getElementById('editDept').value.trim(),
-phone: document.getElementById('editPhone').value.trim()
-}
-});
-if (res.success) {
-toast('✅ Student updated!');
-closeSht('editStu');
-delete studentCache[document.getElementById('editBatch').value];
-delete studentCache['all'];
-loadStudents();
-} else {
-toast('❌ ' + res.error);
-}
+  const name = document.getElementById('editName').value.trim();
+  if (!name) { toast(' Name required'); return; }
+  const btn = document.querySelector('#ov-editStu .btn-p');
+  await withButtonState(btn, async () => {
+    const res = await api('editStudent', {
+      batch: document.getElementById('editBatch').value,
+      student: {
+        regNo: document.getElementById('editRegNo').value,
+        name,
+        department: document.getElementById('editDept').value.trim(),
+        phone: document.getElementById('editPhone').value.trim()
+      }
+    });
+    if (res.success) {
+      closeSht('editStu');
+      clearCachesFor('editStudent');
+      delete studentCache[document.getElementById('editBatch').value];
+      delete studentCache['all'];
+      loadStudents();
+    }
+    return res;
+  }, { loading: 'Saving...', success: '✅ Saved!', error: '❌ Failed!' });
 }
 async function addStudent() {
-const name = document.getElementById('stuName').value.trim();
-const regNo = document.getElementById('stuRegNo').value.trim();
-const batch = document.getElementById('stuBatch').value;
-const dept = document.getElementById('stuDept').value.trim();
-const phone = document.getElementById('stuPhone').value.trim();
-const btype = document.querySelector('input[name="btype"]:checked')?.value || 'Regular';
-if (!name) { toast('❌ Name required'); return; }
-if (!regNo) { toast('❌ Reg No required'); return; }
-if (!batch) { toast('❌ Batch required'); return; }
-const res = await api('addStudent', {
-student: { name, regNo, batch, department: dept, phone, batchType: btype }
-});
-if (res.success) {
-toast('✅ Student added to Google Sheets!');
-closeSht('addStu');
-document.getElementById('stuName').value = '';
-document.getElementById('stuRegNo').value = '';
-document.getElementById('stuDept').value = '';
-document.getElementById('stuPhone').value = '';
-const addedBatch = document.getElementById('stuBatch').value;
-delete studentCache[addedBatch];
-delete studentCache['all'];
-loadStudents();
-loadHomeData();
-} else {
-toast(' ' + res.error);
-}
+  const name = document.getElementById('stuName').value.trim();
+  const regNo = document.getElementById('stuRegNo').value.trim();
+  const batch = document.getElementById('stuBatch').value;
+  const dept = document.getElementById('stuDept').value.trim();
+  const phone = document.getElementById('stuPhone').value.trim();
+  const btype = document.querySelector('input[name="btype"]:checked')?.value || 'Regular';
+  if (!name) { toast('❌ Name required'); return; }
+  if (!regNo) { toast('❌ Reg No required'); return; }
+  if (!batch) { toast('❌ Batch required'); return; }
+  const btn = document.querySelector('#ov-addStu .btn-p');
+  await withButtonState(btn, async () => {
+    const res = await api('addStudent', {
+      student: { name, regNo, batch, department: dept, phone, batchType: btype }
+    });
+    if (res.success) {
+      closeSht('addStu');
+      clearCachesFor('addStudent');
+      document.getElementById('stuName').value = '';
+      document.getElementById('stuRegNo').value = '';
+      document.getElementById('stuDept').value = '';
+      document.getElementById('stuPhone').value = '';
+      const addedBatch = document.getElementById('stuBatch').value;
+      delete studentCache[addedBatch];
+      delete studentCache['all'];
+      loadStudents();
+      loadHomeData();
+    }
+    return res;
+  }, { loading: 'Adding...', success: '✅ Added!', error: '❌ Failed!' });
 }
 async function deactivateStudent() {
 if (!selectedStudent) return;
 if (!confirm('Mark this student as inactive?')) return;
 const res = await api('deactivateStudent', { batch: selectedStudent._batch, regNo: selectedStudent.regNo });
-if (res.success) {
-toast('✅ Student marked inactive');
-closeSht('stuDtl');
-delete studentCache[selectedStudent._batch];
+  if (res.success) {
+    toast('✅ Student marked inactive');
+    closeSht('stuDtl');
+    clearCachesFor('deactivateStudent');
+    delete studentCache[selectedStudent._batch];
 delete studentCache['all'];
 loadStudents();
 } else {
@@ -2022,9 +2138,10 @@ async function reactivateStudent() {
 if (!selectedStudent) return;
 const res = await api('reactivateStudent', { batch: selectedStudent._batch, regNo: selectedStudent.regNo });
 if (res.success) {
-toast('✅ Student reactivated!');
-closeSht('stuDtl');
-delete studentCache[selectedStudent._batch];
+    toast('✅ Student reactivated!');
+    closeSht('stuDtl');
+    clearCachesFor('reactivateStudent');
+    delete studentCache[selectedStudent._batch];
 delete studentCache['all'];
 loadStudents();
 } else {
@@ -2045,13 +2162,16 @@ if (dl2) dl2.innerHTML = dl.innerHTML;
 //  ATTENDANCE
 // ═══════════════════════════════════════
 async function loadAttendanceList() {
-const el = document.getElementById('attList');
-el.innerHTML = `
-<div class="modern-loader">
-<div class="loader-ring"></div>
-<div class="loader-text">Loading students data from cloud...</div>
+  const el = document.getElementById('attList');
+  el.innerHTML = Array(4).fill(`
+<div class="ati" style="padding:11px 16px">
+<div style="display:flex;align-items:center;gap:11px">
+<div class="skel skel-line" style="width:30px;height:14px;margin:0"></div>
+<div class="skel skel-line w60" style="height:14px;margin:0"></div>
+<div class="skel skel-line" style="width:70px;height:28px;margin:0;border-radius:9px"></div>
 </div>
-`;
+</div>
+`).join('');
 pCount = 0; aCount = 0;
 const dateStr = formatDateShort(currentDate);
 document.getElementById('attDate').textContent = dateStr;
@@ -2120,35 +2240,36 @@ const wasP = prev?.classList.contains('P');
 const wasA = prev?.classList.contains('A');
 row.querySelectorAll('.atb').forEach(b => b.classList.remove('active'));
 btn.classList.add('active');
-if (!wasP && type === 'P') pCount++;
-if (!wasA && type === 'A') aCount++;
 if (wasP && type === 'A') { pCount--; aCount++; }
-if (wasA && type === 'P') { aCount--; pCount++; }
+else if (wasA && type === 'P') { aCount--; pCount++; }
+else if (type === 'P') pCount++;
+else if (type === 'A') aCount++;
 document.getElementById('pC').textContent = pCount;
 document.getElementById('aC').textContent = aCount;
 attRecords[regNo] = type;
 }
 async function saveAttendance() {
-const students = allStudents[currentAttBatch] || [];
-if (!students.length) { toast('❌ No students loaded'); return; }
-const dateStr = formatDateShort(currentDate);
-const records = students.map(s => ({
-regNo: s.regNo, name: s.name,
-status: attRecords[s.regNo] || 'P'
-}));
-const res = await api('saveAttendance', {
-date: dateStr,
-batch: currentAttBatch,
-records,
-markedBy: currentUser?.name || 'Teacher'
-});
-if (res.success) {
-toast(`✅ Attendance saved to Google Sheets!\nMarked by: ${currentUser?.name || 'Teacher'}`);
-markedBatchesToday.add(currentAttBatch);
-updateAttStatusBanner();
-} else {
-toast('❌ ' + (res.error || 'Failed to save'));
-}
+  const students = allStudents[currentAttBatch] || [];
+  if (!students.length) { toast('❌ No students loaded'); return; }
+  const btn = document.querySelector('#pg-attendance .btn-ok');
+  const dateStr = formatDateShort(currentDate);
+  const records = students.map(s => ({
+    regNo: s.regNo, name: s.name,
+    status: attRecords[s.regNo] || 'P'
+  }));
+  await withButtonState(btn, async () => {
+    const res = await api('saveAttendance', {
+      date: dateStr,
+      batch: currentAttBatch,
+      records,
+      markedBy: currentUser?.name || 'Teacher'
+    });
+    if (res.success) {
+      markedBatchesToday.add(currentAttBatch);
+      updateAttStatusBanner();
+    }
+    return res;
+  }, { loading: 'Saving...', success: '✅ Saved!', error: '❌ Failed!' });
 }
 function updateAttStatusBanner() {
 const banner = document.getElementById('attStatusBanner');
@@ -2258,17 +2379,19 @@ el.innerHTML = html;
 if (saveBtn) saveBtn.style.display = 'flex';
 }
 async function saveMarks() {
-const date = document.getElementById('examDateSelect')?.value;
-if (!date) { toast('❌ Select exam date first'); return; }
-const stuRes = await api('getStudents', { batch: currentExamBatch });
-if (!stuRes.success) { toast('❌ Could not load students'); return; }
-const marks = stuRes.students.filter(s => s.status === 'Active').map(s => {
-const input = document.getElementById(`mark-${s.regNo}`);
-return { regNo: s.regNo, name: s.name, score: input ? Number(input.value) || 0 : 0 };
-});
-const res = await api('saveMarks', { examDate: date, batch: currentExamBatch, marks });
-if (res.success) { toast('✅ Marks saved to Google Sheets!'); }
-else { toast(' ' + res.error); }
+  const date = document.getElementById('examDateSelect')?.value;
+  if (!date) { toast('❌ Select exam date first'); return; }
+  const stuRes = await api('getStudents', { batch: currentExamBatch });
+  if (!stuRes.success) { toast('❌ Could not load students'); return; }
+  const marks = stuRes.students.filter(s => s.status === 'Active').map(s => {
+    const input = document.getElementById(`mark-${s.regNo}`);
+    return { regNo: s.regNo, name: s.name, score: input ? Number(input.value) || 0 : 0 };
+  });
+  const btn = document.getElementById('saveMarksBtn');
+  await withButtonState(btn, async () => {
+    const res = await api('saveMarks', { examDate: date, batch: currentExamBatch, marks });
+    return res;
+  }, { loading: 'Saving...', success: '✅ Saved!', error: '❌ Failed!' });
 }
 function addExamDate() {
 const date = document.getElementById('newExamDate').value;
@@ -2464,37 +2587,118 @@ sel.appendChild(opt);
 });
 }
 async function sendSMS() {
-const msg = document.getElementById('smsMsg')?.value;
-const to = document.getElementById('smsTo')?.value;
-if (!msg) { toast('❌ Message required'); return; }
-let students = [];
-const indSel = document.getElementById('smsStudent');
-if (indSel.value) {
-const stu = JSON.parse(indSel.value);
-if (!stu.phone) { toast('❌ Selected student has no phone number'); return; }
-students = [stu];
-} else if (to === 'absent') {
-const res = await api('getAbsentStudents', {});
-if (res.success) {
-students = res.students.filter(s => s.phone).map(s => ({ phone: s.phone, name: s.name, regNo: s.regNo, batch: s.batch }));
+  const msg = document.getElementById('smsMsg')?.value;
+  const to = document.getElementById('smsTo')?.value;
+  if (!msg) { toast('❌ Message required'); return; }
+  let students = [];
+  const indSel = document.getElementById('smsStudent');
+  if (indSel.value) {
+    const stu = JSON.parse(indSel.value);
+    if (!stu.phone) { toast('❌ Selected student has no phone number'); return; }
+    students = [stu];
+  } else if (to === 'absent') {
+    const res = await api('getAbsentStudents', {});
+    if (res.success) {
+      students = res.students.filter(s => s.phone).map(s => ({ phone: s.phone, name: s.name, regNo: s.regNo, batch: s.batch }));
+    }
+  } else if (to === 'all') {
+    for (const b of batches.filter(b => b.status === 'Active')) {
+      const res = await api('getStudents', { batch: b.name });
+      if (res.success) students = students.concat(res.students.filter(s => s.phone).map(s => ({ phone: s.phone, name: s.name, regNo: s.regNo, batch: b.name })));
+    }
+  } else {
+    const res = await api('getStudents', { batch: to });
+    if (res.success) students = res.students.filter(s => s.phone).map(s => ({ phone: s.phone, name: s.name, regNo: s.regNo, batch: to }));
+  }
+  if (!students.length) { toast(' No phone numbers available'); return; }
+  const btn = document.querySelector('#sms-send .btn-p');
+  const startTime = new Date().toLocaleString('en-BD', { timeZone: 'Asia/Dhaka' });
+  await withButtonState(btn, async () => {
+    const res = await api('sendSMS', { students, message: msg });
+    if (res.success) {
+      showSmsProgressCard(students.length, res.startTime || startTime);
+    }
+    return res;
+  }, { loading: 'Sending...', success: '✅ Sent!', error: '❌ Failed!' });
 }
-} else if (to === 'all') {
-for (const b of batches.filter(b => b.status === 'Active')) {
-const res = await api('getStudents', { batch: b.name });
-if (res.success) students = students.concat(res.students.filter(s => s.phone).map(s => ({ phone: s.phone, name: s.name, regNo: s.regNo, batch: b.name })));
+// ═══════════════════════════════════════
+//  SMS PROGRESS CARD (Feature 3)
+// ══════════════════════════════════════
+let _smsProgressInterval = null;
+
+function showSmsProgressCard(total, startTime) {
+  const el = document.getElementById('smsProgressCard');
+  el.style.display = 'block';
+  el.className = 'sms-progress sending';
+  el.innerHTML = `
+    <div class="sms-progress-title">📱 Sending SMS...</div>
+    <div class="sms-progress-detail" id="smsProgressDetail">0 of ${total} sent · Please wait...</div>
+    <div class="sms-progress-bar"><div class="sms-progress-fill" id="smsProgressFill" style="width:0%"></div></div>
+    <div class="sms-progress-stats">
+      <span style="color:var(--ok)">✅ <span id="smsProgSent">0</span> sent</span>
+      <span style="color:var(--err)">❌ <span id="smsProgFailed">0</span> failed</span>
+    </div>
+  `;
+
+  if (_smsProgressInterval) clearInterval(_smsProgressInterval);
+
+  _smsProgressInterval = setInterval(async () => {
+    const res = await api('getSMSProgress', { startTime, total });
+    if (res.success) {
+      const sent = res.sent || 0;
+      const failed = res.failed || 0;
+      const done = res.done || (sent + failed >= total);
+
+      document.getElementById('smsProgSent').textContent = sent;
+      document.getElementById('smsProgFailed').textContent = failed;
+      const totalDone = sent + failed;
+      const pct = Math.min(100, Math.round((totalDone / total) * 100));
+      document.getElementById('smsProgressFill').style.width = pct + '%';
+      document.getElementById('smsProgressDetail').textContent = `${totalDone} of ${total} processed`;
+
+      if (done) {
+        clearInterval(_smsProgressInterval);
+        _smsProgressInterval = null;
+        const card = document.getElementById('smsProgressCard');
+        if (failed === 0) {
+          card.className = 'sms-progress done';
+          card.innerHTML = `
+            <div class="sms-progress-title">✅ All SMS Sent Successfully!</div>
+            <div class="sms-progress-detail">${sent} delivered · 0 failed</div>
+            <button class="btn btn-ok btn-sm" style="width:auto" onclick="document.getElementById('smsProgressCard').style.display='none'">OK</button>
+          `;
+        } else if (sent > 0) {
+          card.className = 'sms-progress partial';
+          card.innerHTML = `
+            <div class="sms-progress-title">⚠️ SMS Partially Sent</div>
+            <div class="sms-progress-detail">${sent} delivered · ${failed} failed</div>
+            <div class="sms-progress-actions">
+              <button class="btn btn-warn btn-sm" onclick="retryFailedSMSFromCard()">🔄 Retry Failed</button>
+              <button class="btn btn-ghost btn-sm" onclick="document.getElementById('smsProgressCard').style.display='none'">Dismiss</button>
+            </div>
+          `;
+        } else {
+          card.className = 'sms-progress failed';
+          card.innerHTML = `
+            <div class="sms-progress-title">❌ SMS Failed</div>
+            <div class="sms-progress-detail">0 delivered · ${failed} failed · Check SMS balance or API key</div>
+            <div class="sms-progress-actions">
+              <button class="btn btn-err btn-sm" onclick="retryFailedSMSFromCard()">🔄 Retry All</button>
+              <button class="btn btn-ghost btn-sm" onclick="document.getElementById('smsProgressCard').style.display='none'">Dismiss</button>
+            </div>
+          `;
+        }
+      }
+    }
+  }, 5000);
 }
-} else {
-const res = await api('getStudents', { batch: to });
-if (res.success) students = res.students.filter(s => s.phone).map(s => ({ phone: s.phone, name: s.name, regNo: s.regNo, batch: to }));
+
+async function retryFailedSMSFromCard() {
+  toast("🔄 Opening failed SMS...");
+  const histBtn = document.querySelector("#smsStabs .stab:nth-child(2)");
+  if (histBtn) { swSub(histBtn, "sms-hist"); loadSMSLog(); }
 }
-if (!students.length) { toast(' No phone numbers available'); return; }
-const res = await api('sendSMS', { students, message: msg });
-if (res.success) {
-toast(`📱 SMS sending started for ${students.length} recipients!`);
-} else {
-toast('❌ ' + (res.error || 'SMS failed'));
-}
-}
+
 async function sendAbsenceSMS(idx) {
 const s = window._absentStudents?.[idx];
 if (!s || !s.phone) { toast('❌ No phone number'); return; }
@@ -2515,19 +2719,44 @@ async function loadSMSLog() {
     return;
   }
   window._smsLogList = res.logs;
-  el.innerHTML = res.logs.map((log, idx) => {
-    const isFailed = log.status === 'Failed';
-    return `<div class="slog">
-<div class="slog-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-<div class="slog-tx">
-<div class="slog-m">${log.phone}</div>
-<div class="slog-d">${log.message}</div>
-<span class="slog-st ${isFailed ? 'fail' : 'ok'}">${isFailed ? '❌ Failed' : '✅ ' + log.status}</span>
-</div>
-<div class="slog-t">${log.time}</div>
-${isFailed ? `<button class="btn btn-err btn-sm" style="width:auto;padding:4px 8px;font-size:10px" onclick="resendSMSFromLog(${idx})">↻ Retry</button>` : ''}
-</div>`;
-  }).join('');
+  const failedLogs = res.logs.filter(l => l.status === 'Failed');
+  const sentLogs = res.logs.filter(l => l.status !== 'Failed');
+  let html = '';
+  // Failed section first
+  if (failedLogs.length) {
+    html += `<div style="padding:12px 16px;font-size:11px;font-weight:700;color:var(--err);text-transform:uppercase;letter-spacing:1px;background:var(--errl);border-bottom:1px solid var(--errm)">⚠️ ${failedLogs.length} Failed SMS</div>`;
+    failedLogs.forEach((log, idx) => {
+      html += `<div class="slog" style="background:var(--errl)">
+        <div class="slog-ic"><svg viewBox="0 0 24 24" style="stroke:var(--err)"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <div class="slog-tx">
+          <div class="slog-m">${log.phone}</div>
+          <div class="slog-d">${log.message}</div>
+          <span class="slog-st fail">❌ Failed</span>
+        </div>
+        <div class="slog-t">${log.time}</div>
+        <button class="btn btn-err btn-sm" style="width:auto;padding:4px 8px;font-size:10px" onclick="resendSMSFromLog(${res.logs.indexOf(log)})">↻ Retry</button>
+      </div>`;
+    });
+  }
+  // Sent section below
+  if (sentLogs.length) {
+    html += `<div style="padding:12px 16px;font-size:11px;font-weight:700;color:var(--ok);text-transform:uppercase;letter-spacing:1px;background:var(--okl);border-bottom:1px solid var(--okm)">✅ ${sentLogs.length} Sent Successfully</div>`;
+    sentLogs.forEach(log => {
+      html += `<div class="slog">
+        <div class="slog-ic"><svg viewBox="0 0 24 24" style="stroke:var(--ok)"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <div class="slog-tx">
+          <div class="slog-m">${log.phone}</div>
+          <div class="slog-d">${log.message}</div>
+          <span class="slog-st ok">✅ ${log.status}</span>
+        </div>
+        <div class="slog-t">${log.time}</div>
+      </div>`;
+    });
+  }
+  if (!failedLogs.length) {
+    html = `<div style="padding:12px 16px;font-size:12px;font-weight:700;color:var(--ok);background:var(--okl);border-bottom:1px solid var(--okm)">✅ All SMS delivered! No issues</div>` + html;
+  }
+  el.innerHTML = html;
 }
 // ═══════════════════════════════════════
 //  SMS SCHEDULING
@@ -2672,22 +2901,23 @@ el.innerHTML = '<div class="cb">Error loading teachers. Check console.</div>';
 }
 }
 async function addTeacher() {
-const name = document.getElementById('tName').value.trim();
-const user = document.getElementById('tUser').value.trim().toLowerCase();
-const pass = document.getElementById('tPass').value;
-const role = document.getElementById('tRole').value;
-if (!name || !user || !pass) { toast('❌ All fields required'); return; }
-const res = await api('addTeacher', { teacher: { name, username: user, password: pass, role } });
-if (res.success) {
-toast('✅ Teacher added!');
-closeSht('addTeacher');
-document.getElementById('tName').value = '';
-document.getElementById('tUser').value = '';
-document.getElementById('tPass').value = '';
-loadTeachers();
-} else {
-toast('❌ ' + res.error);
-}
+  const name = document.getElementById('tName').value.trim();
+  const user = document.getElementById('tUser').value.trim().toLowerCase();
+  const pass = document.getElementById('tPass').value;
+  const role = document.getElementById('tRole').value;
+  if (!name || !user || !pass) { toast('❌ All fields required'); return; }
+  const btn = document.querySelector('#ov-addTeacher .btn-p');
+  await withButtonState(btn, async () => {
+    const res = await api('addTeacher', { teacher: { name, username: user, password: pass, role } });
+    if (res.success) {
+      closeSht('addTeacher');
+      document.getElementById('tName').value = '';
+      document.getElementById('tUser').value = '';
+      document.getElementById('tPass').value = '';
+      loadTeachers();
+    }
+    return res;
+  }, { loading: 'Adding...', success: '✅ Added!', error: '❌ Failed!' });
 }
 async function deactivateTeacher(username) {
 if (!confirm('Remove this teacher?')) return;
@@ -2696,21 +2926,22 @@ if (res.success) { toast('✅ Teacher removed'); loadTeachers(); }
 else { toast('❌ ' + res.error); }
 }
 async function changePassword() {
-const old = document.getElementById('oldPass').value;
-const nw = document.getElementById('newPass').value;
-const conf = document.getElementById('confPass').value;
-if (!old || !nw || !conf) { toast('❌ All fields required'); return; }
-if (nw !== conf) { toast('❌ Passwords do not match'); return; }
-const res = await api('changePassword', { username: currentUser.username, oldPassword: old, newPassword: nw });
-if (res.success) {
-toast('✅ Password changed!');
-closeSht('changePass');
-document.getElementById('oldPass').value = '';
-document.getElementById('newPass').value = '';
-document.getElementById('confPass').value = '';
-} else {
-toast('❌ ' + res.error);
-}
+  const old = document.getElementById('oldPass').value;
+  const nw = document.getElementById('newPass').value;
+  const conf = document.getElementById('confPass').value;
+  if (!old || !nw || !conf) { toast('❌ All fields required'); return; }
+  if (nw !== conf) { toast('❌ Passwords do not match'); return; }
+  const btn = document.querySelector('#ov-changePass .btn-p');
+  await withButtonState(btn, async () => {
+    const res = await api('changePassword', { username: currentUser.username, oldPassword: old, newPassword: nw });
+    if (res.success) {
+      closeSht('changePass');
+      document.getElementById('oldPass').value = '';
+      document.getElementById('newPass').value = '';
+      document.getElementById('confPass').value = '';
+    }
+    return res;
+  }, { loading: 'Updating...', success: '✅ Updated!', error: '❌ Failed!' });
 }
 async function toggleAutoSMS() {
 toast('📱 Update AUTO_SMS in Google Sheets Settings tab');
@@ -2825,6 +3056,39 @@ console.error('Attendance Export Error:', err);
 alert('Error generating attendance report.');
 }
 }
+// ═══════════════════════════════════════
+//  BUTTON LOADING STATES (Feature 2)
+// ══════════════════════════════════════
+async function withButtonState(btn, action, opts = {}) {
+  const origText = btn.textContent;
+  const origDisabled = btn.disabled;
+  btn.disabled = true;
+  btn.textContent = opts.loading || 'Working...';
+  btn.classList.add('btn-loading');
+  try {
+    const result = await action();
+    if (result && result.success) {
+      btn.textContent = opts.success || '✅ Done!';
+      btn.classList.remove('btn-loading');
+      btn.classList.add('btn-success');
+      await new Promise(r => setTimeout(r, 2000));
+    } else {
+      btn.textContent = opts.error || '❌ Failed!';
+      btn.classList.remove('btn-loading');
+      btn.classList.add('btn-error');
+      await new Promise(r => setTimeout(r, 3000));
+    }
+  } catch(e) {
+    btn.textContent = opts.error || '❌ Error!';
+    btn.classList.remove('btn-loading');
+    btn.classList.add('btn-error');
+    await new Promise(r => setTimeout(r, 3000));
+  }
+  btn.classList.remove('btn-success', 'btn-error');
+  btn.textContent = origText;
+  btn.disabled = false;
+}
+
 // ═══════════════════════════════════════
 //  TOAST
 // ══════════════════════════════════════
@@ -2961,25 +3225,22 @@ async function doTransferStudent() {
   if (fromBatch === toBatch) { toast('❌ FROM and TO batches must be different'); return; }
   const btype = document.querySelector('input[name="transferBtype"]:checked')?.value || 'Regular';
   const btn = document.getElementById('transferBtn');
-  btn.textContent = 'Transferring...';
-  btn.disabled = true;
-  const res = await api('transferStudent', {
-    fromBatch, toBatch, regNo: selectedTransferStudent.regNo,
-    newRegNo: selectedTransferStudent.regNo, batchType: btype
-  });
-  if (res.success) {
-    toast(`✅ ${res.message}`);
-    closeSht('transferStu');
-    delete studentCache[fromBatch];
-    delete studentCache[toBatch];
-    delete studentCache['all'];
-    loadStudents();
-    loadHomeData();
-  } else {
-    toast('❌ ' + (res.error || 'Transfer failed'));
-  }
-  btn.textContent = 'Transfer Student →';
-  btn.disabled = false;
+  await withButtonState(btn, async () => {
+    const res = await api('transferStudent', {
+      fromBatch, toBatch, regNo: selectedTransferStudent.regNo,
+      newRegNo: selectedTransferStudent.regNo, batchType: btype
+    });
+    if (res.success) {
+      closeSht('transferStu');
+      clearCachesFor('transferStudent');
+      delete studentCache[fromBatch];
+      delete studentCache[toBatch];
+      delete studentCache['all'];
+      loadStudents();
+      loadHomeData();
+    }
+    return res;
+  }, { loading: 'Moving...', success: '✅ Transferred!', error: '❌ Failed!' });
 }
 
 // ═══════════════════════════════════════
