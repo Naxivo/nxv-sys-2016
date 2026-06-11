@@ -990,12 +990,12 @@ Contact: 01577299970</textarea>
 </div>
 </div>
 <div id="scheduleListContainer" style="margin-top:16px"></div>
+      </div>
       <!-- History -->
       <div id="sms-hist" style="display:none">
         <div class="card" style="padding:0" id="smsLogList">
           <div class="loading"><div class="spinner"></div></div>
         </div>
-      </div>
       </div>
     </div>
     <!-- Ex Students -->
@@ -1393,7 +1393,7 @@ console.log('✅ Script loaded successfully');
 // ═══════════════════════════════════════
 //  CONFIGURATION — Fill these values
 // ═══════════════════════════════════════
-const API_URL = "https://script.google.com/macros/s/AKfycbyOTTTSQJ43cyD_iYVQPbK6lpr-A3VR8JUVsvHmznCnMsy_Ts03xgrsIel7JhnMfLEa/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbySYLFhKEzWEk5-xGX-aVPXFeq7MJ3Y5XkRhOCdVXwoPUkBm03lng6mhDvLuFNUlu89/exec";
 const SECRET_TOKEN = "d6bf785b7cfcca40a85e3376cfb930da27a2842eb1d5a5b51105bf190edd07a2"; // ← paste your token here
 // ═══════════════════════════════════════
 //  API HELPER
@@ -2663,7 +2663,7 @@ function showSmsProgressCard(total, startTime) {
 
   if (_smsProgressInterval) clearInterval(_smsProgressInterval);
 
-  _smsProgressInterval = setInterval(async () => {
+  async function pollProgress() {
     const res = await api('getSMSProgress', { startTime, total });
     if (res.success) {
       const sent = res.sent || 0;
@@ -2711,7 +2711,11 @@ function showSmsProgressCard(total, startTime) {
         }
       }
     }
-  }, 5000);
+  }
+
+  // Check immediately on open, then every 5s
+  pollProgress();
+  _smsProgressInterval = setInterval(pollProgress, 5000);
 }
 
 async function retryFailedSMSFromCard() {
