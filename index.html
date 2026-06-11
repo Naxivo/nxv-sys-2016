@@ -196,6 +196,8 @@ body.dark .bnav {
 background: rgba(17, 24, 39, 0.95);
 border-top-color: var(--bdr);
 }
+body.dark .ni { opacity: 0.8; color: var(--tx); }
+body.dark .ni.active { opacity: 1; color: var(--p); }
 
 .ni {
 flex: 1;
@@ -964,7 +966,8 @@ body.logged-in .bnav {
 <span>▶</span><span style="margin-left:6px">📋 Select Individual Student</span>
 </div>
 <div class="fg" id="individualSmsSection" style="display:none;margin-top:6px">
-<select class="fs" id="smsStudent">
+<input class="fi" id="smsStudentSearch" type="text" placeholder="🔍 Search by name / reg no / phone..." oninput="filterSmsStudents()" style="margin-bottom:6px">
+<select class="fs" id="smsStudent" size="6" style="height:auto;min-height:120px">
 <option value="">-- Select student --</option>
 </select>
 </div>
@@ -1390,7 +1393,7 @@ console.log('✅ Script loaded successfully');
 // ═══════════════════════════════════════
 //  CONFIGURATION — Fill these values
 // ═══════════════════════════════════════
-const API_URL = "https://script.google.com/macros/s/AKfycbw_DSjuusVqCPbylLW4Ic-lxb-7h3ucx5om9RAPXw7ouY3z77UDu8f1TBptL11XTy-A/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyOTTTSQJ43cyD_iYVQPbK6lpr-A3VR8JUVsvHmznCnMsy_Ts03xgrsIel7JhnMfLEa/exec";
 const SECRET_TOKEN = "d6bf785b7cfcca40a85e3376cfb930da27a2842eb1d5a5b51105bf190edd07a2"; // ← paste your token here
 // ═══════════════════════════════════════
 //  API HELPER
@@ -1459,6 +1462,7 @@ const CACHE = {
   }
 };
 CACHE.init();
+CACHE.clear('home');
 
 function clearCachesFor(action) {
   switch (action) {
@@ -1707,19 +1711,7 @@ o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'
 // ═══════════════════════════════════════
 //  HOME DATA
 // ══════════════════════════════════════
-async function loadHomeData(force = false) {
-  if (!force) {
-    const cached = CACHE.get('home');
-    if (cached) {
-      document.getElementById('statTotal').textContent = cached.count;
-      document.getElementById('totalStudentCount').textContent = cached.count;
-      document.getElementById('activeBatchCount').textContent = cached.activeBatches;
-      document.getElementById('statAbsent').textContent = cached.absent;
-      document.getElementById('statAtt').textContent = cached.avgAtt + '%';
-      document.getElementById('statSMS').textContent = cached.smsToday;
-      return;
-    }
-  }
+async function loadHomeData() {
   const [stuRes, absRes, statsRes, batchRes] = await Promise.all([
     api('getStudentCount'),
     api('getAbsentStudents', {}),
@@ -1744,13 +1736,6 @@ async function loadHomeData(force = false) {
     document.getElementById('statAtt').textContent = '—%';
     document.getElementById('statSMS').textContent = '—';
   }
-  CACHE.set('home', {
-    count: stuRes.success ? stuRes.count : 0,
-    activeBatches: batchRes.success ? batchRes.batches.filter(b => b.status === 'Active').length : 0,
-    absent: absRes.success ? absRes.students.length : 0,
-    avgAtt: statsRes.success ? statsRes.avgAttendance : 0,
-    smsToday: statsRes.success ? statsRes.smsToday : 0
-  });
 }
 // ═══════════════════════════════════════
 //  BATCHES
@@ -2534,6 +2519,8 @@ const SMS_CHARS_PER_SEGMENT = 166;
 function onSmsToChange() {
 const sel = document.getElementById('smsStudent');
 if (sel) sel.value = '';
+const search = document.getElementById('smsStudentSearch');
+if (search) { search.value = ''; filterSmsStudents(); }
 }
 function toggleIndividualSms(el) {
 const section = document.getElementById('individualSmsSection');
@@ -2548,9 +2535,42 @@ section.style.display = 'none';
 arrow.textContent = '▶';
 }
 }
+function filterSmsStudents() {
+const q = (document.getElementById('smsStudentSearch')?.value || '').toLowerCase().trim();
+const sel = document.getElementById('smsStudent');
+const all = window._smsStudents || [];
+sel.innerHTML = '<option value="">-- Select student --</option>';
+if (!q) {
+all.forEach(s => {
+const phone = s.phone || 'No phone';
+const opt = document.createElement('option');
+opt.value = JSON.stringify({ phone: s.phone || '', name: s.name, regNo: s.regNo, batch: s.batch });
+opt.textContent = `${s.name} (${s.regNo}) - ${phone}`;
+sel.appendChild(opt);
+});
+return;
+}
+const filtered = all.filter(s =>
+(s.name || '').toLowerCase().includes(q) ||
+(s.regNo || '').toString().toLowerCase().includes(q) ||
+(s.phone || '').toString().toLowerCase().includes(q)
+);
+filtered.forEach(s => {
+const phone = s.phone || 'No phone';
+const opt = document.createElement('option');
+opt.value = JSON.stringify({ phone: s.phone || '', name: s.name, regNo: s.regNo, batch: s.batch });
+opt.textContent = `${s.name} (${s.regNo}) - ${phone}`;
+sel.appendChild(opt);
+});
+if (!filtered.length) {
+sel.innerHTML += '<option value="" disabled>No matching students</option>';
+}
+}
 async function loadSmsStudentDropdown() {
 const sel = document.getElementById('smsStudent');
 if (!sel) return;
+const search = document.getElementById('smsStudentSearch');
+if (search) search.value = '';
 const to = document.getElementById('smsTo')?.value;
 sel.innerHTML = '<option>Loading...</option>';
 let all = [];
@@ -2560,17 +2580,18 @@ if (to === 'all' || to === 'absent') {
 const b = batches.filter(b => b.status === 'Active');
 for (const batch of b) {
 const res = await api('getStudents', { batch: batch.name });
-if (res.success) all = all.concat(res.students);
+if (res.success) all = all.concat(res.students.map(s => ({ ...s, batch: batch.name })));
 else errMsg = res.error || 'API failed';
 }
 } else {
 const res = await api('getStudents', { batch: to });
-if (res.success) all = res.students;
+if (res.success) all = res.students.map(s => ({ ...s, batch: to }));
 else errMsg = res.error || 'API failed';
 }
 } catch (e) {
 errMsg = e.message;
 }
+window._smsStudents = all;
 sel.innerHTML = '<option value="">-- Select student --</option>';
 if (errMsg) {
 sel.innerHTML += `<option value="" disabled>Error: ${errMsg}</option>`;
