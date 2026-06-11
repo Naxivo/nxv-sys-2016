@@ -142,6 +142,10 @@ background: linear-gradient(145deg, rgba(255,255,255,.18), transparent 60%);
 .lbl { display: block; font-size: 11px; font-weight: 700; color: var(--tx3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 7px; }
 .inp { width: 100%; background: var(--sur); border: 1.5px solid var(--bdr); border-radius: var(--r2); padding: 13px 16px; font-size: 15px; font-family: var(--font); color: var(--tx); outline: none; transition: border-color .2s, box-shadow .2s; margin-bottom: 14px; }
 .inp:focus { border-color: var(--p); box-shadow: 0 0 0 3px rgba(29,78,216,.1); }
+.pw-wrap { position: relative; }
+.pw-wrap .inp, .pw-wrap .fi { padding-right: 44px; }
+.pw-eye { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; padding: 6px; opacity: .5; color: var(--tx2); stroke: var(--tx2); fill: none; }
+.pw-eye:hover { opacity: 1; }
 .login-hint { text-align: center; font-size: 12px; color: var(--tx4); margin-top: 14px; font-weight: 500; }
 .login-ver { text-align: center; font-size: 11px; color: var(--tx4); margin-top: 28px; font-style: italic; }
 /* ═══════════════════════════════════════
@@ -541,8 +545,6 @@ QUICK ACTIONS
 .about-contact a { color: #fff; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,.4); }
 /* LOADING */
 .loading { display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
-.spinner { width: 32px; height: 32px; border: 3px solid var(--bdr); border-top-color: var(--p); border-radius: 50%; animation: spin .8s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
 .modern-loader {
 display: flex;
 flex-direction: column;
@@ -581,6 +583,7 @@ animation: pulseText 2s ease-in-out infinite;
 .skel-line.w30 { width: 30%; }
 .skel-avatar { width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0; }
 .skel-card { padding: 16px; display: flex; gap: 12px; align-items: center; border-bottom: 1px solid var(--bdr); }
+.skel-stack { width:100%; display:flex; flex-direction:column; gap:10px; padding:8px 0; }
 .skel-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
 .skel-stat { padding: 14px; border-radius: var(--r); background: var(--sur); border: 1px solid var(--bdr); }
 .skel-stat .skel-line:first-child { width: 30px; height: 28px; margin-bottom: 8px; }
@@ -642,7 +645,10 @@ body.logged-in .bnav {
 <label class="lbl">Username</label>
 <input class="inp" type="text" id="lu" placeholder="Enter username" autocomplete="username">
 <label class="lbl">Password</label>
+<div class="pw-wrap">
 <input class="inp" type="password" id="lp" placeholder="••••••••" style="margin-bottom:6px" autocomplete="current-password">
+<button class="pw-eye" type="button" onclick="togglePass(this,'lp')" tabindex="-1"><svg viewBox="0 0 24 24" width="18" height="18" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+</div>
 <button class="btn btn-p" onclick="doLogin()" id="loginBtn">Sign In →</button>
 <div id="loginError" style="color:var(--err);font-size:12px;text-align:center;margin-top:10px;display:none;font-weight:600"></div>
 </div>
@@ -722,7 +728,7 @@ body.logged-in .bnav {
           <div class="sh"><div class="sh-t">Today's Activity</div></div>
           <div class="card">
             <div class="cb" style="padding:0 16px" id="recentActivity">
-              <div class="loading"><div class="spinner"></div></div>
+              <div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>
             </div>
           </div>
 </div>
@@ -800,7 +806,7 @@ body.logged-in .bnav {
 <input type="text" placeholder="Search student…" id="attSearch" oninput="filterAttList(this.value)">
 </div>
 <div class="card" style="padding:0;margin-bottom:12px" id="attList">
-<div class="loading"><div class="spinner"></div></div>
+<div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>
 </div>
 <button class="btn btn-ok" onclick="saveAttendance()">Save Attendance</button>
 </div>
@@ -822,7 +828,7 @@ body.logged-in .bnav {
         </div>
         <div class="sh"><div class="sh-t">Monthly Summary</div></div>
         <div class="card" id="attReport">
-          <div class="loading"><div class="spinner"></div></div>
+          <div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>
         </div>
       </div>
       <!-- Absent List -->
@@ -848,7 +854,7 @@ body.logged-in .bnav {
           <div class="abanner-tx" id="absentBannerTxt">Checking absent students…</div>
         </div>
         <div class="card" style="padding:0" id="absentList">
-          <div class="loading"><div class="spinner"></div></div>
+          <div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>
         </div>
       </div>
 </div>
@@ -857,11 +863,6 @@ body.logged-in .bnav {
 <div class="page" id="pg-exams">
 <div class="topbar">
 <div class="tb-info"><div class="tb-name">Exams</div></div>
-<div class="tb-right">
-<button class="ib" onclick="toast('📄 Export coming soon!')">
-<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--tx2);stroke-width:2;fill:none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-</button>
-</div>
 </div>
 <div class="con">
 <div class="stabs">
@@ -871,10 +872,7 @@ body.logged-in .bnav {
 </div>
 <!-- Add Marks -->
 <div id="ex-marks">
-<div class="btabs">
-<div class="btab active" onclick="swExamBatch(this,'Shitalakshya')">Shitalakshya</div>
-<div class="btab" onclick="swExamBatch(this,'Bhairab')">Bhairab</div>
-</div>
+<div class="btabs" id="examMarkBatchTabs"></div>
 <div class="fg" style="margin-bottom:12px">
 <label>Select Exam Date</label>
 <select class="fs" id="examDateSelect" onchange="loadMarks()">
@@ -887,16 +885,30 @@ body.logged-in .bnav {
 </div>
 <!-- Results -->
 <div id="ex-result" style="display:none">
-<div class="btabs">
-<div class="btab active" onclick="swBatch(this,'Shitalakshya')">Shitalakshya</div>
-<div class="btab" onclick="swBatch(this,'Bhairab')">Bhairab</div>
+<div class="btabs" id="examResultBatchTabs"></div>
+<div class="fg" style="margin-bottom:12px">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+<div style="display:flex;align-items:center;gap:10px">
+<button class="ib" onclick="examResultNav(-1)" title="Previous date">◀</button>
+<span id="resultDateDisplay" style="font-size:13px;font-weight:700;color:var(--tx2)"></span>
+<button class="ib" onclick="examResultNav(1)" title="Next date">▶</button>
 </div>
-<div id="resultsList"><div class="loading"><div class="spinner"></div></div></div>
+<button class="ib" onclick="downloadExamReport()" title="Download report">
+<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--tx2);stroke-width:2;fill:none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+</button>
+</div>
+</div>
+<div id="resultsList"><div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div></div>
 </div>
 <!-- Batch Result -->
 <div id="ex-batch" style="display:none">
-<div class="sg" style="margin-bottom:14px" id="batchAvgContainer"></div>
-<div class="card" id="batchResultCard"><div class="loading"><div class="spinner"></div></div></div>
+<div class="fg" style="margin-bottom:12px">
+<label>Select Exam Date</label>
+<select class="fs" id="batchResultDateSelect" onchange="loadBatchResults()">
+<option value="">— Select date —</option>
+</select>
+</div>
+<div id="batchResultContent"></div>
 </div>
 </div>
 </div>
@@ -994,14 +1006,14 @@ Contact: 01577299970</textarea>
       <!-- History -->
       <div id="sms-hist" style="display:none">
         <div class="card" style="padding:0" id="smsLogList">
-          <div class="loading"><div class="spinner"></div></div>
+          <div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>
         </div>
       </div>
     </div>
     <!-- Ex Students -->
     <div id="sms-exstudents" style="display:none">
       <div class="card" style="padding:0 16px" id="exStudentsContent">
-        <div class="loading"><div class="spinner"></div></div>
+        <div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>
       </div>
       <div class="fg" style="margin-top:12px">
         <label>Message</label>
@@ -1053,7 +1065,7 @@ Contact: 01577299970</textarea>
 <div class="ss">
 <div class="ss-t">Batch Management</div>
 <div class="card" style="padding:0" id="batchMgmt">
-<div class="loading"><div class="spinner"></div></div>
+<div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>
 </div>
 </div>
 <!-- Admin Only Settings (Teachers & Access) -->
@@ -1090,6 +1102,16 @@ Contact: 01577299970</textarea>
 <div class="si" onclick="syncData()">
 <div class="si-ic"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
 <div class="si-info"><div class="si-lb">Sync Google Sheets</div><div class="si-ds" id="lastSync">Tap to sync</div></div>
+<div class="si-ar">›</div>
+</div>
+<div class="si" onclick="setupTriggers()">
+<div class="si-ic"><svg viewBox="0 0 24 24"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"/><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"/></svg></div>
+<div class="si-info"><div class="si-lb">Install Triggers</div><div class="si-ds">Setup auto-archive, SMS, & scheduler</div></div>
+<div class="si-ar">›</div>
+</div>
+<div class="si" onclick="backupToDrive()">
+<div class="si-ic"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
+<div class="si-info"><div class="si-lb">Backup to Drive</div><div class="si-ds">One-click full backup → Google Drive</div></div>
 <div class="si-ar">›</div>
 </div>
 <div class="si" onclick="exportStudentsPDF()">
@@ -1301,9 +1323,9 @@ Contact: 01577299970</textarea>
 <div class="sht-handle"></div>
 <div class="sht-title">Change Password</div>
 <div class="sht-body">
-<div class="fg"><label>Current Password *</label><input class="fi" id="oldPass" type="password" placeholder="••••••••"></div>
-<div class="fg"><label>New Password *</label><input class="fi" id="newPass" type="password" placeholder="••••••••"></div>
-<div class="fg"><label>Confirm New Password *</label><input class="fi" id="confPass" type="password" placeholder="••••••••"></div>
+<div class="fg"><label>Current Password *</label><div class="pw-wrap"><input class="fi" id="oldPass" type="password" placeholder="••••••••"><button class="pw-eye" type="button" onclick="togglePass(this,'oldPass')" tabindex="-1"><svg viewBox="0 0 24 24" width="18" height="18" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+<div class="fg"><label>New Password *</label><div class="pw-wrap"><input class="fi" id="newPass" type="password" placeholder="••••••••"><button class="pw-eye" type="button" onclick="togglePass(this,'newPass')" tabindex="-1"><svg viewBox="0 0 24 24" width="18" height="18" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+<div class="fg"><label>Confirm New Password *</label><div class="pw-wrap"><input class="fi" id="confPass" type="password" placeholder="••••••••"><button class="pw-eye" type="button" onclick="togglePass(this,'confPass')" tabindex="-1"><svg viewBox="0 0 24 24" width="18" height="18" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
 <button class="btn btn-p" onclick="changePassword()">Change Password</button>
 </div>
 </div>
@@ -1315,7 +1337,7 @@ Contact: 01577299970</textarea>
 <div class="sht-title">Manage Teachers</div>
 <div class="sht-body">
 <div class="card" style="padding:0;margin-bottom:14px" id="teacherList">
-<div class="loading"><div class="spinner"></div></div>
+<div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>
 </div>
 <button class="btn btn-p" onclick="openSht('addTeacher')">+ Add New Teacher</button>
 </div>
@@ -1329,7 +1351,7 @@ Contact: 01577299970</textarea>
 <div class="sht-body">
 <div class="fg"><label>Full Name *</label><input class="fi" id="tName" placeholder="e.g. Mr. Karim"></div>
 <div class="fg"><label>Username *</label><input class="fi" id="tUser" placeholder="e.g. karim (lowercase)"></div>
-<div class="fg"><label>Password *</label><input class="fi" id="tPass" type="password" placeholder="••••••••"></div>
+<div class="fg"><label>Password *</label><div class="pw-wrap"><input class="fi" id="tPass" type="password" placeholder="••••••••"><button class="pw-eye" type="button" onclick="togglePass(this,'tPass')" tabindex="-1"><svg viewBox="0 0 24 24" width="18" height="18" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
 <div class="fg"><label>Role *</label>
 <select class="fs" id="tRole">
 <option value="Teacher">Teacher</option>
@@ -1364,7 +1386,8 @@ Contact: 01577299970</textarea>
 3. SMS alerts send automatically at 3 absences<br>
 4. Add exam marks by selecting exam date<br>
 5. View results and batch reports anytime<br>
-6. Admin can reactivate inactive students
+6. Admin can reactivate inactive students<br>
+7. Attendance auto-archives every 35 days (keeps system fast)
 </div>
 </div>
 <div class="card">
@@ -1381,8 +1404,17 @@ Contact: 01577299970</textarea>
 <div style="color:var(--err)">❌ Don't share login credentials</div>
 </div>
 </div>
+<div class="card" style="margin-top:11px">
+<div class="ch"><div class="ct">Auto Archive</div></div>
+<div class="cb" style="font-size:13px;color:var(--tx2);line-height:2;font-weight:500">
+📦 Attendance records older than 35 days are automatically moved to an "Archive_Attendance" sheet every 35 days at 3 AM.<br><br>
+✅ Keeps the system fast<br>
+✅ No data loss — everything stays in the same spreadsheet<br>
+✅ You can view archived data directly from Google Sheets
+</div>
+</div>
 <div style="text-align:center;font-size:12px;color:var(--tx4);font-weight:500;margin-top:14px;font-style:italic">
-Basic BCS Academy · v1.0 · Made in Bangladesh 🇧🇩
+Basic BCS Academy · v1.3 · Made in Bangladesh 🇧🇩
 </div>
 </div>
 </div>
@@ -1393,7 +1425,7 @@ console.log('✅ Script loaded successfully');
 // ═══════════════════════════════════════
 //  CONFIGURATION — Fill these values
 // ═══════════════════════════════════════
-const API_URL = "https://script.google.com/macros/s/AKfycbySYLFhKEzWEk5-xGX-aVPXFeq7MJ3Y5XkRhOCdVXwoPUkBm03lng6mhDvLuFNUlu89/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwznMMCXG-oIxTZmOBcNNFvwnH-zz7FwhBrMoy-UzG3PSZE_MoEMOK3-nScOMZCENw7/exec";
 const SECRET_TOKEN = "d6bf785b7cfcca40a85e3376cfb930da27a2842eb1d5a5b51105bf190edd07a2"; // ← paste your token here
 // ═══════════════════════════════════════
 //  API HELPER
@@ -1598,6 +1630,15 @@ const err = document.getElementById('loginError');
 err.textContent = msg;
 err.style.display = 'block';
 }
+function togglePass(btn, id) {
+const inp = document.getElementById(id);
+if (!inp) return;
+const isPass = inp.type === 'password';
+inp.type = isPass ? 'text' : 'password';
+btn.innerHTML = isPass
+? '<svg viewBox="0 0 24 24" width="18" height="18" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+: '<svg viewBox="0 0 24 24" width="18" height="18" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+}
 function doLogout() {
 localStorage.removeItem('bcsUser');
 currentUser = null;
@@ -1646,10 +1687,11 @@ if (name === 'students') loadStudents().catch(err => console.error('Students loa
 if (name === 'attendance') loadAttendanceList().catch(err => console.error('Attendance load error:', err));
 if (name === 'settings') {
 console.log('⚙️ Loading settings page...');
-loadBatchManagement().catch(err => console.error('❌ Batch management error:', err));
-if (currentUser?.role === 'Admin') {
-loadTeachers().catch(err => console.error('❌ Teachers load error:', err));
-}
+  loadBatchManagement().catch(err => console.error('❌ Batch management error:', err));
+  if (currentUser?.role === 'Admin') {
+    loadTeachers().catch(err => console.error('❌ Teachers load error:', err));
+    loadAutoSMSSetting().catch(err => console.error('❌ Auto SMS setting load error:', err));
+  }
 }
 if (name === 'sms') { refreshBalance().catch(err => console.error('Balance error:', err)); loadScheduleList().catch(err => console.error('Schedule error:', err)); }
 if (name === 'exams') loadExamDates().catch(err => console.error('Exam dates error:', err));
@@ -1668,8 +1710,8 @@ const el = document.getElementById(id);
 if (el) el.style.display = 'block';
   if (id === 'at-abs') { loadAbsentStudents(); loadDailyAbsent(); }
   if (id === 'at-rep') { loadAttendanceReport(); loadDailyReport(); }
-if (id === 'ex-result') loadResults();
-if (id === 'ex-batch') loadBatchResults();
+  if (id === 'ex-result') { examResultDateIndex = 0; loadResults(); }
+  if (id === 'ex-batch') loadBatchResults();
 }
 // ═══════════════════════════════════════
 //  BATCH TABS
@@ -1694,11 +1736,20 @@ el.classList.add('active');
 currentAttBatch = batch;
 loadAttendanceList();
 }
-function swExamBatch(el, batch) {
+function swExamMarkBatch(el, batch) {
 el.closest('.btabs').querySelectorAll('.btab').forEach(t => t.classList.remove('active'));
 el.classList.add('active');
 currentExamBatch = batch;
+loadExamDates();
 loadMarks();
+}
+function swExamResultBatch(el, batch) {
+el.closest('.btabs').querySelectorAll('.btab').forEach(t => t.classList.remove('active'));
+el.classList.add('active');
+currentExamBatch = batch;
+loadExamDates();
+examResultDateIndex = 0;
+loadResults();
 }
 // ═══════════════════════════════════════
 //  DRAWERS
@@ -1782,6 +1833,25 @@ stuTabs.innerHTML += `<div class="btab" onclick="swBatch(this,'${b.name}')" data
     });
     if (active.length > 0) { absBatch = active[0].name; }
   }
+  // Update exam mark batch tabs
+  const examMarkTabs = document.getElementById('examMarkBatchTabs');
+  if (examMarkTabs) {
+    examMarkTabs.innerHTML = '';
+    const active = batches.filter(b => b.status === 'Active');
+    active.forEach((b, i) => {
+      examMarkTabs.innerHTML += `<div class="btab${i===0?' active':''}" onclick="swExamMarkBatch(this,'${b.name}')">${b.name}</div>`;
+    });
+    if (active.length > 0) { currentExamBatch = active[0].name; }
+  }
+  // Update exam result batch tabs
+  const examResultTabs = document.getElementById('examResultBatchTabs');
+  if (examResultTabs) {
+    examResultTabs.innerHTML = '';
+    const active = batches.filter(b => b.status === 'Active');
+    active.forEach((b, i) => {
+      examResultTabs.innerHTML += `<div class="btab${i===0?' active':''}" onclick="swExamResultBatch(this,'${b.name}')">${b.name}</div>`;
+    });
+  }
 // Update add student batch select
 const stuBatchSel = document.getElementById('stuBatch');
 if (stuBatchSel) {
@@ -1806,7 +1876,7 @@ async function loadBatchManagement() {
     return;
   }
   try {
-    el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+    el.innerHTML = '<div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>';
     const res = await api('getBatches');
 console.log('📊 Batches response:', res);
 if (!res.success) {
@@ -2219,7 +2289,8 @@ s.name.toLowerCase().includes(q.toLowerCase()) || s.regNo.toString().includes(q)
 renderAttList(filtered, attRecords);
 }
 function markAtt(btn, type, regNo) {
-const row = btn.closest('.ati');
+  if (btn.classList.contains('active')) return;
+  const row = btn.closest('.ati');
 const prev = row.querySelector('.atb.active');
 const wasP = prev?.classList.contains('P');
 const wasA = prev?.classList.contains('A');
@@ -2278,7 +2349,7 @@ loadAttendanceList();
 }
 async function loadAttendanceReport() {
 const el = document.getElementById('attReport');
-el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+el.innerHTML = '<div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>';
 const bd = getBDDate();
 const month = `${MONTHS[bd.getMonth()]} ${bd.getFullYear()}`;
   const res = await api('getAttendanceReport', { batch: repBatch, month });
@@ -2302,7 +2373,7 @@ el.innerHTML = html;
 async function loadAbsentStudents() {
 const el = document.getElementById('absentList');
 const banner = document.getElementById('absentBannerTxt');
-el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+el.innerHTML = '<div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>';
 const res = await api('getAbsentStudents', {});
 if (!res.success) { el.innerHTML = '<div class="cb">Failed to load</div>'; return; }
 banner.textContent = `${res.students.length} students have 3+ absences this month`;
@@ -2321,14 +2392,23 @@ ${currentUser?.role === 'Admin' ? `<button class="btn btn-sm" style="background:
 // ═══════════════════════════════════════
 //  EXAMS
 // ══════════════════════════════════════
+let examResultDateIndex = 0;
+
 async function loadExamDates() {
 const res = await api('getExamDates', { batch: currentExamBatch });
 const sel = document.getElementById('examDateSelect');
-if (!sel) return;
+const batchSel = document.getElementById('batchResultDateSelect');
+if (sel) {
 sel.innerHTML = '<option value="">— Select date —</option>';
+}
+if (batchSel) {
+batchSel.innerHTML = '<option value="">— Select date —</option>';
+}
 if (res.success) {
 examDates = res.dates;
-res.dates.forEach(d => { sel.innerHTML += `<option value="${d}">${d}</option>`; });
+if (sel) res.dates.forEach(d => { sel.innerHTML += `<option value="${d}">${d}</option>`; });
+if (batchSel) res.dates.forEach(d => { batchSel.innerHTML += `<option value="${d}">${d}</option>`; });
+examResultDateIndex = 0;
 }
 }
 async function loadMarks() {
@@ -2340,11 +2420,15 @@ if (saveBtn) saveBtn.style.display = 'none';
 return;
 }
 const el = document.getElementById('marksList');
-el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+el.innerHTML = '<div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>';
 const stuRes = await api('getStudents', { batch: currentExamBatch });
 const marksRes = await api('getMarks', { examDate: date, batch: currentExamBatch });
 const existingMarks = {};
-if (marksRes.success) marksRes.marks.forEach(m => { existingMarks[m.regNo] = m.score; });
+let totalMarks = 100;
+if (marksRes.success) {
+marksRes.marks.forEach(m => { existingMarks[m.regNo] = m.score; });
+totalMarks = marksRes.totalMarks || 100;
+}
 if (!stuRes.success) { el.innerHTML = '<div class="cb">Failed to load students</div>'; return; }
 const students = stuRes.students.filter(s => s.status === 'Active');
 if (!students.length) { el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3)">No active students in this batch</div>'; return; }
@@ -2352,11 +2436,12 @@ const avg = marksRes.success && marksRes.marks.length > 0
 ? Math.round(marksRes.marks.reduce((a, b) => a + Number(b.score), 0) / marksRes.marks.length)
 : '—';
 let html = `<div class="exc"><div class="exh"><div class="exh-n">${currentExamBatch} · ${date}</div><div class="exh-avg">Avg: ${avg}</div></div>`;
+html += `<div class="fg" style="padding:0 16px 8px"><label>Total Marks</label><input class="fs" type="number" id="totalMarksInput" value="${totalMarks}" min="1" style="max-width:100px"></div>`;
 students.forEach(s => {
 const score = existingMarks[s.regNo] || '';
 html += `<div class="exr">
 <div class="exr-n">${s.name} <span style="color:var(--tx4);font-size:11px">· ${s.regNo}</span></div>
-<input class="mi" type="number" id="mark-${s.regNo}" value="${score}" min="0" max="100" placeholder="—">
+<input class="mi" type="number" id="mark-${s.regNo}" value="${score}" min="0" max="${totalMarks}" placeholder="—">
 </div>`;
 });
 html += '</div>';
@@ -2366,6 +2451,8 @@ if (saveBtn) saveBtn.style.display = 'flex';
 async function saveMarks() {
   const date = document.getElementById('examDateSelect')?.value;
   if (!date) { toast('❌ Select exam date first'); return; }
+  const totalMarksInput = document.getElementById('totalMarksInput');
+  const totalMarks = totalMarksInput ? Number(totalMarksInput.value) || 100 : 100;
   const stuRes = await api('getStudents', { batch: currentExamBatch });
   if (!stuRes.success) { toast('❌ Could not load students'); return; }
   const marks = stuRes.students.filter(s => s.status === 'Active').map(s => {
@@ -2374,7 +2461,7 @@ async function saveMarks() {
   });
   const btn = document.getElementById('saveMarksBtn');
   await withButtonState(btn, async () => {
-    const res = await api('saveMarks', { examDate: date, batch: currentExamBatch, marks });
+    const res = await api('saveMarks', { examDate: date, batch: currentExamBatch, marks, totalMarks });
     return res;
   }, { loading: 'Saving...', success: '✅ Saved!', error: '❌ Failed!' });
 }
@@ -2383,64 +2470,112 @@ const date = document.getElementById('newExamDate').value;
 if (!date) { toast('❌ Select a date'); return; }
 const formatted = new Date(date).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
 const sel = document.getElementById('examDateSelect');
+if (sel) {
 sel.innerHTML += `<option value="${formatted}">${formatted}</option>`;
 sel.value = formatted;
+}
+const batchSel = document.getElementById('batchResultDateSelect');
+if (batchSel) {
+batchSel.innerHTML += `<option value="${formatted}">${formatted}</option>`;
+}
 toast('✅ Exam date added!');
 closeSht('addExamDate');
 loadMarks();
 }
 async function loadResults() {
 const el = document.getElementById('resultsList');
-el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-if (!examDates.length) { el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M14 2H6"/></svg><p>No exam dates found</p></div>'; return; }
-const res = await api('getMarks', { examDate: examDates[0], batch: currentExamBatch });
+const display = document.getElementById('resultDateDisplay');
+el.innerHTML = '<div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>';
+if (!examDates.length) { el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M14 2H6"/></svg><p>No exam dates found</p></div>'; if (display) display.textContent = ''; return; }
+if (examResultDateIndex < 0) examResultDateIndex = 0;
+if (examResultDateIndex >= examDates.length) examResultDateIndex = examDates.length - 1;
+const date = examDates[examResultDateIndex];
+if (display) display.textContent = date;
+const res = await api('getMarks', { examDate: date, batch: currentExamBatch });
 if (!res.success || !res.marks.length) {
-el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M14 2H6"/></svg><p>No results found</p></div>';
+el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M14 2H6"/></svg><p>No results for this date</p></div>';
 return;
 }
+const totalMarks = res.totalMarks || 100;
 const medals = ['🥇','🥈','🥉'];
 el.innerHTML = res.marks.map((m, i) => `
 <div class="rc">
 <div class="rch">
 <div class="rk" style="${i<3?`background:${['#92400e','#64748b','#78350f'][i]}`:''}">${medals[i] || i+1}</div>
 <div><div class="rn">${m.name}</div><div class="rb">Reg: ${m.regNo} · ${currentExamBatch}</div></div>
-<div class="rs"><div class="rs-v">${m.score}</div><div class="rs-l">/ 100</div></div>
+<div class="rs"><div class="rs-v">${m.score}</div><div class="rs-l">/ ${totalMarks}</div></div>
 </div>
 <div class="rsubs">
-<div class="rsp">${examDates[0]} <span style="color:var(--p);font-weight:800">${m.score}</span></div>
+<div class="rsp">${date} <span style="color:var(--p);font-weight:800">${m.score}</span></div>
 </div>
 </div>`).join('');
 }
+
+function examResultNav(dir) {
+examResultDateIndex += dir;
+loadResults();
+}
+
+function downloadExamReport() {
+if (!examDates.length || examResultDateIndex < 0 || examResultDateIndex >= examDates.length) { toast('❌ No data to download'); return; }
+const date = examDates[examResultDateIndex];
+const el = document.getElementById('resultsList');
+const rows = el.querySelectorAll('.rc');
+if (!rows.length) { toast('❌ No results to download'); return; }
+let html = `<html><head><meta charset="utf-8"><title>Exam Report</title>
+<style>
+body{font-family:Arial,sans-serif;margin:40px}
+h1{font-size:20px;margin-bottom:4px}
+.sub{color:#666;font-size:14px;margin-bottom:20px}
+table{width:100%;border-collapse:collapse}
+th{background:#1a73e8;color:#fff;padding:10px 12px;text-align:left;font-size:13px}
+td{padding:10px 12px;border-bottom:1px solid #ddd;font-size:13px}
+tr:nth-child(even){background:#f8f9fa}
+.rank{font-weight:700;color:#1a73e8}
+</style></head><body>
+<h1>Exam Report</h1>
+<div class="sub">Batch: ${currentExamBatch} &nbsp;|&nbsp; Date: ${date}</div>
+<table><thead><tr><th>Rank</th><th>Name</th><th>Reg No</th><th>Score</th></tr></thead><tbody>`;
+rows.forEach((row, i) => {
+const name = row.querySelector('.rn')?.textContent || '';
+const reg = row.querySelector('.rb')?.textContent?.replace('Reg: ', '')?.split('·')[0]?.trim() || '';
+const score = row.querySelector('.rs-v')?.textContent || '';
+html += `<tr><td class="rank">${i+1}</td><td>${name}</td><td>${reg}</td><td>${score}</td></tr>`;
+});
+html += `</tbody></table></body></html>`;
+const w = window.open('', '_blank');
+w.document.write(html);
+w.document.close();
+setTimeout(() => { w.print(); }, 500);
+}
 async function loadBatchResults() {
-const el = document.getElementById('batchResultCard');
-el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-if (!examDates.length) { el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3)">No exam dates found</div>'; return; }
-const results = {};
-  const activeBatchNames = batches.filter(b => b.status === 'Active').map(b => b.name);
-  if (!activeBatchNames.length) { el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3)">No active batches</div>'; return; }
-  for (const b of activeBatchNames) {
-const res = await api('getMarks', { examDate: examDates[0], batch: b });
+const el = document.getElementById('batchResultContent');
+el.innerHTML = '<div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>';
+const date = document.getElementById('batchResultDateSelect')?.value;
+if (!date) { el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3)">Select an exam date</div>'; return; }
+const activeBatchNames = batches.filter(b => b.status === 'Active').map(b => b.name);
+if (!activeBatchNames.length) { el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3)">No active batches</div>'; return; }
+let html = `<div class="ch"><div class="ct">Top 3 Scorers · ${date}</div></div><div class="cb" style="padding:0 16px">`;
+const batchResults = await Promise.all(activeBatchNames.map(b =>
+api('getMarks', { examDate: date, batch: b })
+));
+batchResults.forEach((res, idx) => {
+const b = activeBatchNames[idx];
 if (res.success && res.marks.length) {
-const avg = Math.round(res.marks.reduce((a, m) => a + Number(m.score), 0) / res.marks.length);
-results[b] = avg;
-}
-}
-  const avgContainer = document.getElementById('batchAvgContainer');
-  if (avgContainer) {
-    avgContainer.innerHTML = activeBatchNames.map((b, i) => {
-      const colors = ['b','g','o','r'];
-      const icons = ['📘','📗','📙','📕'];
-      const avg = results[b] || '—';
-      return `<div class="st ${colors[i % colors.length]}"><div class="st-ic">${icons[i % icons.length]}</div><div class="st-v">${avg}</div><div class="st-l">${b} Avg</div></div>`;
-    }).join('');
-  }
-let html = `<div class="ch"><div class="ct">All Batches · ${examDates[0]}</div></div><div class="cb" style="padding:0 16px">`;
-Object.entries(results).forEach(([b, avg]) => {
-html += `<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--bdr)">
-<div style="width:34px;height:34px;border-radius:9px;background:var(--pl);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--p);font-size:11px;border:1px solid var(--pm)">${b.slice(0,4)}</div>
-<div style="flex:1"><div style="font-size:13px;font-weight:700">${b}</div><div class="pb"><div class="pf" style="width:${avg}%;background:var(--p)"></div></div></div>
-<div style="font-size:18px;font-weight:800;color:var(--p)">${avg}</div>
+const totalMarks = res.totalMarks || 100;
+const top3 = res.marks.slice(0, 3);
+html += `<div style="margin:12px 0;padding:12px;border:1px solid var(--bdr);border-radius:10px;background:var(--bg2)">
+<div style="font-size:14px;font-weight:700;margin-bottom:8px;color:var(--p)">📚 ${b}</div>`;
+const medals = ['🥇','🥈','🥉'];
+top3.forEach((m, i) => {
+html += `<div style="display:flex;align-items:center;gap:10px;padding:6px 0">
+<span style="font-size:16px">${medals[i]}</span>
+<span style="flex:1;font-size:13px;font-weight:600">${m.name} <span style="color:var(--tx4);font-weight:400">· ${m.regNo}</span></span>
+<span style="font-size:15px;font-weight:800;color:var(--p)">${m.score}/${totalMarks}</span>
 </div>`;
+});
+html += `</div>`;
+}
 });
 html += '</div>';
 el.innerHTML = html;
@@ -2505,10 +2640,10 @@ const time = document.getElementById('balTime');
 if (amt) amt.textContent = 'Checking...';
 const res = await api('checkBalance');
 if (res.success) {
-if (amt) amt.textContent = `৳ ${res.balance}`;
+if (amt) amt.textContent = `৳ ${Number(res.balance).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}`;
 if (time) time.textContent = 'Last checked: just now';
 const card = document.getElementById('balCard');
-if (card && Number(res.balance) < 200) card.classList.add('low');
+if (card && Number(res.balance) < 150) card.classList.add('low');
 else if (card) card.classList.remove('low');
 } else {
 if (amt) amt.textContent = 'SMS not configured';
@@ -2737,7 +2872,7 @@ else toast('❌ ' + (res.error || 'SMS failed'));
 }
 async function loadSMSLog() {
   const el = document.getElementById('smsLogList');
-  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  el.innerHTML = '<div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>';
   const res = await api('getSMSLog');
   if (!res.success || !res.logs.length) {
     el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><p>No SMS history</p></div>';
@@ -2898,7 +3033,7 @@ console.error('❌ teacherList element not found!');
 return;
 }
 try {
-el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+el.innerHTML = '<div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>';
 const res = await api('getTeachers');
 console.log(' Teachers response:', res);
 if (!res.success) {
@@ -2968,8 +3103,21 @@ async function changePassword() {
     return res;
   }, { loading: 'Updating...', success: '✅ Updated!', error: '❌ Failed!' });
 }
+async function loadAutoSMSSetting() {
+const res = await api('getSetting', { key: 'AUTO_SMS' });
+const cb = document.getElementById('autoSmsTog');
+if (cb) cb.checked = res.success && res.value === 'true';
+}
 async function toggleAutoSMS() {
-toast('📱 Update AUTO_SMS in Google Sheets Settings tab');
+const cb = document.getElementById('autoSmsTog');
+const val = cb?.checked ? 'true' : 'false';
+const res = await api('updateSetting', { key: 'AUTO_SMS', value: val });
+if (res.success) {
+toast(val === 'true' ? '✅ Auto Absence SMS enabled' : ' Auto Absence SMS disabled');
+} else {
+toast('❌ Failed to update');
+if (cb) cb.checked = !cb.checked;
+}
 }
 async function syncData() {
 toast('️ Syncing with Google Sheets...');
@@ -2978,6 +3126,25 @@ await loadBatches();
 const ls = document.getElementById('lastSync');
 if (ls) ls.textContent = 'Last synced: just now';
 toast('✅ Sync complete!');
+}
+async function setupTriggers() {
+if (!confirm('This will install all automatic triggers:\n\n1. Auto Archive (every 35 days at 3 AM)\n2. Absence SMS (daily at 9 PM)\n3. Full-month check (daily at 10 PM)\n4. SMS Scheduler (every 15 min)\n\nProceed?')) return;
+toast('⏳ Installing triggers...');
+const res = await api('createTriggers');
+if (res.success) {
+toast('✅ ' + res.message);
+} else {
+toast('❌ Failed: ' + (res.error || 'Unknown error'));
+}
+}
+async function backupToDrive() {
+toast('⏳ Backing up to Drive...');
+const res = await api('backupToDrive');
+if (res.success) {
+toast('✅ ' + res.message);
+} else {
+toast('❌ Backup failed: ' + (res.error || 'Unknown error'));
+}
 }
 // ═══════════════════════════════════════
 //  EXPORT
@@ -3196,7 +3363,7 @@ async function loadTransferStudents() {
     document.getElementById('transferStudentList').innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3);font-size:13px">Select FROM batch to load students</div>';
     return;
   }
-  document.getElementById('transferStudentList').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  document.getElementById('transferStudentList').innerHTML = '<div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>';
   const res = await api('getStudents', { batch });
   if (res.success) {
     transferStudents = res.students.filter(s => s.status === 'Active');
@@ -3277,7 +3444,7 @@ let exSelectedBatches = new Set();
 async function loadExStudentsUI() {
   const el = document.getElementById('exStudentsContent');
   if (!el) return;
-  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  el.innerHTML = '<div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>';
   const res = await api('getExBatches');
   if (!res.success || !res.batches.length) {
     el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><p>No ex-batches found. Deactivate a batch in Settings first.</p></div>';
@@ -3359,7 +3526,7 @@ async function loadDailyReport() {
   const dateStr = formatDateShort(repDate);
   document.getElementById('repDate').textContent = dateStr;
   const el = document.getElementById('dailyReportTable');
-  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  el.innerHTML = '<div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>';
   const res = await api('getAttendance', { date: dateStr, batch: repBatch });
   if (!res.success || !res.records.length) {
     el.innerHTML = '<div class="empty" style="padding:16px"><p>No attendance data for this date</p></div>';
@@ -3405,7 +3572,7 @@ async function loadDailyAbsent() {
   const dateStr = formatDateShort(absDate);
   document.getElementById('absDate').textContent = dateStr;
   const el = document.getElementById('dailyAbsentList');
-  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  el.innerHTML = '<div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>';
   const res = await api('getDailyAbsent', { date: dateStr, batch: absBatch });
   if (!res.success || !res.students.length) {
     el.innerHTML = '<div class="empty" style="padding:16px"><p>✅ No absent students for this date</p></div>';
@@ -3453,7 +3620,7 @@ async function loadFailedSMS() {
   const banner = document.getElementById('failedBanner');
   list.style.display = 'block';
   if (banner) banner.style.display = 'none';
-  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  el.innerHTML = '<div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>';
   const res = await api('getFailedSMS');
   if (!res.success || !res.logs.length) {
     el.innerHTML = '<div class="cb" style="text-align:center;color:var(--ok);font-weight:700">✅ No failed SMS</div>';
