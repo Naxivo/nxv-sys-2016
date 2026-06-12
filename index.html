@@ -1416,7 +1416,7 @@ console.log('✅ Script loaded successfully');
 // ═══════════════════════════════════════
 //  CONFIGURATION — Fill these values
 // ═══════════════════════════════════════
-const API_URL = "https://script.google.com/macros/s/AKfycby_YV0r65HSYiCfIm2i_cvTcpezYItwozDvMWdvoxCDLFaBvws9hbuNgr0yCT5MO4p8/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbw2yyle1dok9ukc9ISOjJUyZg_5Mc8vIwSDQS02Ix76R9clsZ_DmMdQH_cX92NlzeU/exec";
 const SECRET_TOKEN = "d6bf785b7cfcca40a85e3376cfb930da27a2842eb1d5a5b51105bf190edd07a2"; // ← paste your token here
 // ═══════════════════════════════════════
 //  API HELPER
@@ -1534,7 +1534,7 @@ if (t) t.checked = true;
 const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 function getBDDate(date = new Date()) {
-const bd = new Date(date.toLocaleString('en-US', { timeZone: 'Asia/Dhaka' }));
+const bd = new Date(date.toLocaleString('en-BD', { timeZone: 'Asia/Dhaka' }));
 return bd;
 }
 function formatDate(date) {
@@ -2421,11 +2421,11 @@ let examResultDateIndex = 0;
 function fmtDateDisplay(d) {
   if (d && typeof d === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(d)) {
     const dt = new Date(d);
-    if (!isNaN(dt)) return dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Dhaka' });
+    if (!isNaN(dt)) return dt.toLocaleDateString('en-BD', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Dhaka' });
   }
   if (d && typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d)) {
     const dt = new Date(d + 'T00:00:00');
-    if (!isNaN(dt)) return dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Dhaka' });
+    if (!isNaN(dt)) return dt.toLocaleDateString('en-BD', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Dhaka' });
   }
   return d;
 }
@@ -2449,7 +2449,7 @@ function examResultJump(el) {
 }
 async function loadMarks() {
 const input = document.getElementById('examDateInput');
-const date = input?.value ? new Date(input.value).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'Asia/Dhaka' }) : '';
+const date = input?.value ? new Date(input.value).toLocaleDateString('en-BD', { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'Asia/Dhaka' }) : '';
 const saveBtn = document.getElementById('saveMarksBtn');
 if (!date) {
 document.getElementById('marksList').innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16"/><polyline points="14 2 14 8 20 8"/></svg><p>Select exam date to add marks</p></div>';
@@ -2532,7 +2532,7 @@ if (saveBtn) saveBtn.style.display = 'flex';
 }
 async function saveMarks() {
   const input = document.getElementById('examDateInput');
-  const date = input?.value ? new Date(input.value).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'Asia/Dhaka' }) : '';
+  const date = input?.value ? new Date(input.value).toLocaleDateString('en-BD', { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'Asia/Dhaka' }) : '';
   if (!date) { toast('❌ Select exam date first'); return; }
   const totalMarksInput = document.getElementById('totalMarksInput');
   const totalMarks = totalMarksInput ? Number(totalMarksInput.value) || 100 : 100;
@@ -2640,7 +2640,7 @@ async function loadBatchResults() {
 const el = document.getElementById('batchResultContent');
 el.innerHTML = '<div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>';
 const input = document.getElementById('batchResultDateInput');
-const date = input?.value ? new Date(input.value).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'Asia/Dhaka' }) : '';
+const date = input?.value ? new Date(input.value).toLocaleDateString('en-BD', { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'Asia/Dhaka' }) : '';
 if (!date) { el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3)">Select an exam date</div>'; return; }
 const activeBatchNames = batches.filter(b => b.status === 'Active').map(b => b.name);
 if (!activeBatchNames.length) { el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3)">No active batches</div>'; return; }
@@ -3903,7 +3903,8 @@ if (!worksheet[cellAddress]) continue;
 worksheet[cellAddress].s = {font:{bold:true,color:{rgb:"FFFFFFFF"}},fill:{fgColor:{rgb:"FF1D4ED8"}}};
 }
 XLSX.utils.book_append_sheet(workbook, worksheet, batchName.toLowerCase()==='all'?'All Students':batchName);
-const fileName = `${exportTitle}_Students_${new Date().toISOString().slice(0,10)}.xlsx`;
+const bd = getBDDate();
+const fileName = `${exportTitle}_Students_${bd.getFullYear()}-${String(bd.getMonth()+1).padStart(2,'0')}-${String(bd.getDate()).padStart(2,'0')}.xlsx`;
 XLSX.writeFile(workbook, fileName);
 if (typeof toast === 'function') toast(`✅ Excel downloaded! (${students.length} students)`);
 } catch (err) {
