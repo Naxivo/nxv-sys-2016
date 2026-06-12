@@ -2862,7 +2862,7 @@ sel.innerHTML = '<option value="">-- Select teacher --</option>';
 if (res.success && res.teachers) {
 res.teachers.forEach(t => {
 const opt = document.createElement('option');
-opt.value = JSON.stringify({ phone: t.phone, name: t.name, batch: 'Teacher' });
+opt.value = JSON.stringify({ phone: t.phone, name: t.name });
 opt.textContent = `${t.name} - ${t.phone}`;
 sel.appendChild(opt);
 });
