@@ -959,6 +959,11 @@ body.logged-in .bnav {
 <div class="stc-lb">Announcement</div>
 <div class="stc-ds">Class, exam notice</div>
 </div>
+<div class="stc" onclick="selSms(this,'teacher')">
+<div class="stc-ic"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+<div class="stc-lb">Teacher</div>
+<div class="stc-ds">Message to teacher</div>
+</div>
 <div class="stc" onclick="selSms(this,'custom')">
 <div class="stc-ic"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
 <div class="stc-lb">Custom</div>
@@ -982,6 +987,16 @@ body.logged-in .bnav {
 <input class="fi" id="smsStudentSearch" type="text" placeholder="🔍 Search by name / reg no / phone..." oninput="filterSmsStudents()" style="margin-bottom:6px">
 <select class="fs" id="smsStudent" size="6" style="height:auto;min-height:120px">
 <option value="">-- Select student --</option>
+</select>
+</div>
+</div>
+<div style="margin-top:8px">
+<div style="cursor:pointer;font-size:13px;font-weight:600;color:var(--p);padding:6px 0" onclick="toggleTeacherSms(this)">
+<span>▶</span><span style="margin-left:6px">👨‍🏫 Select Teacher</span>
+</div>
+<div class="fg" id="teacherSmsSection" style="display:none;margin-top:6px">
+<select class="fs" id="smsTeacher" size="5" style="height:auto;min-height:100px">
+<option value="">-- Select teacher --</option>
 </select>
 </div>
 </div>
@@ -1069,6 +1084,15 @@ Contact: 01577299970</textarea>
 <div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>
 </div>
 </div>
+<!-- Add Teachers (for SMS) -->
+<div class="ss">
+<div class="ss-t">Add Teachers</div>
+<div class="si" onclick="openAddTeacherSms()">
+<div class="si-ic"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+<div class="si-info"><div class="si-lb">Add Teachers</div><div class="si-ds">Save teacher name & phone for SMS</div></div>
+<div class="si-ar">›</div>
+</div>
+</div>
 <!-- Admin Only Settings (Teachers & Access) -->
 <div class="ss" id="adminOnlySettings">
 <div class="ss-t">Teachers & Access</div>
@@ -1094,7 +1118,7 @@ Contact: 01577299970</textarea>
 <div class="si">
 <div class="si-ic"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
 <div class="si-info"><div class="si-lb">Auto Absence SMS</div><div class="si-ds">Trigger at 3 absences per month</div></div>
-<label class="tog"><input type="checkbox" id="autoSmsTog" onchange="toggleAutoSMS()"><span class="tog-sl"></span></label>
+<label class="tog"><input type="checkbox" id="autoSmsTog" onclick="toggleAutoSMS()"><span class="tog-sl"></span></label>
 </div>
 </div>
 <!-- Data -->
@@ -1349,7 +1373,20 @@ Contact: 01577299970</textarea>
 <option value="Admin">Admin</option>
 </select>
 </div>
+<div class="fg"><label>Phone Number</label><input class="fi" id="tPhone" type="tel" placeholder="e.g. 017xxxxxxxx"></div>
 <button class="btn btn-p" onclick="addTeacher()">Add Teacher</button>
+</div>
+</div>
+</div>
+<!-- Teacher Contacts for SMS -->
+<div class="ov" id="ov-addTeacherSms">
+<div class="sht">
+<div class="sht-handle"></div>
+<div class="sht-title">Add Teacher</div>
+<div class="sht-body">
+<div class="fg"><label>Full Name *</label><input class="fi" id="atsName" placeholder="e.g. Mr. Karim"></div>
+<div class="fg"><label>Phone Number *</label><input class="fi" id="atsPhone" type="tel" placeholder="e.g. 017xxxxxxxx"></div>
+<button class="btn btn-p" id="atsBtn" onclick="saveAddTeacherSms()">Save</button>
 </div>
 </div>
 </div>
@@ -1416,7 +1453,7 @@ console.log('✅ Script loaded successfully');
 // ═══════════════════════════════════════
 //  CONFIGURATION — Fill these values
 // ═══════════════════════════════════════
-const API_URL = "https://script.google.com/macros/s/AKfycbw2yyle1dok9ukc9ISOjJUyZg_5Mc8vIwSDQS02Ix76R9clsZ_DmMdQH_cX92NlzeU/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwF6v4S5RaSWh2gJUUZUh5z1Eyf4PC-JsHSt2w5eHKn1cRlp38bUOczjoijSpCig2Ge/exec";
 const SECRET_TOKEN = "d6bf785b7cfcca40a85e3376cfb930da27a2842eb1d5a5b51105bf190edd07a2"; // ← paste your token here
 // ═══════════════════════════════════════
 //  API HELPER
@@ -2694,6 +2731,14 @@ Thank you
 Basic BCS Academy
 Contact: 01577299970`
 },
+teacher: {
+to: 'all',
+msg: `Dear [Teacher Name] sir,
+
+Thank you
+Basic BCS Academy
+Contact: 01577299970`
+},
 custom: {
 to: 'all',
 msg: `Dear [Student Name], Reg: [RegNo], Batch: [Batch],
@@ -2711,6 +2756,14 @@ const msg = document.getElementById('smsMsg');
 const sel = document.getElementById('smsTo');
 if (msg) { msg.value = t.msg; updCC(); }
 if (sel) sel.value = t.to;
+  if (type === 'teacher') {
+const sec = document.getElementById('teacherSmsSection');
+if (sec && sec.style.display === 'none') {
+const parent = sec.parentElement;
+const trigger = parent.querySelector('div:first-child');
+if (trigger) trigger.click();
+}
+}
 }
 }
 function updCC() {
@@ -2745,6 +2798,8 @@ const sel = document.getElementById('smsStudent');
 if (sel) sel.value = '';
 const search = document.getElementById('smsStudentSearch');
 if (search) { search.value = ''; filterSmsStudents(); }
+const tSel = document.getElementById('smsTeacher');
+if (tSel) tSel.value = '';
 }
 function toggleIndividualSms(el) {
 const section = document.getElementById('individualSmsSection');
@@ -2788,6 +2843,36 @@ sel.appendChild(opt);
 });
 if (!filtered.length) {
 sel.innerHTML += '<option value="" disabled>No matching students</option>';
+}
+}
+function toggleTeacherSms(el) {
+const section = document.getElementById('teacherSmsSection');
+if (!section) return;
+const arrow = el.querySelector('span:first-child');
+if (section.style.display === 'none') {
+section.style.display = '';
+arrow.textContent = '▼';
+loadSmsTeacherDropdown();
+} else {
+section.style.display = 'none';
+arrow.textContent = '▶';
+}
+}
+async function loadSmsTeacherDropdown() {
+const sel = document.getElementById('smsTeacher');
+if (!sel) return;
+sel.innerHTML = '<option>Loading...</option>';
+const res = await api('getTeachersForSms');
+sel.innerHTML = '<option value="">-- Select teacher --</option>';
+if (res.success && res.teachers) {
+res.teachers.forEach(t => {
+const opt = document.createElement('option');
+opt.value = JSON.stringify({ phone: t.phone, name: t.name, batch: 'Teacher' });
+opt.textContent = `${t.name} - ${t.phone}`;
+sel.appendChild(opt);
+});
+} else {
+sel.innerHTML += '<option value="" disabled>No teachers with phone found</option>';
 }
 }
 async function loadSmsStudentDropdown() {
@@ -2837,7 +2922,12 @@ async function sendSMS() {
   if (!msg) { toast('❌ Message required'); return; }
   let students = [];
   const indSel = document.getElementById('smsStudent');
-  if (indSel.value) {
+  const teacherSel = document.getElementById('smsTeacher');
+  if (teacherSel && teacherSel.value) {
+    const t = JSON.parse(teacherSel.value);
+    if (!t.phone) { toast('❌ Selected teacher has no phone number'); return; }
+    students = [t];
+  } else if (indSel.value) {
     const stu = JSON.parse(indSel.value);
     if (!stu.phone) { toast('❌ Selected student has no phone number'); return; }
     students = [stu];
@@ -2968,19 +3058,21 @@ async function loadSMSLog() {
     return;
   }
   window._smsLogList = res.logs;
-  const failedLogs = res.logs.filter(l => l.status === 'Failed');
-  const sentLogs = res.logs.filter(l => l.status !== 'Failed');
+  const failedLogs = res.logs.filter(l => l.status.trim() === 'Failed');
+  const sentLogs = res.logs.filter(l => l.status.trim() !== 'Failed');
   let html = '';
   // Failed section first
   if (failedLogs.length) {
     html += `<div style="padding:12px 16px;font-size:11px;font-weight:700;color:var(--err);text-transform:uppercase;letter-spacing:1px;background:var(--errl);border-bottom:1px solid var(--errm)">⚠️ ${failedLogs.length} Failed SMS</div>`;
     failedLogs.forEach((log, idx) => {
+      const displayName = log.name || log.phone;
+      const details = [log.batch, log.regNo, log.phone].filter(Boolean).join(' · ');
       html += `<div class="slog" style="background:var(--errl)">
         <div class="slog-ic"><svg viewBox="0 0 24 24" style="stroke:var(--err)"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
         <div class="slog-tx">
-          <div class="slog-m">${log.phone}</div>
-          <div class="slog-d">${log.message}</div>
-          <span class="slog-st fail">❌ Failed</span>
+          <div class="slog-m">${displayName}</div>
+          <div class="slog-d">${details}</div>
+          <span class="slog-st fail">❌ ${log.status.trim()}</span>
         </div>
         <div class="slog-t">${log.time}</div>
         <button class="btn btn-err btn-sm" style="width:auto;padding:4px 8px;font-size:10px" onclick="resendSMSFromLog(${res.logs.indexOf(log)})">↻ Retry</button>
@@ -2991,12 +3083,14 @@ async function loadSMSLog() {
   if (sentLogs.length) {
     html += `<div style="padding:12px 16px;font-size:11px;font-weight:700;color:var(--ok);text-transform:uppercase;letter-spacing:1px;background:var(--okl);border-bottom:1px solid var(--okm)">✅ ${sentLogs.length} Sent Successfully</div>`;
     sentLogs.forEach(log => {
+      const displayName = log.name || log.phone;
+      const details = [log.batch, log.regNo, log.phone].filter(Boolean).join(' · ');
       html += `<div class="slog">
         <div class="slog-ic"><svg viewBox="0 0 24 24" style="stroke:var(--ok)"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
         <div class="slog-tx">
-          <div class="slog-m">${log.phone}</div>
-          <div class="slog-d">${log.message}</div>
-          <span class="slog-st ok">✅ ${log.status}</span>
+          <div class="slog-m">${displayName}</div>
+          <div class="slog-d">${details}</div>
+          <span class="slog-st ok">✅ ${log.status.trim()}</span>
         </div>
         <div class="slog-t">${log.time}</div>
       </div>`;
@@ -3139,7 +3233,7 @@ el.innerHTML = res.teachers.map(t => `
 <div class="av" style="background:var(--pl);color:var(--p)">${t.name.charAt(0).toUpperCase()}</div>
 <div class="sl-info">
 <div class="sl-name">${t.name}</div>
-<div class="sl-det">${t.username} · ${t.role} · <span style="color:var(--${t.status==='Active'?'ok':'err'})">${t.status}</span></div>
+<div class="sl-det">${t.username} · ${t.role}${t.phone ? ' · ' + t.phone : ''} · <span style="color:var(--${t.status==='Active'?'ok':'err'})">${t.status}</span></div>
 </div>
 ${t.status === 'Active' && t.role !== 'Admin' ? `<button class="btn btn-sm btn-err" onclick="deactivateTeacher('${t.username}')">Remove</button>` : ''}
 </div>`).join('');
@@ -3154,15 +3248,17 @@ async function addTeacher() {
   const user = document.getElementById('tUser').value.trim().toLowerCase();
   const pass = document.getElementById('tPass').value;
   const role = document.getElementById('tRole').value;
+  const phone = document.getElementById('tPhone').value.trim();
   if (!name || !user || !pass) { toast('❌ All fields required'); return; }
   const btn = document.querySelector('#ov-addTeacher .btn-p');
   await withButtonState(btn, async () => {
-    const res = await api('addTeacher', { teacher: { name, username: user, password: pass, role } });
+    const res = await api('addTeacher', { teacher: { name, username: user, password: pass, role, phone } });
     if (res.success) {
       closeSht('addTeacher');
       document.getElementById('tName').value = '';
       document.getElementById('tUser').value = '';
       document.getElementById('tPass').value = '';
+      document.getElementById('tPhone').value = '';
       loadTeachers();
     }
     return res;
@@ -3173,6 +3269,29 @@ if (!confirm('Remove this teacher?')) return;
 const res = await api('deactivateTeacher', { username });
 if (res.success) { toast('✅ Teacher removed'); loadTeachers(); }
 else { toast('❌ ' + res.error); }
+}
+// ═══════════════════════════════════════
+//  ADD TEACHER for SMS
+// ═══════════════════════════════════════
+function openAddTeacherSms() {
+  document.getElementById('atsName').value = '';
+  document.getElementById('atsPhone').value = '';
+  openSht('addTeacherSms');
+}
+async function saveAddTeacherSms() {
+  const name = document.getElementById('atsName').value.trim();
+  const phone = document.getElementById('atsPhone').value.trim();
+  if (!name || !phone) { toast('❌ Name and phone required'); return; }
+  const btn = document.getElementById('atsBtn');
+  await withButtonState(btn, async () => {
+    const res = await api('addTeacherContact', { name, phone, role: 'Teacher' });
+    if (res.success) {
+      closeSht('addTeacherSms');
+      toast('✅ Teacher saved!');
+      loadSmsTeacherDropdown();
+    }
+    return res;
+  }, { loading: 'Saving...', success: '✅ Saved!', error: '❌ Failed!' });
 }
 async function changePassword() {
   const old = document.getElementById('oldPass').value;
@@ -3197,9 +3316,13 @@ const res = await api('getSetting', { key: 'AUTO_SMS' });
 const cb = document.getElementById('autoSmsTog');
 if (cb) cb.checked = res.success && res.value === 'true';
 }
+let _togLock = false;
 async function toggleAutoSMS() {
+if (_togLock) return;
+_togLock = true;
 const cb = document.getElementById('autoSmsTog');
 const val = cb?.checked ? 'true' : 'false';
+try {
 const res = await api('updateSetting', { key: 'AUTO_SMS', value: val });
 if (res.success) {
 toast(val === 'true' ? '✅ Auto Absence SMS enabled' : ' Auto Absence SMS disabled');
@@ -3207,6 +3330,11 @@ toast(val === 'true' ? '✅ Auto Absence SMS enabled' : ' Auto Absence SMS disab
 toast('❌ Failed to update');
 if (cb) cb.checked = !cb.checked;
 }
+} catch(e) {
+toast('❌ Error');
+if (cb) cb.checked = !cb.checked;
+}
+_togLock = false;
 }
 async function syncData() {
 toast('️ Syncing with Google Sheets...');
