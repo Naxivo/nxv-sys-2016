@@ -680,7 +680,7 @@ body.logged-in .bnav {
 <div class="wb-date" id="wbDate">Loading...</div>
 <div class="wb-att" id="attStatusBanner">⚠️ Today's attendance not marked yet</div>
 <div class="wb-pills">
-<div class="wb-pill">🏫 <span id="activeBatchCount">2</span> Active Batches</div>
+<div class="wb-pill">🏫 <span id="activeBatchCount">—</span> Active Batches</div>
 <div class="wb-pill">👥 <span id="totalStudentCount">—</span> Students</div>
 </div>
 </div>
@@ -796,6 +796,7 @@ body.logged-in .bnav {
 <div class="btab active" onclick="swAttBatch(this,'')"></div>
 <div class="btab" onclick="swAttBatch(this,'Bhairab')">Bhairab</div>
 </div>
+<div id="attMarkedBy"></div>
 <div class="asm">
 <div class="asp p">Present<br><strong id="pC">0</strong></div>
 <div class="asp a">Absent<br><strong id="aC">0</strong></div>
@@ -874,12 +875,9 @@ body.logged-in .bnav {
 <div id="ex-marks">
 <div class="btabs" id="examMarkBatchTabs"></div>
 <div class="fg" style="margin-bottom:12px">
-<label>Select Exam Date</label>
-<select class="fs" id="examDateSelect" onchange="loadMarks()">
-<option value="">— Select date —</option>
-</select>
+<label>Select Exam Date & Time</label>
+<input class="fs" type="datetime-local" id="examDateInput" onchange="loadMarks()">
 </div>
-<button class="btn btn-ghost btn-sm" style="margin-bottom:12px" onclick="openSht('addExamDate')">+ Add New Exam Date</button>
 <div id="marksList"><div class="empty"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16"/><polyline points="14 2 14 8 20 8"/></svg><p>Select exam date to add marks</p></div></div>
 <button class="btn btn-p" onclick="saveMarks()" id="saveMarksBtn" style="display:none">Save Marks</button>
 </div>
@@ -893,9 +891,14 @@ body.logged-in .bnav {
 <span id="resultDateDisplay" style="font-size:13px;font-weight:700;color:var(--tx2)"></span>
 <button class="ib" onclick="examResultNav(1)" title="Next date">▶</button>
 </div>
+<div style="display:flex;align-items:center;gap:8px;flex:1;max-width:220px">
+<select class="fs" id="examResultDateSelect" onchange="examResultJump(this)" style="font-size:12px;padding:4px 8px">
+<option value="">Jump to date</option>
+</select>
 <button class="ib" onclick="downloadExamReport()" title="Download report">
 <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--tx2);stroke-width:2;fill:none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
 </button>
+</div>
 </div>
 </div>
 <div id="resultsList"><div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div></div>
@@ -904,9 +907,7 @@ body.logged-in .bnav {
 <div id="ex-batch" style="display:none">
 <div class="fg" style="margin-bottom:12px">
 <label>Select Exam Date</label>
-<select class="fs" id="batchResultDateSelect" onchange="loadBatchResults()">
-<option value="">— Select date —</option>
-</select>
+<input class="fs" type="date" id="batchResultDateInput" onchange="loadBatchResults()">
 </div>
 <div id="batchResultContent"></div>
 </div>
@@ -1307,16 +1308,6 @@ Contact: 01577299970</textarea>
 </div>
 </div>
 <!-- Add Exam Date -->
-<div class="ov" id="ov-addExamDate">
-<div class="sht">
-<div class="sht-handle"></div>
-<div class="sht-title">Add Exam Date</div>
-<div class="sht-body">
-<div class="fg"><label>Exam Date *</label><input class="fi" id="newExamDate" type="date"></div>
-<button class="btn btn-p" onclick="addExamDate()">Add Date</button>
-</div>
-</div>
-</div>
 <!-- Change Password -->
 <div class="ov" id="ov-changePass">
 <div class="sht">
@@ -1425,7 +1416,7 @@ console.log('✅ Script loaded successfully');
 // ═══════════════════════════════════════
 //  CONFIGURATION — Fill these values
 // ═══════════════════════════════════════
-const API_URL = "https://script.google.com/macros/s/AKfycbwznMMCXG-oIxTZmOBcNNFvwnH-zz7FwhBrMoy-UzG3PSZE_MoEMOK3-nScOMZCENw7/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzKahv2uzWZD8EnK-j5K8UcFBWvGrB6M7UL3eeakUjU3CoE6J56Vi6Et94ip7S1TgCi/exec";
 const SECRET_TOKEN = "d6bf785b7cfcca40a85e3376cfb930da27a2842eb1d5a5b51105bf190edd07a2"; // ← paste your token here
 // ═══════════════════════════════════════
 //  API HELPER
@@ -1838,10 +1829,11 @@ stuTabs.innerHTML += `<div class="btab" onclick="swBatch(this,'${b.name}')" data
   if (examMarkTabs) {
     examMarkTabs.innerHTML = '';
     const active = batches.filter(b => b.status === 'Active');
+    examMarkTabs.innerHTML += `<div class="btab${active.length===0?' active':''}" onclick="swExamMarkBatch(this,'all')">All</div>`;
     active.forEach((b, i) => {
-      examMarkTabs.innerHTML += `<div class="btab${i===0?' active':''}" onclick="swExamMarkBatch(this,'${b.name}')">${b.name}</div>`;
+      examMarkTabs.innerHTML += `<div class="btab${i===0 && active.length>0?' active':''}" onclick="swExamMarkBatch(this,'${b.name}')">${b.name}</div>`;
     });
-    if (active.length > 0) { currentExamBatch = active[0].name; }
+    currentExamBatch = active.length > 0 ? active[0].name : 'all';
   }
   // Update exam result batch tabs
   const examResultTabs = document.getElementById('examResultBatchTabs');
@@ -2066,7 +2058,9 @@ return `<div class="sli${inactive?' inactive':''}" onclick="showStudentDetail(${
 <span class="bdg bdg-b">${s._batch.slice(0,4)}</span>
 </div>`;
 }).join('');
-html += `<div style="padding:11px 16px;text-align:center;font-size:12px;color:var(--tx4);font-weight:600">${students.length} students</div>`;
+const activeCount = students.filter(s => s.status === 'Active').length;
+const inactiveCount = students.filter(s => s.status !== 'Active').length;
+html += `<div style="padding:11px 16px;text-align:center;font-size:12px;color:var(--tx4);font-weight:600">${activeCount} Active · ${inactiveCount} Inactive · ${students.length} Total</div>`;
 el.innerHTML = html;
 }
 function filterStudents(q) {
@@ -2238,6 +2232,15 @@ const isoDate = formatDateISO(currentDate);
 const attRes = await api('getAttendance', { date: dateStr, batch: currentAttBatch });
 const existing = attRes.success ? attRes.records : [];
 const total = res.students.filter(s => s.status === 'Active').length;
+
+// Show who marked this batch+date
+const markedBy = existing.length > 0 ? existing[0].markedBy : '';
+const markedBanner = document.getElementById('attMarkedBy');
+if (markedBy) {
+  markedBanner.innerHTML = `<div style="padding:8px 14px;margin-bottom:10px;border-radius:8px;background:var(--warnl);color:var(--tx1);font-size:12px;font-weight:600;display:flex;align-items:center;gap:8px"><span>👤</span> Already marked by <strong>${markedBy}</strong></div>`;
+} else if (markedBanner) {
+  markedBanner.innerHTML = '';
+}
 document.getElementById('tC').textContent = total;
 attRecords = {};
 aCount = 0; // Reset absent count
@@ -2394,25 +2397,38 @@ ${currentUser?.role === 'Admin' ? `<button class="btn btn-sm" style="background:
 // ══════════════════════════════════════
 let examResultDateIndex = 0;
 
+function fmtDateDisplay(d) {
+  if (d && typeof d === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(d)) {
+    const dt = new Date(d);
+    if (!isNaN(dt)) return dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Dhaka' });
+  }
+  if (d && typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d)) {
+    const dt = new Date(d + 'T00:00:00');
+    if (!isNaN(dt)) return dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Dhaka' });
+  }
+  return d;
+}
+
 async function loadExamDates() {
 const res = await api('getExamDates', { batch: currentExamBatch });
-const sel = document.getElementById('examDateSelect');
-const batchSel = document.getElementById('batchResultDateSelect');
-if (sel) {
-sel.innerHTML = '<option value="">— Select date —</option>';
-}
-if (batchSel) {
-batchSel.innerHTML = '<option value="">— Select date —</option>';
+const resultSel = document.getElementById('examResultDateSelect');
+if (resultSel) {
+resultSel.innerHTML = '<option value="">Jump to date</option>';
 }
 if (res.success) {
 examDates = res.dates;
-if (sel) res.dates.forEach(d => { sel.innerHTML += `<option value="${d}">${d}</option>`; });
-if (batchSel) res.dates.forEach(d => { batchSel.innerHTML += `<option value="${d}">${d}</option>`; });
+if (resultSel) res.dates.forEach(d => { resultSel.innerHTML += `<option value="${d}">${fmtDateDisplay(d)}</option>`; });
 examResultDateIndex = 0;
 }
 }
+
+function examResultJump(el) {
+  const idx = examDates.indexOf(el.value);
+  if (idx !== -1) { examResultDateIndex = idx; loadResults(); }
+}
 async function loadMarks() {
-const date = document.getElementById('examDateSelect')?.value;
+const input = document.getElementById('examDateInput');
+const date = input?.value ? new Date(input.value).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'Asia/Dhaka' }) : '';
 const saveBtn = document.getElementById('saveMarksBtn');
 if (!date) {
 document.getElementById('marksList').innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16"/><polyline points="14 2 14 8 20 8"/></svg><p>Select exam date to add marks</p></div>';
@@ -2421,6 +2437,51 @@ return;
 }
 const el = document.getElementById('marksList');
 el.innerHTML = '<div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>';
+
+if (currentExamBatch === 'all') {
+  const activeBatches = batches.filter(b => b.status === 'Active').map(b => b.name);
+  if (!activeBatches.length) { el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3)">No active batches</div>'; return; }
+
+  const [stuResults, marksResults] = await Promise.all([
+    Promise.all(activeBatches.map(b => api('getStudents', { batch: b }))),
+    Promise.all(activeBatches.map(b => api('getMarks', { examDate: date, batch: b })))
+  ]);
+
+  let totalMarks = 100;
+  let allStudents = [];
+  let totalSum = 0;
+  let totalCount = 0;
+
+  activeBatches.forEach((b, i) => {
+    const batchStu = stuResults[i]?.success ? stuResults[i].students.filter(s => s.status === 'Active') : [];
+    const batchMarks = marksResults[i]?.success ? marksResults[i].marks : [];
+    if (marksResults[i]?.success) totalMarks = marksResults[i].totalMarks || totalMarks;
+    const existing = {};
+    batchMarks.forEach(m => { existing[m.regNo] = m.score; totalSum += Number(m.score); totalCount++; });
+
+    batchStu.forEach(s => {
+      allStudents.push({ ...s, _batch: b, _score: existing[s.regNo] || '' });
+    });
+  });
+
+  const avg = totalCount > 0 ? Math.round(totalSum / totalCount) : '—';
+
+  if (!allStudents.length) { el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3)">No active students found</div>'; return; }
+
+  let html = `<div class="exc"><div class="exh"><div class="exh-n">All Batches · ${fmtDateDisplay(date)}</div><div class="exh-avg">Avg: ${avg}</div></div>`;
+  html += `<div class="fg" style="padding:0 16px 8px"><label>Total Marks</label><input class="fs" type="number" id="totalMarksInput" value="${totalMarks}" min="1" style="max-width:100px"></div>`;
+  allStudents.forEach(s => {
+    html += `<div class="exr">
+<div class="exr-n">${s.name} <span style="color:var(--tx4);font-size:11px">· ${s.regNo} · ${s._batch}</span></div>
+<input class="mi" type="number" id="mark-${s._batch}-${s.regNo}" value="${s._score}" min="0" max="${totalMarks}" placeholder="—">
+</div>`;
+  });
+  html += '</div>';
+  el.innerHTML = html;
+  if (saveBtn) saveBtn.style.display = 'flex';
+  return;
+}
+
 const stuRes = await api('getStudents', { batch: currentExamBatch });
 const marksRes = await api('getMarks', { examDate: date, batch: currentExamBatch });
 const existingMarks = {};
@@ -2435,7 +2496,7 @@ if (!students.length) { el.innerHTML = '<div class="cb" style="text-align:center
 const avg = marksRes.success && marksRes.marks.length > 0
 ? Math.round(marksRes.marks.reduce((a, b) => a + Number(b.score), 0) / marksRes.marks.length)
 : '—';
-let html = `<div class="exc"><div class="exh"><div class="exh-n">${currentExamBatch} · ${date}</div><div class="exh-avg">Avg: ${avg}</div></div>`;
+let html = `<div class="exc"><div class="exh"><div class="exh-n">${currentExamBatch} · ${fmtDateDisplay(date)}</div><div class="exh-avg">Avg: ${avg}</div></div>`;
 html += `<div class="fg" style="padding:0 16px 8px"><label>Total Marks</label><input class="fs" type="number" id="totalMarksInput" value="${totalMarks}" min="1" style="max-width:100px"></div>`;
 students.forEach(s => {
 const score = existingMarks[s.regNo] || '';
@@ -2449,48 +2510,54 @@ el.innerHTML = html;
 if (saveBtn) saveBtn.style.display = 'flex';
 }
 async function saveMarks() {
-  const date = document.getElementById('examDateSelect')?.value;
+  const input = document.getElementById('examDateInput');
+  const date = input?.value ? new Date(input.value).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'Asia/Dhaka' }) : '';
   if (!date) { toast('❌ Select exam date first'); return; }
   const totalMarksInput = document.getElementById('totalMarksInput');
   const totalMarks = totalMarksInput ? Number(totalMarksInput.value) || 100 : 100;
+  const btn = document.getElementById('saveMarksBtn');
+
+  if (currentExamBatch === 'all') {
+    const activeBatches = batches.filter(b => b.status === 'Active').map(b => b.name);
+    if (!activeBatches.length) { toast('❌ No active batches'); return; }
+    const results = await withButtonState(btn, async () => {
+      const res = await Promise.all(activeBatches.map(async b => {
+        const stuRes = await api('getStudents', { batch: b });
+        if (!stuRes.success) return { batch: b, success: false };
+        const marks = stuRes.students.filter(s => s.status === 'Active').map(s => {
+          const input = document.getElementById(`mark-${b}-${s.regNo}`);
+          return { regNo: s.regNo, name: s.name, score: input ? Number(input.value) || 0 : 0 };
+        });
+        return api('saveMarks', { examDate: date, batch: b, marks, totalMarks });
+      }));
+      const allOk = res.every(r => r.success !== false);
+      return allOk;
+    }, { loading: 'Saving all batches...', success: '✅ All batches saved!', error: '❌ Some batches failed!' });
+    return;
+  }
+
   const stuRes = await api('getStudents', { batch: currentExamBatch });
   if (!stuRes.success) { toast('❌ Could not load students'); return; }
   const marks = stuRes.students.filter(s => s.status === 'Active').map(s => {
     const input = document.getElementById(`mark-${s.regNo}`);
     return { regNo: s.regNo, name: s.name, score: input ? Number(input.value) || 0 : 0 };
   });
-  const btn = document.getElementById('saveMarksBtn');
   await withButtonState(btn, async () => {
     const res = await api('saveMarks', { examDate: date, batch: currentExamBatch, marks, totalMarks });
     return res;
   }, { loading: 'Saving...', success: '✅ Saved!', error: '❌ Failed!' });
 }
-function addExamDate() {
-const date = document.getElementById('newExamDate').value;
-if (!date) { toast('❌ Select a date'); return; }
-const formatted = new Date(date).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
-const sel = document.getElementById('examDateSelect');
-if (sel) {
-sel.innerHTML += `<option value="${formatted}">${formatted}</option>`;
-sel.value = formatted;
-}
-const batchSel = document.getElementById('batchResultDateSelect');
-if (batchSel) {
-batchSel.innerHTML += `<option value="${formatted}">${formatted}</option>`;
-}
-toast('✅ Exam date added!');
-closeSht('addExamDate');
-loadMarks();
-}
 async function loadResults() {
 const el = document.getElementById('resultsList');
 const display = document.getElementById('resultDateDisplay');
+const resultSel = document.getElementById('examResultDateSelect');
 el.innerHTML = '<div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>';
 if (!examDates.length) { el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M14 2H6"/></svg><p>No exam dates found</p></div>'; if (display) display.textContent = ''; return; }
 if (examResultDateIndex < 0) examResultDateIndex = 0;
 if (examResultDateIndex >= examDates.length) examResultDateIndex = examDates.length - 1;
 const date = examDates[examResultDateIndex];
-if (display) display.textContent = date;
+if (display) display.textContent = fmtDateDisplay(date);
+if (resultSel) resultSel.value = date;
 const res = await api('getMarks', { examDate: date, batch: currentExamBatch });
 if (!res.success || !res.marks.length) {
 el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><path d="M14 2H6"/></svg><p>No results for this date</p></div>';
@@ -2506,7 +2573,7 @@ el.innerHTML = res.marks.map((m, i) => `
 <div class="rs"><div class="rs-v">${m.score}</div><div class="rs-l">/ ${totalMarks}</div></div>
 </div>
 <div class="rsubs">
-<div class="rsp">${date} <span style="color:var(--p);font-weight:800">${m.score}</span></div>
+<div class="rsp">${fmtDateDisplay(date)} <span style="color:var(--p);font-weight:800">${m.score}</span></div>
 </div>
 </div>`).join('');
 }
@@ -2551,11 +2618,12 @@ setTimeout(() => { w.print(); }, 500);
 async function loadBatchResults() {
 const el = document.getElementById('batchResultContent');
 el.innerHTML = '<div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>';
-const date = document.getElementById('batchResultDateSelect')?.value;
+const input = document.getElementById('batchResultDateInput');
+const date = input?.value ? new Date(input.value).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'Asia/Dhaka' }) : '';
 if (!date) { el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3)">Select an exam date</div>'; return; }
 const activeBatchNames = batches.filter(b => b.status === 'Active').map(b => b.name);
 if (!activeBatchNames.length) { el.innerHTML = '<div class="cb" style="text-align:center;color:var(--tx3)">No active batches</div>'; return; }
-let html = `<div class="ch"><div class="ct">Top 3 Scorers · ${date}</div></div><div class="cb" style="padding:0 16px">`;
+let html = `<div class="ch"><div class="ct">Top 3 Scorers · ${fmtDateDisplay(date)}</div></div><div class="cb" style="padding:0 16px">`;
 const batchResults = await Promise.all(activeBatchNames.map(b =>
 api('getMarks', { examDate: date, batch: b })
 ));
@@ -3535,10 +3603,12 @@ async function loadDailyReport() {
   const present = res.records.filter(r => r.status === 'P').length;
   const absent = res.records.filter(r => r.status === 'A').length;
   let html = `<div class="ch"><div class="ct">${repBatch} · ${dateStr}</div></div>`;
+  const markedBy = res.records[0]?.markedBy || '';
   html += `<div style="display:flex;gap:10px;padding:0 16px 10px">
     <div class="asp p" style="flex:1;text-align:center;padding:8px">Present<br><strong>${present}</strong></div>
     <div class="asp a" style="flex:1;text-align:center;padding:8px">Absent<br><strong>${absent}</strong></div>
   </div>`;
+  if (markedBy) html += `<div style="padding:8px 14px;margin:0 16px 10px;border-radius:8px;background:var(--warnl);color:var(--tx1);font-size:12px;font-weight:600;display:flex;align-items:center;gap:8px"><span>👤</span> Marked by: <strong>${markedBy}</strong></div>`;
   html += `<div class="cb" style="padding:0">`;
   res.records.forEach((r, i) => {
     const cl = r.status === 'P' ? 'ok' : 'err';
