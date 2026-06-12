@@ -954,11 +954,7 @@ body.logged-in .bnav {
 <div class="stc-lb">Festival</div>
 <div class="stc-ds">Eid, New Year etc.</div>
 </div>
-<div class="stc" onclick="selSms(this,'announce')">
-<div class="stc-ic"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
-<div class="stc-lb">Announcement</div>
-<div class="stc-ds">Class, exam notice</div>
-</div>
+
 <div class="stc" onclick="selSms(this,'teacher')">
 <div class="stc-ic"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
 <div class="stc-lb">Teacher</div>
@@ -1024,6 +1020,7 @@ Contact: 01577299970</textarea>
         <div class="card" style="padding:0" id="smsLogList">
           <div class="loading"><div class="skel-stack"><div class="skel skel-line"></div><div class="skel skel-line w60"></div><div class="skel skel-line"></div><div class="skel skel-line w40"></div></div></div>
         </div>
+        <div id="smsRetryResults" style="margin-top:12px"></div>
       </div>
     </div>
     <!-- Ex Students -->
@@ -1457,7 +1454,7 @@ console.log('✅ Script loaded successfully');
 // ═══════════════════════════════════════
 //  CONFIGURATION — Fill these values
 // ═══════════════════════════════════════
-const API_URL = "https://script.google.com/macros/s/AKfycbxMwqsuyK9e_ugvKU0lOj96EMvqYJwCFCxY4KQ20-QpiPgGUiQg_5zFjVU0y5zHz2mh/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwjEoR2eIH4IE95HXx3O5G4zzVlnzE29sCtUYGdfo1IeoR4m2I5er3vZif1fBIIJ1g3/exec";
 const SECRET_TOKEN = "d6bf785b7cfcca40a85e3376cfb930da27a2842eb1d5a5b51105bf190edd07a2"; // ← paste your token here
 // ═══════════════════════════════════════
 //  API HELPER
@@ -2728,13 +2725,7 @@ Thank you
 Basic BCS Academy
 Contact: 01577299970`
 },
-announce: {
-to: 'all',
-msg: `Dear [Student Name], Reg: [RegNo], Batch: [Batch], Important announcement from Basic BCS Academy. Please check the notice board.
-Thank you
-Basic BCS Academy
-Contact: 01577299970`
-},
+
 teacher: {
 to: 'all',
 msg: `Dear [Teacher Name] sir,
@@ -3065,10 +3056,10 @@ async function loadSMSLog() {
   const failedLogs = res.logs.filter(l => l.status.trim() === 'Failed');
   const sentLogs = res.logs.filter(l => l.status.trim() !== 'Failed');
   let html = '';
-  // Failed section first
   if (failedLogs.length) {
     html += `<div style="padding:12px 16px;font-size:11px;font-weight:700;color:var(--err);text-transform:uppercase;letter-spacing:1px;background:var(--errl);border-bottom:1px solid var(--errm)">⚠️ ${failedLogs.length} Failed SMS</div>`;
     failedLogs.forEach((log, idx) => {
+      const arrayIdx = res.logs.indexOf(log);
       const displayName = log.name || '—';
       const details = [log.name, log.batch, log.regNo, log.phone].filter(Boolean).join(' · ');
       html += `<div class="slog" style="background:var(--errl)">
@@ -3079,11 +3070,10 @@ async function loadSMSLog() {
           <span class="slog-st fail">❌ ${log.status.trim()}</span>
         </div>
         <div class="slog-t">${log.time}</div>
-        <button class="btn btn-err btn-sm" style="width:auto;padding:4px 8px;font-size:10px" onclick="resendSMSFromLog(${res.logs.indexOf(log)})">↻ Retry</button>
+        <button class="btn btn-err btn-sm" style="width:auto;padding:4px 8px;font-size:10px" onclick="resendSMSFromLog(this, ${arrayIdx})">↻ Retry</button>
       </div>`;
     });
   }
-  // Sent section below
   if (sentLogs.length) {
     html += `<div style="padding:12px 16px;font-size:11px;font-weight:700;color:var(--ok);text-transform:uppercase;letter-spacing:1px;background:var(--okl);border-bottom:1px solid var(--okm)">✅ ${sentLogs.length} Sent Successfully</div>`;
     sentLogs.forEach(log => {
@@ -3099,9 +3089,6 @@ async function loadSMSLog() {
         <div class="slog-t">${log.time}</div>
       </div>`;
     });
-  }
-  if (!failedLogs.length) {
-    html = `<div style="padding:12px 16px;font-size:12px;font-weight:700;color:var(--ok);background:var(--okl);border-bottom:1px solid var(--okm)">✅ All SMS delivered! No issues</div>` + html;
   }
   el.innerHTML = html;
 }
@@ -3932,16 +3919,28 @@ async function resendFailedSMS(idx) {
   }
 }
 
-async function resendSMSFromLog(idx) {
+async function resendSMSFromLog(btn, idx) {
   const list = window._smsLogList || [];
   const log = list[idx];
   if (!log) { toast('❌ Not found'); return; }
+  btn.textContent = '↻ Retrying...';
+  btn.disabled = true;
   const res = await api('retryFailedSMS', { numbers: [log.phone], message: log.message });
+  const resultEl = document.createElement('div');
+  resultEl.className = 'card';
+  resultEl.style.cssText = 'padding:10px 14px;margin-bottom:6px;display:flex;align-items:center;gap:10px;font-size:13px';
   if (res.success) {
-    toast(`↻ Resending to ${log.phone}...`);
+    resultEl.innerHTML = `<span style="color:var(--ok);font-size:16px">✅</span> <span style="font-weight:600">${log.name || log.phone}</span> <span style="color:#64748b">${log.phone}</span> <span style="margin-left:auto;color:var(--ok);font-size:11px;font-weight:600">Resent</span>`;
+    btn.textContent = '✅ Done';
+    btn.style.borderColor = 'var(--ok)';
+    btn.style.color = 'var(--ok)';
   } else {
-    toast('❌ ' + (res.error || 'Resend failed'));
+    resultEl.innerHTML = `<span style="color:var(--err);font-size:16px">❌</span> <span style="font-weight:600">${log.name || log.phone}</span> <span style="color:#64748b">${log.phone}</span> <span style="margin-left:auto;color:var(--err);font-size:11px;font-weight:600">Failed</span>`;
+    btn.textContent = '↻ Retry';
+    btn.disabled = false;
   }
+  const container = document.getElementById('smsRetryResults');
+  container.prepend(resultEl);
 }
 
 // ═══════════════════════════════════════
