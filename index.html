@@ -1454,7 +1454,7 @@ console.log('✅ Script loaded successfully');
 // ═══════════════════════════════════════
 //  CONFIGURATION — Fill these values
 // ═══════════════════════════════════════
-const API_URL = "https://script.google.com/macros/s/AKfycbwjEoR2eIH4IE95HXx3O5G4zzVlnzE29sCtUYGdfo1IeoR4m2I5er3vZif1fBIIJ1g3/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbx0sNvStPBfuPtSFEr91RzINg5Q9priK4UlyDn0OHxDLgw7P6aSE3VlwmRnm2-m-AfE/exec";
 const SECRET_TOKEN = "d6bf785b7cfcca40a85e3376cfb930da27a2842eb1d5a5b51105bf190edd07a2"; // ← paste your token here
 // ═══════════════════════════════════════
 //  API HELPER
@@ -3934,6 +3934,7 @@ async function resendSMSFromLog(btn, idx) {
     btn.textContent = '✅ Done';
     btn.style.borderColor = 'var(--ok)';
     btn.style.color = 'var(--ok)';
+    loadSMSLog();
   } else {
     resultEl.innerHTML = `<span style="color:var(--err);font-size:16px">❌</span> <span style="font-weight:600">${log.name || log.phone}</span> <span style="color:#64748b">${log.phone}</span> <span style="margin-left:auto;color:var(--err);font-size:11px;font-weight:600">Failed</span>`;
     btn.textContent = '↻ Retry';
