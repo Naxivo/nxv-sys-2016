@@ -1416,7 +1416,7 @@ console.log('✅ Script loaded successfully');
 // ═══════════════════════════════════════
 //  CONFIGURATION — Fill these values
 // ═══════════════════════════════════════
-const API_URL = "https://script.google.com/macros/s/AKfycbzKahv2uzWZD8EnK-j5K8UcFBWvGrB6M7UL3eeakUjU3CoE6J56Vi6Et94ip7S1TgCi/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycby_YV0r65HSYiCfIm2i_cvTcpezYItwozDvMWdvoxCDLFaBvws9hbuNgr0yCT5MO4p8/exec";
 const SECRET_TOKEN = "d6bf785b7cfcca40a85e3376cfb930da27a2842eb1d5a5b51105bf190edd07a2"; // ← paste your token here
 // ═══════════════════════════════════════
 //  API HELPER
@@ -1674,6 +1674,7 @@ if (el) el.style.display = 'block';
 }
 }
 // Load page data with error handling so page doesn't stay blank
+if (name === 'home') loadHomeData().catch(err => console.error('Home load error:', err));
 if (name === 'students') loadStudents().catch(err => console.error('Students load error:', err));
 if (name === 'attendance') loadAttendanceList().catch(err => console.error('Attendance load error:', err));
 if (name === 'settings') {
@@ -1777,6 +1778,25 @@ async function loadHomeData() {
   } else {
     document.getElementById('statAtt').textContent = '—%';
     document.getElementById('statSMS').textContent = '—';
+  }
+  // Check which batches already have attendance marked today
+  if (batchRes.success) {
+    const active = batchRes.batches.filter(b => b.status === 'Active');
+    const todayStr = formatDateShort(new Date());
+    markedBatchesToday = new Set();
+    const checks = active.map(b =>
+      api('getAttendance', { date: todayStr, batch: b.name }).then(res => {
+        if (res.success && res.records.length > 0) markedBatchesToday.add(b.name);
+      })
+    );
+    await Promise.all(checks);
+    const banner = document.getElementById('attStatusBanner');
+    if (banner) {
+      const marked = markedBatchesToday.size;
+      if (marked === 0) banner.textContent = "⚠️ Today's attendance not marked yet";
+      else if (marked < active.length) banner.textContent = `🕐 ${marked} of ${active.length} batches marked today`;
+      else banner.textContent = "✅ All batches attendance done for today!";
+    }
   }
 }
 // ═══════════════════════════════════════
