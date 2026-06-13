@@ -1454,7 +1454,7 @@ console.log('✅ Script loaded successfully');
 // ═══════════════════════════════════════
 //  CONFIGURATION — Fill these values
 // ═══════════════════════════════════════
-const API_URL = "https://script.google.com/macros/s/AKfycbx0sNvStPBfuPtSFEr91RzINg5Q9priK4UlyDn0OHxDLgw7P6aSE3VlwmRnm2-m-AfE/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzDRc_-cRnOlrjopswTHwImiLvXIGzO5U1Io3ipVMxQc1VN69GylljVLsM87tGqRzf7/exec";
 const SECRET_TOKEN = "d6bf785b7cfcca40a85e3376cfb930da27a2842eb1d5a5b51105bf190edd07a2"; // ← paste your token here
 // ═══════════════════════════════════════
 //  API HELPER
@@ -3357,7 +3357,7 @@ async function changePassword() {
 async function loadAutoSMSSetting() {
 const res = await api('getSetting', { key: 'AUTO_SMS' });
 const cb = document.getElementById('autoSmsTog');
-if (cb) cb.checked = res.success && res.value === 'true';
+if (cb) cb.checked = res.success && String(res.value) === 'true';
 }
 document.getElementById('autoSmsLabel')?.addEventListener('click', toggleAutoSMS);
 let _togLock = false;
