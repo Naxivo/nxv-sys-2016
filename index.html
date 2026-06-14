@@ -1305,9 +1305,10 @@ Contact: 01577299970</textarea>
 <div class="sht-handle"></div>
 <div class="sht-title">Edit Student</div>
 <div class="sht-body">
-<input type="hidden" id="editRegNo">
 <input type="hidden" id="editBatch">
+<input type="hidden" id="editRow">
 <div class="fg"><label>Full Name *</label><input class="fi" id="editName" placeholder="Student name"></div>
+<div class="fg"><label>Reg No *</label><input class="fi" id="editRegNo" placeholder="Registration number"></div>
 <div class="fg"><label>Department</label><input class="fi" id="editDept" placeholder="Department" list="deptList2"><datalist id="deptList2"></datalist></div>
 <div class="fg"><label>Phone</label><input class="fi" id="editPhone" type="tel" placeholder="01XXXXXXXXX"></div>
 <button class="btn btn-p" onclick="saveEditStudent()">Save Changes</button>
@@ -1454,7 +1455,7 @@ console.log('✅ Script loaded successfully');
 // ═══════════════════════════════════════
 //  CONFIGURATION — Fill these values
 // ═══════════════════════════════════════
-const API_URL = "https://script.google.com/macros/s/AKfycbzDRc_-cRnOlrjopswTHwImiLvXIGzO5U1Io3ipVMxQc1VN69GylljVLsM87tGqRzf7/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzatYeYhfpJD7I9BygGXfXLvY2xowjpef98JjsnMNxhpW19zFzqiw3QwMADyZESA4Hl/exec";
 const SECRET_TOKEN = "d6bf785b7cfcca40a85e3376cfb930da27a2842eb1d5a5b51105bf190edd07a2"; // ← paste your token here
 // ═══════════════════════════════════════
 //  API HELPER
@@ -2166,6 +2167,7 @@ function openEditStudent() {
 if (!selectedStudent) return;
 document.getElementById('editRegNo').value = selectedStudent.regNo;
 document.getElementById('editBatch').value = selectedStudent._batch;
+document.getElementById('editRow').value = selectedStudent.row || '';
 document.getElementById('editName').value = selectedStudent.name;
 document.getElementById('editDept').value = selectedStudent.department || '';
 document.getElementById('editPhone').value = selectedStudent.phone || '';
@@ -2174,13 +2176,16 @@ openSht('editStu');
 }
 async function saveEditStudent() {
   const name = document.getElementById('editName').value.trim();
+  const regNo = document.getElementById('editRegNo').value.trim();
   if (!name) { toast(' Name required'); return; }
+  if (!regNo) { toast(' RegNo required'); return; }
   const btn = document.querySelector('#ov-editStu .btn-p');
   await withButtonState(btn, async () => {
     const res = await api('editStudent', {
       batch: document.getElementById('editBatch').value,
       student: {
-        regNo: document.getElementById('editRegNo').value,
+        row: parseInt(document.getElementById('editRow').value, 10),
+        regNo: regNo,
         name,
         department: document.getElementById('editDept').value.trim(),
         phone: document.getElementById('editPhone').value.trim()
